@@ -16,9 +16,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vinaynalavade.expensetracker.presentation.navigation.Screen
-import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 
 val BottomNavItems = listOf(
     Screen.Dashboard,
@@ -30,7 +32,8 @@ val BottomNavItems = listOf(
 
 /**
  * Premium, modern Bottom Navigation Bar for Leaf.
- * Provides clear active tab hierarchy, refined pill indicators, and edge-to-edge window inset support.
+ * Provides clear active tab hierarchy, refined pill indicators, high-contrast readable typography,
+ * single-line text protection across device screen widths, and edge-to-edge window inset support.
  */
 @Composable
 fun AppBottomBar(
@@ -74,6 +77,7 @@ fun AppBottomBar(
                         onNavigateToRoute(targetRoute)
                     }
                 },
+                alwaysShowLabel = true,
                 icon = {
                     val icon = screen.icon
                     if (icon != null) {
@@ -87,16 +91,22 @@ fun AppBottomBar(
                 label = {
                     Text(
                         text = stringResource(screen.titleResId),
-                        style = if (isSelected) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelSmall,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+                            letterSpacing = (-0.2).sp
+                        ),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
                 )
             )
         }

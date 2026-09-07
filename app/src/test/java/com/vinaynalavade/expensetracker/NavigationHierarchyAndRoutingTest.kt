@@ -30,6 +30,20 @@ class NavigationHierarchyAndRoutingTest {
     }
 
     @Test
+    fun testBottomNavItemsExactOrder() {
+        assertEquals(
+            listOf(
+                Screen.Dashboard,
+                Screen.Transactions,
+                Screen.Split,
+                Screen.Analytics,
+                Screen.Settings
+            ),
+            BottomNavItems
+        )
+    }
+
+    @Test
     fun testTransactionsRouteGeneration() {
         // Default route
         val defaultRoute = Screen.Transactions.createRoute()
