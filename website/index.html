@@ -51,7 +51,7 @@
           <li><a href="privacy.html" class="nav-link">Privacy</a></li>
           <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
-        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.5/Leaf_v1.0.5.apk"
+        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk"
           class="btn btn-primary btn-sm dynamic-download-link" download>
           <span>Download APK</span>
           <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
@@ -79,15 +79,15 @@
           <div class="hero-content">
             <div class="hero-badge">
               <span class="hero-badge-dot"></span>
-              <span>Official Android Release • <span class="dynamic-version">v1.0.5</span></span>
+              <span>Official Android Release • <span class="dynamic-version">v1.0.6</span></span>
             </div>
             <h1 class="hero-title">Your money.<br><span>Under control.</span></h1>
             <p class="hero-lead">
               Leaf is a simple, private, and reliable Android application for tracking expenses, managing cash and bank
-              accounts, planning budgets, and understanding your everyday money flow without ads or cloud trackers.
+              accounts, planning budgets, splitting shared bills, and understanding your everyday money flow without ads or cloud trackers.
             </p>
             <div class="hero-cta">
-              <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.5/Leaf_v1.0.5.apk"
+              <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk"
                 class="btn btn-primary btn-lg dynamic-download-link" download>
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                   <path
@@ -335,7 +335,113 @@
           </div>
         </div>
 
-        <!-- Story 2: Google Drive Backup -->
+        <!-- Story 2: Split & Collect (New in v1.0.6) -->
+        <div class="feature-story reversed">
+          <div class="feature-story-content">
+            <span class="section-tag" style="background: var(--primary-light); color: var(--primary);">New in v1.0.6</span>
+            <h3>Split shared expenses &amp; collect with ease</h3>
+            <p>
+              Leaf v1.0.6 introduces the dedicated <strong>Split</strong> tab. Split dinners, trips, or group bills effortlessly. Attach your recipient UPI QR code, generate personalized payment reminders for WhatsApp, and track settlements—100% isolated from your personal transaction ledgers.
+            </p>
+            <ul class="feature-checklist">
+              <li>
+                <svg viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+                <span><strong>5th Primary Tab:</strong> Dedicated Split navigation tab with clear "To collect" &amp; "Collected" metrics</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+                <span><strong>Exact Math:</strong> Equal splitting with penny-perfect rounding, plus custom share allocations</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+                <span><strong>UPI QR &amp; WhatsApp:</strong> Attach recipient QR code and dispatch one-tap reminders with payment info</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+                <span><strong>Zero Double Counting:</strong> Shared expenses stay completely separate from your personal ledger balances</span>
+              </li>
+            </ul>
+          </div>
+          <div class="feature-story-visual">
+            <div class="split-mockup-card">
+              <div class="split-header-row">
+                <div>
+                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary);">🏖️ Travel</span>
+                  <h4 style="color: var(--text-primary); margin-top: 2px;">Goa Weekend Trip</h4>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Paid by Me • Equal Split (4 People)</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-family: var(--font-sans); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">₹ 4,000.00</div>
+                  <span class="split-status-pill pending">1 of 3 Settled</span>
+                </div>
+              </div>
+
+              <div class="split-progress-container">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>Collected: <strong style="color: var(--income);">₹ 1,000</strong></span>
+                  <span>To Collect: <strong style="color: var(--expense);">₹ 2,000</strong></span>
+                </div>
+                <div class="split-progress-bar">
+                  <div class="split-progress-fill" style="width: 33%;"></div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                <div class="split-participant-row">
+                  <span class="split-participant-name"><span>👤</span> Me (You)</span>
+                  <span class="split-participant-amount" style="color: var(--text-secondary);">₹ 1,000.00</span>
+                </div>
+                <div class="split-participant-row">
+                  <span class="split-participant-name"><span>👤</span> Aarav</span>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="split-participant-amount">₹ 1,000.00</span>
+                    <span class="split-status-pill settled">Settled ✓</span>
+                  </div>
+                </div>
+                <div class="split-participant-row">
+                  <span class="split-participant-name"><span>👤</span> Rohan</span>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="split-participant-amount">₹ 1,000.00</span>
+                    <span class="split-status-pill pending">Pending</span>
+                  </div>
+                </div>
+                <div class="split-participant-row">
+                  <span class="split-participant-name"><span>👤</span> Priya</span>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="split-participant-amount">₹ 1,000.00</span>
+                    <span class="split-status-pill pending">Pending</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 0.25rem;">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">📷 UPI QR Code Attached</span>
+                <span class="whatsapp-action-badge">
+                  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></svg>
+                  <span>Share Reminder</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 3: Google Drive Backup -->
         <div class="feature-story reversed">
           <div class="feature-story-content">
             <span class="section-tag gold">Data Ownership</span>
@@ -688,7 +794,7 @@
         <div class="download-card">
           <span class="download-version-badge">
             <span class="hero-badge-dot"></span>
-            <span>Latest Release: <strong class="dynamic-version">v1.0.5</strong></span>
+            <span>Latest Release: <strong class="dynamic-version">v1.0.6</strong></span>
           </span>
 
           <h2 style="font-size: clamp(1.85rem, 4vw, 2.3rem); margin-bottom: 0.75rem;">Get Leaf for Android</h2>
@@ -698,7 +804,7 @@
           </p>
 
           <div>
-            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.5/Leaf_v1.0.5.apk"
+            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk"
               class="btn btn-primary btn-lg dynamic-download-link" download>
               <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                 <path
@@ -711,7 +817,7 @@
           <div class="download-meta">
             <div class="download-meta-item">
               <span class="download-meta-label">Package File</span>
-              <span class="download-meta-val dynamic-filename">Leaf_v1.0.5.apk</span>
+              <span class="download-meta-val dynamic-filename">Leaf_v1.0.6.apk</span>
             </div>
             <div class="download-meta-item">
               <span class="download-meta-label">Minimum Requirement</span>
@@ -719,7 +825,7 @@
             </div>
             <div class="download-meta-item">
               <span class="download-meta-label">Release Date</span>
-              <span class="download-meta-val dynamic-release-date">September 1, 2026</span>
+              <span class="download-meta-val dynamic-release-date">September 7, 2026</span>
             </div>
           </div>
 

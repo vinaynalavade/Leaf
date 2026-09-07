@@ -123,8 +123,8 @@ class ReleasePolishAndOnboardingTest {
     @Test
     fun testBottomNavigationStructure() {
         val bottomRoutes = BottomNavItems.map { it.route }
-        assertEquals(4, bottomRoutes.size)
-        assertEquals(listOf(Screen.Dashboard.route, Screen.Transactions.route, Screen.Analytics.route, Screen.Settings.route), bottomRoutes)
+        assertEquals(5, bottomRoutes.size)
+        assertEquals(listOf(Screen.Dashboard.route, Screen.Transactions.route, Screen.Split.route, Screen.Analytics.route, Screen.Settings.route), bottomRoutes)
         assertFalse("Categories must NOT be in bottom navigation", bottomRoutes.contains(Screen.Categories.route))
     }
 

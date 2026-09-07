@@ -9,18 +9,23 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.data.local.dao.CategoryDao
 import com.vinaynalavade.expensetracker.data.local.dao.RecurringTransactionDao
+import com.vinaynalavade.expensetracker.data.local.dao.SplitDao
 import com.vinaynalavade.expensetracker.data.local.dao.TransactionDao
 import com.vinaynalavade.expensetracker.data.local.entity.CategoryEntity
 import com.vinaynalavade.expensetracker.data.local.entity.RecurringTransactionEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SplitExpenseEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SplitParticipantEntity
 import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
 
 @Database(
     entities = [
         TransactionEntity::class,
         CategoryEntity::class,
-        RecurringTransactionEntity::class
+        RecurringTransactionEntity::class,
+        SplitExpenseEntity::class,
+        SplitParticipantEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class ExpenseTrackerDatabase : RoomDatabase() {
@@ -28,6 +33,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun categoryDao(): CategoryDao
     abstract fun recurringTransactionDao(): RecurringTransactionDao
+    abstract fun splitDao(): SplitDao
 
     companion object {
         @Volatile
@@ -68,6 +74,41 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `split_expenses` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `title` TEXT NOT NULL,
+                        `total_amount_subunits` INTEGER NOT NULL,
+                        `date` INTEGER NOT NULL,
+                        `category_id` INTEGER NOT NULL,
+                        `paid_by` TEXT NOT NULL,
+                        `split_method` TEXT NOT NULL,
+                        `qr_image_path` TEXT,
+                        `created_at` INTEGER NOT NULL,
+                        `updated_at` INTEGER NOT NULL,
+                        FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT
+                    )
+                """)
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_split_expenses_category_id` ON `split_expenses` (`category_id`)")
+
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `split_participants` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `split_expense_id` INTEGER NOT NULL,
+                        `name` TEXT NOT NULL,
+                        `is_current_user` INTEGER NOT NULL,
+                        `amount_subunits` INTEGER NOT NULL,
+                        `settlement_status` TEXT NOT NULL,
+                        `settled_at` INTEGER,
+                        FOREIGN KEY(`split_expense_id`) REFERENCES `split_expenses`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                    )
+                """)
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_split_participants_split_expense_id` ON `split_participants` (`split_expense_id`)")
+            }
+        }
+
         fun getInstance(context: Context): ExpenseTrackerDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -75,7 +116,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                     ExpenseTrackerDatabase::class.java,
                     AppConstants.DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .addCallback(DatabaseCallback())
                     .build()
                 INSTANCE = instance

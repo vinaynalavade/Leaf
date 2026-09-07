@@ -15,9 +15,10 @@ class NavigationHierarchyAndRoutingTest {
         val routes = BottomNavItems.map { it.route }
         assertTrue(routes.contains(Screen.Dashboard.route))
         assertTrue(routes.contains(Screen.Transactions.route))
+        assertTrue(routes.contains(Screen.Split.route))
         assertTrue(routes.contains(Screen.Analytics.route))
         assertTrue(routes.contains(Screen.Settings.route))
-        assertEquals(4, BottomNavItems.size)
+        assertEquals(5, BottomNavItems.size)
     }
 
     @Test

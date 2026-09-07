@@ -729,6 +729,118 @@ a:hover {
   color: var(--income);
 }
 
+/* --- Split & Collect Mockup Styles --- */
+.split-mockup-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.split-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.split-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+}
+
+.split-status-pill.pending {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.split-status-pill.settled {
+  background-color: var(--income-bg);
+  color: var(--income-text);
+}
+
+.split-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.split-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--bg-surface-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.split-progress-fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-normal);
+}
+
+.split-participant-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.65rem;
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+}
+
+.split-participant-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.split-participant-amount {
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.whatsapp-action-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: #25D366;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-xs);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(37, 211, 102, 0.3);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.whatsapp-action-badge:hover {
+  background-color: #1eb956;
+  color: #ffffff;
+}
+
+.whatsapp-action-badge svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
 /* --- Feature Stories --- */
 .feature-story {
   display: grid;

@@ -2,6 +2,7 @@ package com.vinaynalavade.expensetracker.presentation.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.CallSplit
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Dashboard
@@ -23,9 +24,18 @@ sealed class Screen(
             return "transactions?filter=$f&query=$q"
         }
     }
+    data object Split : Screen("split", R.string.nav_split, Icons.AutoMirrored.Filled.CallSplit)
     data object Analytics : Screen("monthly_summary", R.string.nav_analytics, Icons.Default.PieChart)
     data object Categories : Screen("categories", R.string.nav_categories, Icons.Default.Category)
     data object Settings : Screen("settings", R.string.nav_settings, Icons.Default.Settings)
+
+    data object CreateSplit : Screen("create_split")
+    data object SplitDetail : Screen("split_detail/{splitId}") {
+        fun createRoute(splitId: Long) = "split_detail/$splitId"
+    }
+    data object EditSplit : Screen("edit_split/{splitId}") {
+        fun createRoute(splitId: Long) = "edit_split/$splitId"
+    }
 
     data object Welcome : Screen("welcome")
     data object AppTour : Screen("app_tour")

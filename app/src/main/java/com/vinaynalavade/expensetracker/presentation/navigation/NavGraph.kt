@@ -54,10 +54,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+import com.vinaynalavade.expensetracker.presentation.split.SplitLandingScreen
+import com.vinaynalavade.expensetracker.presentation.split.SplitLandingViewModel
+import com.vinaynalavade.expensetracker.presentation.split.create.CreateSplitScreen
+import com.vinaynalavade.expensetracker.presentation.split.create.CreateSplitViewModel
+import com.vinaynalavade.expensetracker.presentation.split.detail.SplitDetailScreen
+import com.vinaynalavade.expensetracker.presentation.split.detail.SplitDetailViewModel
+import com.vinaynalavade.expensetracker.presentation.split.edit.EditSplitScreen
+import com.vinaynalavade.expensetracker.presentation.split.edit.EditSplitViewModel
+
 private fun isPrimaryDestination(route: String?): Boolean {
     return route == Screen.Dashboard.route ||
         route == Screen.Transactions.route ||
         route?.startsWith("transactions") == true ||
+        route == Screen.Split.route ||
         route == Screen.MonthlySummary.route ||
         route == Screen.Settings.route
 }
@@ -548,6 +558,94 @@ fun NavGraph(
             AboutScreen(
                 updateViewModel = updateViewModel,
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // Split & Collect Destinations (v1.0.6)
+        composable(Screen.Split.route) {
+            val viewModel: SplitLandingViewModel = viewModel(
+                factory = SplitLandingViewModel.Factory(
+                    getSplitExpensesUseCase = container.getSplitExpensesUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            SplitLandingScreen(
+                viewModel = viewModel,
+                onNavigateToCreateSplit = {
+                    navController.navigate(Screen.CreateSplit.route)
+                },
+                onNavigateToSplitDetail = { splitId ->
+                    navController.navigate(Screen.SplitDetail.createRoute(splitId))
+                }
+            )
+        }
+
+        composable(Screen.CreateSplit.route) {
+            val viewModel: CreateSplitViewModel = viewModel(
+                factory = CreateSplitViewModel.Factory(
+                    saveSplitExpenseUseCase = container.saveSplitExpenseUseCase,
+                    getCategoriesUseCase = container.getCategoriesUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase,
+                    qrStorageManager = container.splitQrStorageManager
+                )
+            )
+            CreateSplitScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onSplitCreated = { createdId ->
+                    navController.popBackStack()
+                    navController.navigate(Screen.SplitDetail.createRoute(createdId))
+                    onShowSnackbar("Split expense created successfully")
+                }
+            )
+        }
+
+        composable(
+            route = Screen.SplitDetail.route,
+            arguments = listOf(navArgument("splitId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val splitId = backStackEntry.arguments?.getLong("splitId") ?: 0L
+            val viewModel: SplitDetailViewModel = viewModel(
+                factory = SplitDetailViewModel.Factory(
+                    splitId = splitId,
+                    getSplitExpenseByIdUseCase = container.getSplitExpenseByIdUseCase,
+                    updateParticipantSettlementUseCase = container.updateParticipantSettlementUseCase,
+                    deleteSplitExpenseUseCase = container.deleteSplitExpenseUseCase,
+                    qrStorageManager = container.splitQrStorageManager,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            SplitDetailScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToEdit = { id ->
+                    navController.navigate(Screen.EditSplit.createRoute(id))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.EditSplit.route,
+            arguments = listOf(navArgument("splitId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val splitId = backStackEntry.arguments?.getLong("splitId") ?: 0L
+            val viewModel: EditSplitViewModel = viewModel(
+                factory = EditSplitViewModel.Factory(
+                    splitId = splitId,
+                    getSplitExpenseByIdUseCase = container.getSplitExpenseByIdUseCase,
+                    updateSplitExpenseUseCase = container.updateSplitExpenseUseCase,
+                    getCategoriesUseCase = container.getCategoriesUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase,
+                    qrStorageManager = container.splitQrStorageManager
+                )
+            )
+            EditSplitScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() },
+                onSplitUpdated = {
+                    navController.popBackStack()
+                    onShowSnackbar("Split expense updated")
+                }
             )
         }
     }

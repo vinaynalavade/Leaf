@@ -23,6 +23,7 @@ import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 val BottomNavItems = listOf(
     Screen.Dashboard,
     Screen.Transactions,
+    Screen.Split,
     Screen.Analytics,
     Screen.Settings
 )
@@ -58,7 +59,8 @@ fun AppBottomBar(
         BottomNavItems.forEach { screen ->
             val isSelected = currentRoute == screen.route ||
                 (screen == Screen.Transactions && currentRoute?.startsWith("transactions") == true) ||
-                (screen == Screen.Analytics && currentRoute == Screen.MonthlySummary.route)
+                (screen == Screen.Analytics && currentRoute == Screen.MonthlySummary.route) ||
+                (screen == Screen.Split && currentRoute == Screen.Split.route)
 
             NavigationBarItem(
                 selected = isSelected,

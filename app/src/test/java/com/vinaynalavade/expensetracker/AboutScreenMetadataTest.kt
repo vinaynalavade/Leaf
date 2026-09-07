@@ -29,13 +29,13 @@ class AboutScreenMetadataTest {
 
     @Test
     fun testVersionNamingConvention() {
-        val version = "1.0.5"
+        val version = "1.0.6"
         val parts = version.split(".")
 
         assertEquals(3, parts.size)
         assertEquals("1", parts[0])
         assertEquals("0", parts[1])
-        assertEquals("5", parts[2])
+        assertEquals("6", parts[2])
     }
 
     @Test

@@ -34,7 +34,7 @@
           <li><a href="privacy.html" class="nav-link">Privacy</a></li>
           <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
-        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.5/Leaf_v1.0.5.apk" class="btn btn-primary btn-sm dynamic-download-link" download>
+        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk" class="btn btn-primary btn-sm dynamic-download-link" download>
           <span>Download APK</span>
           <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         </a>
@@ -128,11 +128,71 @@
       </div>
     </section>
 
-    <!-- Category 2: Budgets & Ledger -->
+    <!-- Category 2: Split & Collect (New in v1.0.6) -->
     <section class="section">
       <div class="container">
         <div style="margin-bottom: 2.5rem;">
-          <span class="section-tag">2. Budgeting & Insights</span>
+          <span class="section-tag" style="background: var(--primary-light); color: var(--primary);">2. Split &amp; Collect (New in v1.0.6)</span>
+          <h2>Shared Expenses &amp; Repayment Tracking</h2>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <h3 class="card-title">Dedicated Split Tab</h3>
+            <p class="card-desc">Permanent 5th bottom navigation tab with overview metrics: total "To collect" and "Collected", fast "+ Split an expense" wizard, and recent shared cards.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
+            </div>
+            <h3 class="card-title">Subunit Splitting Math</h3>
+            <p class="card-desc">Exact integer subunit arithmetic prevents rounding leaks. Choose Equal split with deterministic remainder distribution or Custom shares with live validation.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm2 3h2v2h-2v-2zm-2 2h2v3h-2v-3zm4 1h2v2h-2v-2zm0-3h2v2h-2v-2z"/></svg>
+            </div>
+            <h3 class="card-title">UPI QR Code Storage</h3>
+            <p class="card-desc">Attach your recipient UPI QR code directly from your phone gallery. Stored securely on-device with full high-clarity preview and direct payment sharing.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></svg>
+            </div>
+            <h3 class="card-title">WhatsApp Payment Reminders</h3>
+            <p class="card-desc">One-tap WhatsApp share generates clean, polite payment reminders (consolidated for equal splits, personalized for custom shares) with QR attachment.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            </div>
+            <h3 class="card-title">Manual Settlement Tracking</h3>
+            <p class="card-desc">Track participant shares with clear Pending vs Settled status toggles. Includes confirmation protection, undo support, and a "✓ Fully settled" progress badge.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <h3 class="card-title">100% Data Isolation</h3>
+            <p class="card-desc">Split expenses are stored in dedicated Room tables, completely isolated from your personal transaction ledgers so monthly surpluses are never distorted.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category 3: Budgets & Ledger -->
+    <section class="section section-muted">
+      <div class="container">
+        <div style="margin-bottom: 2.5rem;">
+          <span class="section-tag">3. Budgeting &amp; Insights</span>
           <h2>Financial Continuity & Analysis</h2>
         </div>
 
@@ -164,11 +224,11 @@
       </div>
     </section>
 
-    <!-- Category 3: Cloud Safety & Google Drive Backup -->
-    <section class="section section-muted">
+    <!-- Category 4: Cloud Safety & Google Drive Backup -->
+    <section class="section">
       <div class="container">
         <div style="margin-bottom: 2.5rem;">
-          <span class="section-tag gold">3. Cloud Backup & Portability</span>
+          <span class="section-tag gold">4. Cloud Backup &amp; Portability</span>
           <h2>Your Data, Backed Up Your Way</h2>
         </div>
 
@@ -200,12 +260,12 @@
       </div>
     </section>
 
-    <!-- Category 4: Recurring & Automation -->
-    <section class="section">
+    <!-- Category 5: Recurring & Automation -->
+    <section class="section section-muted">
       <div class="container">
         <div style="margin-bottom: 2.5rem;">
-          <span class="section-tag">4. Recurring & Automation</span>
-          <h2>Automate Bills, Salaries & EMIs</h2>
+          <span class="section-tag">5. Recurring &amp; Automation</span>
+          <h2>Automate Bills, Salaries &amp; EMIs</h2>
         </div>
 
         <div class="grid-3">
@@ -213,7 +273,7 @@
             <div class="card-icon">
               <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
             </div>
-            <h3 class="card-title">EMI & Salary Schedules</h3>
+            <h3 class="card-title">EMI &amp; Salary Schedules</h3>
             <p class="card-desc">Schedule fixed monthly income, loan EMIs, and utility subscriptions with reliable automatic tracking.</p>
           </div>
 
@@ -236,11 +296,11 @@
       </div>
     </section>
 
-    <!-- Category 5: Security, Customization & Everyday Use -->
-    <section class="section section-muted">
+    <!-- Category 6: Security, Customization & Everyday Use -->
+    <section class="section">
       <div class="container">
         <div style="margin-bottom: 2.5rem;">
-          <span class="section-tag">5. Security & Customization</span>
+          <span class="section-tag">6. Security &amp; Customization</span>
           <h2>Privacy, Locking and Personalization</h2>
         </div>
 
@@ -301,7 +361,7 @@
       <div class="container container-narrow" style="text-align: center;">
         <h2>Ready to manage your finances with ease?</h2>
         <p class="lead" style="margin-bottom: 2rem;">Download Leaf today and experience simple, private money tracking.</p>
-        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.5/Leaf_v1.0.5.apk" class="btn btn-primary btn-lg dynamic-download-link" download>
+        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk" class="btn btn-primary btn-lg dynamic-download-link" download>
           <span>Download Leaf APK</span>
           <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         </a>

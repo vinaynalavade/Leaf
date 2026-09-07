@@ -112,6 +112,15 @@ interface AppContainer {
     val checkForUpdateUseCase: com.vinaynalavade.expensetracker.domain.usecase.CheckForUpdateUseCase
     val downloadAndVerifyUpdateUseCase: com.vinaynalavade.expensetracker.domain.usecase.DownloadAndVerifyUpdateUseCase
     val packageInstallerHelper: com.vinaynalavade.expensetracker.core.installer.PackageInstallerHelper
+
+    val splitRepository: com.vinaynalavade.expensetracker.domain.repository.SplitRepository
+    val splitQrStorageManager: com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
+    val getSplitExpensesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpensesUseCase
+    val getSplitExpenseByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpenseByIdUseCase
+    val saveSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSplitExpenseUseCase
+    val updateSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateSplitExpenseUseCase
+    val deleteSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitExpenseUseCase
+    val updateParticipantSettlementUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
@@ -430,5 +439,37 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val packageInstallerHelper: com.vinaynalavade.expensetracker.core.installer.PackageInstallerHelper by lazy {
         com.vinaynalavade.expensetracker.core.installer.PackageInstallerHelper(context)
+    }
+
+    override val splitRepository: com.vinaynalavade.expensetracker.domain.repository.SplitRepository by lazy {
+        com.vinaynalavade.expensetracker.data.repository.SplitRepositoryImpl(database.splitDao())
+    }
+
+    override val splitQrStorageManager: com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager by lazy {
+        com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager(context)
+    }
+
+    override val getSplitExpensesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpensesUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpensesUseCase(splitRepository)
+    }
+
+    override val getSplitExpenseByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpenseByIdUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSplitExpenseByIdUseCase(splitRepository)
+    }
+
+    override val saveSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSplitExpenseUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveSplitExpenseUseCase(splitRepository)
+    }
+
+    override val updateSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateSplitExpenseUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.UpdateSplitExpenseUseCase(splitRepository)
+    }
+
+    override val deleteSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitExpenseUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitExpenseUseCase(splitRepository, splitQrStorageManager)
+    }
+
+    override val updateParticipantSettlementUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase(splitRepository)
     }
 }
