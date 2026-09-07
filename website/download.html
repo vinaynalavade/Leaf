@@ -90,7 +90,7 @@
           <div class="checksum-box">
             <div>
               <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">Official SHA-256 Checksum</div>
-              <div class="checksum-code dynamic-sha256" id="apk-sha256">8f96ca10295c6368d5981b47942a7b2dbef22e4905c92b93bf6cb34f4225fbc7</div>
+              <div class="checksum-code dynamic-sha256" id="apk-sha256">242f19a87c47f5b743ea58b66c40da6dd782048c1299d72128dd46d15dece7a5</div>
             </div>
             <button class="copy-btn" type="button" data-copy-target="#apk-sha256">Copy</button>
           </div>
@@ -110,7 +110,7 @@
             <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">September 7, 2026</span>
           </div>
           <p style="font-size: 0.95rem; margin-bottom: 1.25rem;">
-            Version 1.0.6 introduces the new <strong>Split &amp; Collect</strong> module for sharing group expenses, calculating exact shares, uploading UPI QR codes, and sending payment reminders on WhatsApp.
+            Version 1.0.6 introduces the new <strong>Split &amp; Collect</strong> module for sharing group expenses, calculating exact shares, uploading UPI QR codes, sending payment reminders on WhatsApp, and optionally recording expenses and settlements into your primary ledger.
           </p>
           <ul class="feature-checklist">
             <li>
@@ -127,11 +127,11 @@
             </li>
             <li>
               <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              <span><strong>Manual Settlement Tracking:</strong> Toggle participant statuses between <em>Pending</em> and <em>Settled</em> with confirmation protection and complete undo capability.</span>
+              <span><strong>Manual Settlement Tracking:</strong> Toggle participant statuses between <em>Pending</em> and <em>Settled</em> with receiving payment account selection, confirmation protection, and complete undo capability.</span>
             </li>
             <li>
               <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              <span><strong>Isolated Data Architecture:</strong> Shared expenses live in dedicated database tables, keeping personal income, expenses, and net surplus balances 100% clean.</span>
+              <span><strong>Optional Transaction Integration:</strong> Choose per split whether to automatically record expenses &amp; settlement income in your Transactions ledger or keep them isolated, with strict financial-history preservation (deleting splits or undoing settlements never alters your past ledger history).</span>
             </li>
           </ul>
         </div>

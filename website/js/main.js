@@ -18,7 +18,7 @@
     defaultApkSize: '3.9 MB',
     defaultApkFileName: 'Leaf_v1.0.6.apk',
     defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.0.6/Leaf_v1.0.6.apk',
-    defaultSha256: '8f96ca10295c6368d5981b47942a7b2dbef22e4905c92b93bf6cb34f4225fbc7',
+    defaultSha256: '242f19a87c47f5b743ea58b66c40da6dd782048c1299d72128dd46d15dece7a5',
     repoUrl: 'https://github.com/vinaynalavade/Leaf',
     releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
   };

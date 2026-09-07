@@ -767,6 +767,18 @@ a:hover {
   color: var(--income-text);
 }
 
+.split-ledger-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+}
+
 .split-progress-container {
   display: flex;
   flex-direction: column;
