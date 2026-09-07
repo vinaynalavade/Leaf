@@ -20,7 +20,8 @@ data class SplitParticipant(
     val isCurrentUser: Boolean = false,
     val amount: Amount,
     val settlementStatus: SettlementStatus = SettlementStatus.PENDING,
-    val settledAt: Long? = null
+    val settledAt: Long? = null,
+    val settlementTransactionId: Long? = null
 ) {
     val isSettled: Boolean get() = settlementStatus == SettlementStatus.SETTLED
     val isPending: Boolean get() = settlementStatus == SettlementStatus.PENDING

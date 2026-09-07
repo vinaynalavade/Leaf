@@ -25,7 +25,7 @@ import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
         SplitExpenseEntity::class,
         SplitParticipantEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class ExpenseTrackerDatabase : RoomDatabase() {
@@ -109,6 +109,15 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `split_expenses` ADD COLUMN `add_to_transactions` INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE `split_expenses` ADD COLUMN `expense_transaction_id` INTEGER")
+                db.execSQL("ALTER TABLE `split_expenses` ADD COLUMN `payment_method` TEXT NOT NULL DEFAULT 'CASH'")
+                db.execSQL("ALTER TABLE `split_participants` ADD COLUMN `settlement_transaction_id` INTEGER")
+            }
+        }
+
         fun getInstance(context: Context): ExpenseTrackerDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -116,7 +125,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                     ExpenseTrackerDatabase::class.java,
                     AppConstants.DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .addCallback(DatabaseCallback())
                     .build()
                 INSTANCE = instance

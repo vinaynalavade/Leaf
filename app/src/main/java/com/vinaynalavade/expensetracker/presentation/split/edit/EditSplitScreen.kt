@@ -73,6 +73,7 @@ import com.vinaynalavade.expensetracker.domain.model.SplitMethod
 import com.vinaynalavade.expensetracker.presentation.components.AppTopBar
 import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
 import com.vinaynalavade.expensetracker.presentation.components.LoadingView
+import com.vinaynalavade.expensetracker.presentation.components.PaymentMethodSelector
 import com.vinaynalavade.expensetracker.presentation.split.components.CustomSplitBalanceIndicator
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
@@ -297,6 +298,17 @@ fun EditSplitScreen(
                             )
                         }
                     }
+                }
+
+                // If Transaction Integration is enabled, allow editing payment method
+                if (uiState.addToTransactions) {
+                    PaymentMethodSelector(
+                        selectedMethod = uiState.paymentMethod,
+                        onMethodSelect = { viewModel.onPaymentMethodChange(it) },
+                        isCompact = true,
+                        horizontalPadding = 0.dp,
+                        showLabel = true
+                    )
                 }
 
                 // Add People

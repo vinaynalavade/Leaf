@@ -25,6 +25,9 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
     fun getTransactionWithCategoryById(id: Long): Flow<TransactionWithCategory?>
 
+    @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
+    suspend fun getTransactionByIdSuspend(id: Long): TransactionEntity?
+
     @Transaction
     @Query("SELECT * FROM transactions WHERE timestamp >= :startDate AND timestamp <= :endDate ORDER BY timestamp DESC, id DESC")
     fun getTransactionsBetween(startDate: Long, endDate: Long): Flow<List<TransactionWithCategory>>

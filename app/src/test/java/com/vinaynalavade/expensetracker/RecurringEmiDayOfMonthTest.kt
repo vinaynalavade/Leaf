@@ -456,6 +456,7 @@ class RecurringEmiDayOfMonthTest {
         override fun getAllTransactionsWithCategory(): Flow<List<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>> = flowOf(emptyList())
         override fun getRecentTransactionsWithCategory(limit: Int): Flow<List<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>> = flowOf(emptyList())
         override fun getTransactionWithCategoryById(id: Long): Flow<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory?> = flowOf(null)
+        override suspend fun getTransactionByIdSuspend(id: Long): com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity? = null
         override fun getTransactionsBetween(startDate: Long, endDate: Long): Flow<List<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>> = flowOf(emptyList())
         override fun getTotalIncomeSubunits(): Flow<Long> = flowOf(0L)
         override fun getTotalExpenseSubunits(): Flow<Long> = flowOf(0L)

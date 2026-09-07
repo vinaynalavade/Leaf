@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.share.WhatsAppShareHelper
 import com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SettlementStatus
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
 import com.vinaynalavade.expensetracker.domain.model.SplitParticipant
@@ -30,6 +31,7 @@ data class SplitDetailUiState(
     val currency: Currency = Currency.DEFAULT,
     val isLoading: Boolean = true,
     val selectedParticipantForSettle: SplitParticipant? = null,
+    val settlePaymentMethod: PaymentMethod = PaymentMethod.CASH,
     val showDeleteConfirmDialog: Boolean = false,
     val isDeleting: Boolean = false
 )
@@ -66,6 +68,7 @@ class SplitDetailViewModel(
                     splitExpense = expense,
                     qrImageBitmap = bitmap,
                     currency = prefs.currency,
+                    settlePaymentMethod = prefs.defaultIncomeSource,
                     isLoading = false
                 )
             }
@@ -76,16 +79,22 @@ class SplitDetailViewModel(
         _uiState.update { it.copy(selectedParticipantForSettle = participant) }
     }
 
+    fun onSettlePaymentMethodSelect(method: PaymentMethod) {
+        _uiState.update { it.copy(settlePaymentMethod = method) }
+    }
+
     fun dismissSettleDialog() {
         _uiState.update { it.copy(selectedParticipantForSettle = null) }
     }
 
     fun confirmSettle() {
         val participant = _uiState.value.selectedParticipantForSettle ?: return
+        val paymentMethod = _uiState.value.settlePaymentMethod
         viewModelScope.launch {
             updateParticipantSettlementUseCase(
                 participantId = participant.id,
-                status = SettlementStatus.SETTLED
+                status = SettlementStatus.SETTLED,
+                paymentMethod = paymentMethod
             )
             _uiState.update { it.copy(selectedParticipantForSettle = null) }
         }

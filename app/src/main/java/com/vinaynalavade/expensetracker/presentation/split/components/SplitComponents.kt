@@ -49,10 +49,12 @@ import androidx.compose.ui.unit.dp
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.model.Currency
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SettlementStatus
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
 import com.vinaynalavade.expensetracker.domain.model.SplitParticipant
 import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
+import com.vinaynalavade.expensetracker.presentation.components.PaymentMethodSelector
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.IncomeEmerald
@@ -355,6 +357,9 @@ fun SettlementConfirmDialog(
     participantName: String,
     amount: Amount,
     currency: Currency,
+    isTransactionIntegrationEnabled: Boolean = false,
+    selectedPaymentMethod: PaymentMethod = PaymentMethod.CASH,
+    onPaymentMethodSelect: (PaymentMethod) -> Unit = {},
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -368,14 +373,34 @@ fun SettlementConfirmDialog(
             )
         },
         text = {
-            Text(
-                text = stringResource(
-                    R.string.split_settle_confirm_msg,
-                    amount.format(currency),
-                    participantName
-                ),
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Column {
+                Text(
+                    text = stringResource(
+                        R.string.split_settle_confirm_msg,
+                        amount.format(currency),
+                        participantName
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                if (isTransactionIntegrationEnabled) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    Text(
+                        text = stringResource(R.string.split_settle_received_in),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+                    PaymentMethodSelector(
+                        selectedMethod = selectedPaymentMethod,
+                        onMethodSelect = onPaymentMethodSelect,
+                        isCompact = true,
+                        horizontalPadding = 0.dp,
+                        showLabel = false
+                    )
+                }
+            }
         },
         confirmButton = {
             Button(
@@ -404,6 +429,7 @@ fun SettlementConfirmDialog(
  */
 @Composable
 fun DeleteSplitConfirmDialog(
+    isTransactionIntegrationEnabled: Boolean = false,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -418,7 +444,11 @@ fun DeleteSplitConfirmDialog(
         },
         text = {
             Text(
-                text = stringResource(R.string.split_delete_confirm_msg),
+                text = if (isTransactionIntegrationEnabled) {
+                    stringResource(R.string.split_delete_confirm_linked_msg)
+                } else {
+                    stringResource(R.string.split_delete_confirm_msg)
+                },
                 style = MaterialTheme.typography.bodyMedium
             )
         },

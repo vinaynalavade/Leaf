@@ -10,6 +10,7 @@ import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
 import com.vinaynalavade.expensetracker.domain.model.Category
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SettlementStatus
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
 import com.vinaynalavade.expensetracker.domain.model.SplitMethod
@@ -42,6 +43,7 @@ data class EditSplitUiState(
     val customSharesInput: Map<String, String> = emptyMap(),
     val calculatedParticipants: List<SplitParticipant> = emptyList(),
     val existingSettlements: Map<String, SettlementStatus> = emptyMap(),
+    val existingParticipantTransactions: Map<String, Long?> = emptyMap(),
     val customValidation: CustomSplitValidation = CustomSplitValidation(
         isValid = true,
         allocatedAmount = Amount.ZERO,
@@ -50,6 +52,9 @@ data class EditSplitUiState(
     ),
     val qrImagePath: String? = null,
     val qrImageBitmap: ImageBitmap? = null,
+    val addToTransactions: Boolean = false,
+    val expenseTransactionId: Long? = null,
+    val paymentMethod: PaymentMethod = PaymentMethod.CASH,
     val validationError: String? = null,
     val isSaving: Boolean = false,
     val isLoading: Boolean = true,
@@ -87,6 +92,7 @@ class EditSplitViewModel(
                 val participantNames = expense.participants.map { it.name }
                 val customMap = expense.participants.associate { it.name to it.amount.toInputString(currency) }
                 val settlements = expense.participants.associate { it.name to it.settlementStatus }
+                val txMap = expense.participants.associate { it.name to it.settlementTransactionId }
 
                 _uiState.update {
                     it.copy(
@@ -102,8 +108,12 @@ class EditSplitViewModel(
                         customSharesInput = customMap,
                         calculatedParticipants = expense.participants,
                         existingSettlements = settlements,
+                        existingParticipantTransactions = txMap,
                         qrImagePath = expense.qrImagePath,
                         qrImageBitmap = bitmap,
+                        addToTransactions = expense.addToTransactions,
+                        expenseTransactionId = expense.expenseTransactionId,
+                        paymentMethod = expense.paymentMethod,
                         isLoading = false,
                         currency = currency
                     )
@@ -112,6 +122,10 @@ class EditSplitViewModel(
                 _uiState.update { it.copy(isLoading = false, validationError = "Split expense not found.") }
             }
         }
+    }
+
+    fun onPaymentMethodChange(paymentMethod: PaymentMethod) {
+        _uiState.update { it.copy(paymentMethod = paymentMethod) }
     }
 
     fun onTitleChange(newTitle: String) {
@@ -188,6 +202,7 @@ class EditSplitViewModel(
         val participants = state.participants
         val currency = state.currency
         val settlements = state.existingSettlements
+        val existingTxIds = state.existingParticipantTransactions
 
         if (state.splitMethod == SplitMethod.EQUAL) {
             val calculated = SplitCalculationEngine.calculateEqualSplit(
@@ -196,7 +211,11 @@ class EditSplitViewModel(
                 payerName = state.paidBy
             ).map { p ->
                 val prevStatus = settlements[p.name] ?: SettlementStatus.PENDING
-                p.copy(settlementStatus = prevStatus)
+                val prevTxId = existingTxIds[p.name]
+                p.copy(
+                    settlementStatus = prevStatus,
+                    settlementTransactionId = prevTxId
+                )
             }
 
             _uiState.update {
@@ -218,11 +237,13 @@ class EditSplitViewModel(
                 allocatedSubunits += shareAmount.subunits
                 val isCurrentUser = name.equals("Me", ignoreCase = true) || name.equals(state.paidBy, ignoreCase = true)
                 val prevStatus = settlements[name] ?: SettlementStatus.PENDING
+                val prevTxId = existingTxIds[name]
                 SplitParticipant(
                     name = name,
                     isCurrentUser = isCurrentUser,
                     amount = shareAmount,
-                    settlementStatus = prevStatus
+                    settlementStatus = prevStatus,
+                    settlementTransactionId = prevTxId
                 )
             }
 
@@ -297,6 +318,9 @@ class EditSplitViewModel(
                 paidBy = state.paidBy,
                 splitMethod = state.splitMethod,
                 qrImagePath = state.qrImagePath,
+                addToTransactions = state.addToTransactions,
+                expenseTransactionId = state.expenseTransactionId,
+                paymentMethod = state.paymentMethod,
                 participants = state.calculatedParticipants,
                 createdAt = state.date,
                 updatedAt = System.currentTimeMillis()

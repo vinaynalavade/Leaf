@@ -81,6 +81,9 @@ fun SplitDetailScreen(
             participantName = participant.name,
             amount = participant.amount,
             currency = uiState.currency,
+            isTransactionIntegrationEnabled = expense?.addToTransactions ?: false,
+            selectedPaymentMethod = uiState.settlePaymentMethod,
+            onPaymentMethodSelect = { viewModel.onSettlePaymentMethodSelect(it) },
             onConfirm = { viewModel.confirmSettle() },
             onDismiss = { viewModel.dismissSettleDialog() }
         )
@@ -89,6 +92,7 @@ fun SplitDetailScreen(
     // Delete confirmation dialog
     if (uiState.showDeleteConfirmDialog) {
         DeleteSplitConfirmDialog(
+            isTransactionIntegrationEnabled = expense?.addToTransactions ?: false,
             onConfirm = {
                 viewModel.confirmDelete {
                     onNavigateBack()

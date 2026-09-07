@@ -442,7 +442,11 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     }
 
     override val splitRepository: com.vinaynalavade.expensetracker.domain.repository.SplitRepository by lazy {
-        com.vinaynalavade.expensetracker.data.repository.SplitRepositoryImpl(database.splitDao())
+        com.vinaynalavade.expensetracker.data.repository.SplitRepositoryImpl(
+            database = database,
+            splitDao = database.splitDao(),
+            transactionDao = database.transactionDao()
+        )
     }
 
     override val splitQrStorageManager: com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager by lazy {

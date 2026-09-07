@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.domain.model.Category
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
 import com.vinaynalavade.expensetracker.domain.model.SplitMethod
 import com.vinaynalavade.expensetracker.domain.model.SplitParticipant
@@ -51,6 +52,15 @@ data class SplitExpenseEntity(
     @ColumnInfo(name = "qr_image_path")
     val qrImagePath: String? = null,
 
+    @ColumnInfo(name = "add_to_transactions", defaultValue = "0")
+    val addToTransactions: Boolean = false,
+
+    @ColumnInfo(name = "expense_transaction_id")
+    val expenseTransactionId: Long? = null,
+
+    @ColumnInfo(name = "payment_method", defaultValue = "CASH")
+    val paymentMethod: String = "CASH",
+
     @ColumnInfo(name = "created_at")
     val createdAt: Long = date,
 
@@ -68,6 +78,9 @@ data class SplitExpenseEntity(
             paidBy = paidBy,
             splitMethod = try { SplitMethod.valueOf(splitMethod) } catch (_: Exception) { SplitMethod.EQUAL },
             qrImagePath = qrImagePath,
+            addToTransactions = addToTransactions,
+            expenseTransactionId = expenseTransactionId,
+            paymentMethod = PaymentMethod.fromString(paymentMethod),
             participants = participants,
             createdAt = createdAt,
             updatedAt = updatedAt
@@ -85,6 +98,9 @@ data class SplitExpenseEntity(
                 paidBy = splitExpense.paidBy,
                 splitMethod = splitExpense.splitMethod.name,
                 qrImagePath = splitExpense.qrImagePath,
+                addToTransactions = splitExpense.addToTransactions,
+                expenseTransactionId = splitExpense.expenseTransactionId,
+                paymentMethod = splitExpense.paymentMethod.name,
                 createdAt = splitExpense.createdAt,
                 updatedAt = splitExpense.updatedAt
             )

@@ -53,6 +53,7 @@ class UpdateParticipantSettlementUseCase(
     suspend operator fun invoke(
         participantId: Long,
         status: SettlementStatus,
+        paymentMethod: com.vinaynalavade.expensetracker.domain.model.PaymentMethod = com.vinaynalavade.expensetracker.domain.model.PaymentMethod.CASH,
         settledAt: Long? = if (status == SettlementStatus.SETTLED) System.currentTimeMillis() else null
-    ): AppResult<Unit> = splitRepository.updateParticipantSettlement(participantId, status, settledAt)
+    ): AppResult<Unit> = splitRepository.updateParticipantSettlement(participantId, status, paymentMethod, settledAt)
 }

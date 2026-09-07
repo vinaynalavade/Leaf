@@ -32,6 +32,7 @@ interface SplitRepository {
     suspend fun updateParticipantSettlement(
         participantId: Long,
         status: SettlementStatus,
+        paymentMethod: com.vinaynalavade.expensetracker.domain.model.PaymentMethod = com.vinaynalavade.expensetracker.domain.model.PaymentMethod.CASH,
         settledAt: Long? = if (status == SettlementStatus.SETTLED) System.currentTimeMillis() else null
     ): AppResult<Unit>
 }

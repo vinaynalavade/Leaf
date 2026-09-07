@@ -5,6 +5,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +31,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
@@ -77,9 +79,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SplitMethod
 import com.vinaynalavade.expensetracker.presentation.components.AppTopBar
 import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
+import com.vinaynalavade.expensetracker.presentation.components.PaymentMethodSelector
 import com.vinaynalavade.expensetracker.presentation.split.components.CustomSplitBalanceIndicator
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
@@ -260,6 +264,8 @@ fun CreateSplitScreen(
                         onTitleChange = { viewModel.onTitleChange(it) },
                         onAmountChange = { viewModel.onAmountChange(it) },
                         onCategorySelect = { viewModel.onCategorySelect(it) },
+                        onAddToTransactionsChange = { viewModel.onAddToTransactionsChange(it) },
+                        onPaymentMethodChange = { viewModel.onPaymentMethodChange(it) },
                         onOpenDatePicker = { showDatePicker = true }
                     )
                     2 -> Step2AddPeople(
@@ -348,6 +354,8 @@ private fun Step1ExpenseDetails(
     onTitleChange: (String) -> Unit,
     onAmountChange: (String) -> Unit,
     onCategorySelect: (com.vinaynalavade.expensetracker.domain.model.Category) -> Unit,
+    onAddToTransactionsChange: (Boolean) -> Unit,
+    onPaymentMethodChange: (PaymentMethod) -> Unit,
     onOpenDatePicker: () -> Unit
 ) {
     val quickSuggestions = listOf("Dinner", "Goa Hotel", "Movie", "Road Trip", "Groceries", "Coffee")
@@ -491,6 +499,137 @@ private fun Step1ExpenseDetails(
                         selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+
+        // Add to Transactions Integration Choice Card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = CardShape,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            border = CardDefaults.outlinedCardBorder()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(MaterialTheme.spacing.md)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ReceiptLong,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.xs))
+                    Text(
+                        text = stringResource(R.string.split_add_to_transactions_title),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = stringResource(R.string.split_add_to_transactions_desc),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)
+                ) {
+                    // Option 1: Yes, add to Transactions
+                    Surface(
+                        shape = PillShape,
+                        color = if (uiState.addToTransactions) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        border = if (uiState.addToTransactions) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(PillShape)
+                            .clickable { onAddToTransactionsChange(true) }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            if (uiState.addToTransactions) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(14.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                            }
+                            Text(
+                                text = stringResource(R.string.split_add_to_transactions_yes),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (uiState.addToTransactions) FontWeight.Bold else FontWeight.Medium,
+                                color = if (uiState.addToTransactions) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    // Option 2: No, keep only in Split
+                    Surface(
+                        shape = PillShape,
+                        color = if (!uiState.addToTransactions) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        border = if (!uiState.addToTransactions) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(PillShape)
+                            .clickable { onAddToTransactionsChange(false) }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            if (!uiState.addToTransactions) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(14.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                            }
+                            Text(
+                                text = stringResource(R.string.split_add_to_transactions_no),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (!uiState.addToTransactions) FontWeight.Bold else FontWeight.Medium,
+                                color = if (!uiState.addToTransactions) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                // If Yes, show Payment Method Selector for who paid the original bill
+                AnimatedVisibility(visible = uiState.addToTransactions) {
+                    Column(modifier = Modifier.padding(top = MaterialTheme.spacing.md)) {
+                        PaymentMethodSelector(
+                            selectedMethod = uiState.paymentMethod,
+                            onMethodSelect = onPaymentMethodChange,
+                            isCompact = true,
+                            horizontalPadding = 0.dp,
+                            showLabel = true
+                        )
+                    }
+                }
             }
         }
     }
@@ -1043,6 +1182,42 @@ private fun Step5Review(
                             style = MaterialTheme.typography.labelMedium,
                             color = IncomeEmerald,
                             fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+
+                // Transaction Integration Summary
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ReceiptLong,
+                            contentDescription = null,
+                            tint = if (uiState.addToTransactions) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Transaction Ledger",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Surface(
+                        shape = PillShape,
+                        color = if (uiState.addToTransactions) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Text(
+                            text = if (uiState.addToTransactions) "Yes (${uiState.paymentMethod.displayName})" else "No (Split only)",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = if (uiState.addToTransactions) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
                     }
                 }

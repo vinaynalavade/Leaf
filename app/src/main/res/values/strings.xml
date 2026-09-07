@@ -292,4 +292,10 @@
     <string name="split_validation_name_required">Please enter an expense name.</string>
     <string name="split_validation_amount_required">Please enter a valid expense amount greater than 0.</string>
     <string name="split_validation_mismatch">Allocated shares do not match total expense.</string>
+    <string name="split_add_to_transactions_title">Add to Transactions</string>
+    <string name="split_add_to_transactions_desc">Keep this shared expense in your normal transaction history?</string>
+    <string name="split_add_to_transactions_yes">Yes, add to Transactions</string>
+    <string name="split_add_to_transactions_no">No, keep only in Split</string>
+    <string name="split_settle_received_in">Received in</string>
+    <string name="split_delete_confirm_linked_msg">This will remove this split expense and its settlement records. Any linked transactions in your transaction ledger will be preserved as financial history.</string>
 </resources>

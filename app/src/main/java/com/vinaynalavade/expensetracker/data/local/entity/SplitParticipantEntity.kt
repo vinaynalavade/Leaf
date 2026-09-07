@@ -44,7 +44,10 @@ data class SplitParticipantEntity(
     val settlementStatus: String = "PENDING",
 
     @ColumnInfo(name = "settled_at")
-    val settledAt: Long? = null
+    val settledAt: Long? = null,
+
+    @ColumnInfo(name = "settlement_transaction_id")
+    val settlementTransactionId: Long? = null
 ) {
     fun toDomainModel(): SplitParticipant {
         return SplitParticipant(
@@ -54,7 +57,8 @@ data class SplitParticipantEntity(
             isCurrentUser = isCurrentUser,
             amount = Amount(amountSubunits),
             settlementStatus = try { SettlementStatus.valueOf(settlementStatus) } catch (_: Exception) { SettlementStatus.PENDING },
-            settledAt = settledAt
+            settledAt = settledAt,
+            settlementTransactionId = settlementTransactionId
         )
     }
 
@@ -67,7 +71,8 @@ data class SplitParticipantEntity(
                 isCurrentUser = participant.isCurrentUser,
                 amountSubunits = participant.amount.subunits,
                 settlementStatus = participant.settlementStatus.name,
-                settledAt = participant.settledAt
+                settledAt = participant.settledAt,
+                settlementTransactionId = participant.settlementTransactionId
             )
         }
     }

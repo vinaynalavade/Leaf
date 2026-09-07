@@ -18,6 +18,9 @@ data class SplitExpense(
     val paidBy: String = "Me",
     val splitMethod: SplitMethod = SplitMethod.EQUAL,
     val qrImagePath: String? = null,
+    val addToTransactions: Boolean = false,
+    val expenseTransactionId: Long? = null,
+    val paymentMethod: PaymentMethod = PaymentMethod.CASH,
     val participants: List<SplitParticipant> = emptyList(),
     val createdAt: Long = date,
     val updatedAt: Long = date

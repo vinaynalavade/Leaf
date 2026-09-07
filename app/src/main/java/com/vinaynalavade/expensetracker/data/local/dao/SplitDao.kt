@@ -26,6 +26,12 @@ interface SplitDao {
     @Query("SELECT * FROM split_expenses WHERE id = :id LIMIT 1")
     suspend fun getSplitExpenseByIdSuspend(id: Long): SplitExpenseWithDetails?
 
+    @Query("SELECT * FROM split_participants WHERE id = :participantId LIMIT 1")
+    suspend fun getParticipantById(participantId: Long): SplitParticipantEntity?
+
+    @Query("SELECT * FROM split_participants WHERE split_expense_id = :expenseId")
+    suspend fun getParticipantsByExpenseId(expenseId: Long): List<SplitParticipantEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExpense(expense: SplitExpenseEntity): Long
 
@@ -43,6 +49,9 @@ interface SplitDao {
 
     @Query("UPDATE split_participants SET settlement_status = :status, settled_at = :settledAt WHERE id = :participantId")
     suspend fun updateParticipantSettlement(participantId: Long, status: String, settledAt: Long?)
+
+    @Query("UPDATE split_participants SET settlement_status = :status, settled_at = :settledAt, settlement_transaction_id = :transactionId WHERE id = :participantId")
+    suspend fun updateParticipantSettlementWithTransaction(participantId: Long, status: String, settledAt: Long?, transactionId: Long?)
 
     @Transaction
     suspend fun insertSplitExpenseWithParticipants(

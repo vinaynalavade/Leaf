@@ -10,6 +10,7 @@ import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
 import com.vinaynalavade.expensetracker.domain.model.Category
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SettlementStatus
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
 import com.vinaynalavade.expensetracker.domain.model.SplitMethod
@@ -47,6 +48,8 @@ data class CreateSplitUiState(
     ),
     val qrImagePath: String? = null,
     val qrImageBitmap: ImageBitmap? = null,
+    val addToTransactions: Boolean = false,
+    val paymentMethod: PaymentMethod = PaymentMethod.CASH,
     val currentStep: Int = 1,
     val validationError: String? = null,
     val isSaving: Boolean = false,
@@ -80,17 +83,27 @@ class CreateSplitViewModel(
         viewModelScope.launch {
             val userPrefs = getUserPreferencesUseCase().firstOrNull()
             val currency = userPrefs?.currency ?: Currency.DEFAULT
+            val defaultSource = userPrefs?.defaultExpenseSource ?: PaymentMethod.CASH
             val categories = getCategoriesUseCase().firstOrNull()?.filter { it.type == TransactionType.EXPENSE } ?: emptyList()
             val defaultCat = categories.firstOrNull { it.name.contains("Food", ignoreCase = true) } ?: categories.firstOrNull()
 
             _uiState.update {
                 it.copy(
                     currency = currency,
+                    paymentMethod = defaultSource,
                     availableCategories = categories,
                     selectedCategory = defaultCat
                 )
             }
         }
+    }
+
+    fun onAddToTransactionsChange(addToTransactions: Boolean) {
+        _uiState.update { it.copy(addToTransactions = addToTransactions) }
+    }
+
+    fun onPaymentMethodChange(paymentMethod: PaymentMethod) {
+        _uiState.update { it.copy(paymentMethod = paymentMethod) }
     }
 
     fun onTitleChange(newTitle: String) {
@@ -314,6 +327,8 @@ class CreateSplitViewModel(
                 paidBy = state.paidBy,
                 splitMethod = state.splitMethod,
                 qrImagePath = state.qrImagePath,
+                addToTransactions = state.addToTransactions,
+                paymentMethod = state.paymentMethod,
                 participants = state.calculatedParticipants,
                 createdAt = state.date,
                 updatedAt = System.currentTimeMillis()
