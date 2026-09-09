@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,11 +42,11 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Luxury Financial Insight & Monthly Overview card on the dashboard.
- * Delivers clean financial health metrics, net change indicators, and month progress.
+ * Monthly overview card on the dashboard showing this month's financial activity at a glance.
+ * Redesigned with a luxury squircle surface, confident financial hierarchy, and clean semantic colors.
  */
 @Composable
-fun FinancialInsightCard(
+fun MonthlyOverviewCard(
     summary: FinancialSummary,
     modifier: Modifier = Modifier
 ) {
@@ -70,31 +68,16 @@ fun FinancialInsightCard(
         else -> Icons.AutoMirrored.Filled.TrendingUp
     }
 
-    val bannerBg = if (isDark) {
-        Brush.horizontalGradient(
-            colors = listOf(
-                Color(0xFF131F2E),
-                Color(0xFF17283C)
-            )
-        )
-    } else {
-        Brush.horizontalGradient(
-            colors = listOf(
-                Color(0xFFFFFFFF),
-                Color(0xFFF0FDF4)
-            )
-        )
-    }
-
     Card(
         shape = CardShape,
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.screen)
             .clip(CardShape)
-            .background(bannerBg)
             .border(
                 width = 0.75.dp,
                 color = if (isDark) Color(0xFF263242) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
@@ -114,36 +97,33 @@ fun FinancialInsightCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(36.dp)
                             .clip(SquircleIconShape)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.AutoAwesome,
+                            imageVector = Icons.Default.CalendarMonth,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(18.dp)
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
 
                     Column {
                         Text(
-                            text = "MONTHLY HEALTH",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 1.0.sp
-                            ),
-                            color = MaterialTheme.colorScheme.primary
+                            text = "Monthly Overview",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = currentMonth,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -152,10 +132,10 @@ fun FinancialInsightCard(
                 Box(
                     modifier = Modifier
                         .clip(PillShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f))
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
                 ) {
-                    val countText = if (summary.transactionCount == 1) "1 entry" else "${summary.transactionCount} entries"
+                    val countText = if (summary.transactionCount == 1) "1 transaction" else "${summary.transactionCount} transactions"
                     Text(
                         text = countText,
                         style = MaterialTheme.typography.labelSmall,
@@ -174,55 +154,46 @@ fun FinancialInsightCard(
             ) {
                 Column {
                     Text(
-                        text = "Net Cash Flow",
+                        text = "Net Change",
                         style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(3.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = trendIcon,
-                            contentDescription = null,
-                            tint = trendColor,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
+                        if (!summary.netChange.isZero) {
+                            Icon(
+                                imageVector = trendIcon,
+                                contentDescription = null,
+                                tint = trendColor,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
                         AmountDisplay(
                             amount = summary.netChange,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = (-0.5).sp
                             ),
+                            overrideColor = if (summary.netChange.isZero) MaterialTheme.colorScheme.onSurface else trendColor,
                             showPrefix = true
                         )
                     }
                 }
-
-                val statusText = when {
-                    isPositive -> "Savings on track 🎉"
-                    isNegative -> "Spending exceeds income"
-                    else -> "Evenly balanced"
-                }
-
-                Text(
-                    text = statusText,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
     }
 }
 
 /**
- * Backwards compatible alias for MonthlyOverviewCard.
+ * Compatibility alias for FinancialInsightCard.
  */
 @Composable
-fun MonthlyOverviewCard(
+fun FinancialInsightCard(
     summary: FinancialSummary,
     modifier: Modifier = Modifier
 ) {
-    FinancialInsightCard(summary = summary, modifier = modifier)
+    MonthlyOverviewCard(summary = summary, modifier = modifier)
 }
 
