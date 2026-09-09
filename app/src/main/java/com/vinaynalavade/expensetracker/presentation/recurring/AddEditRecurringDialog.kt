@@ -42,6 +42,7 @@ import com.vinaynalavade.expensetracker.presentation.entry.components.AmountVisu
 import com.vinaynalavade.expensetracker.presentation.entry.components.CategorySelector
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.LocalCurrency
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import androidx.compose.foundation.layout.widthIn
@@ -292,7 +293,7 @@ fun AddEditRecurringDialog(
                 Text(text = "Cancel")
             }
         },
-        shape = CardShape,
+        shape = DialogShape,
         containerColor = MaterialTheme.colorScheme.surface
     )
 }

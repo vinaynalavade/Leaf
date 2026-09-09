@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
@@ -33,11 +32,13 @@ import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.presentation.components.AmountDisplay
 import com.vinaynalavade.expensetracker.presentation.theme.HeroCardShape
+import com.vinaynalavade.expensetracker.presentation.theme.InnerCardShape
+import com.vinaynalavade.expensetracker.presentation.theme.SquircleIconShape
 import com.vinaynalavade.expensetracker.presentation.theme.financialColors
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
- * Premium Hero Balance Card displaying Total Balance prominently with breakdown for Income & Expense.
+ * Luxury Hero Balance Card displaying Total Balance prominently with breakdown for Income & Expense.
  */
 @Composable
 fun BalanceHeroCard(
@@ -47,10 +48,10 @@ fun BalanceHeroCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.lg)
+            .padding(horizontal = MaterialTheme.spacing.screen)
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                width = 0.75.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
                 shape = HeroCardShape
             ),
         shape = HeroCardShape,
@@ -70,11 +71,11 @@ fun BalanceHeroCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+            Spacer(modifier = Modifier.height(6.dp))
 
             AmountDisplay(
                 amount = summary.currentBalance,
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
                 showPrefix = false
             )
@@ -82,14 +83,14 @@ fun BalanceHeroCard(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
 
             HorizontalDivider(
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.md)
             ) {
                 // Income Summary Pill
                 FinancialSummaryPill(
@@ -100,11 +101,9 @@ fun BalanceHeroCard(
                     modifier = Modifier.weight(1f)
                 )
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
-
                 // Expense Summary Pill
                 FinancialSummaryPill(
-                    title = "Expense",
+                    title = "Expenses",
                     amount = summary.totalExpense,
                     type = TransactionType.EXPENSE,
                     icon = Icons.Default.ArrowUpward,
@@ -137,16 +136,16 @@ private fun FinancialSummaryPill(
 
     Row(
         modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
+            .clip(InnerCardShape)
             .background(containerColor)
-            .padding(MaterialTheme.spacing.md),
+            .padding(horizontal = MaterialTheme.spacing.md, vertical = MaterialTheme.spacing.md),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(accentColor.copy(alpha = 0.2f)),
+                .size(34.dp)
+                .clip(SquircleIconShape)
+                .background(accentColor.copy(alpha = 0.16f)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -169,9 +168,10 @@ private fun FinancialSummaryPill(
                 amount = amount,
                 type = type,
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 showPrefix = false
             )
         }
     }
 }
+

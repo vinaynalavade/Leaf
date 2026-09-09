@@ -38,12 +38,12 @@ def generate_all_icons(src_path: str = "logo_source.png", res_base: str = "app/s
     base_circle_logo = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     base_circle_logo.paste(square_src, (0, 0), mask=circle_mask)
 
-    # 3. Create high-res in-app logo (drawable/ic_kharchaflow_logo.png)
+    # 3. Create high-res in-app logo (drawable/ic_leaf_logo.png)
     drawable_dir = os.path.join(res_base, "drawable")
     os.makedirs(drawable_dir, exist_ok=True)
     high_res_logo = base_squircle_logo.resize((512, 512), Image.Resampling.LANCZOS)
-    high_res_logo.save(os.path.join(drawable_dir, "ic_kharchaflow_logo.png"), "PNG")
-    print("Saved 512x512 ic_kharchaflow_logo.png")
+    high_res_logo.save(os.path.join(drawable_dir, "ic_leaf_logo.png"), "PNG")
+    print("Saved 512x512 ic_leaf_logo.png")
 
     # 4. Standard and Round launcher icon densities
     # mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192

@@ -156,6 +156,7 @@ fun NavGraph(
 
             DashboardScreen(
                 viewModel = viewModel,
+                userName = userPrefs.userName,
                 currency = userPrefs.currency,
                 onNavigateToAddExpense = {
                     navController.navigate(Screen.AddExpense.route)

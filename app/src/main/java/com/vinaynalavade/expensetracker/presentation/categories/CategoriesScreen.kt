@@ -183,7 +183,7 @@ fun CategoriesScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(
-                                horizontal = MaterialTheme.spacing.lg,
+                                horizontal = MaterialTheme.spacing.screen,
                                 vertical = MaterialTheme.spacing.md
                             ),
                             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm)
@@ -247,7 +247,7 @@ private fun CategoryCard(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                 shape = CardShape
             ),
         shape = CardShape,

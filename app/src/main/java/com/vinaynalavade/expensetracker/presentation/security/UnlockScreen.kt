@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.core.security.BiometricAuthHelper
 import com.vinaynalavade.expensetracker.core.security.BiometricAuthResult
+import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -111,7 +113,7 @@ fun UnlockScreen(
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_kharchaflow_logo),
+                    painter = painterResource(id = R.drawable.ic_leaf_logo),
                     contentDescription = stringResource(R.string.app_name),
                     modifier = Modifier.size(56.dp)
                 )
@@ -313,6 +315,7 @@ private fun KeypadDigitButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     Box(
         modifier = modifier
             .size(68.dp)
@@ -321,7 +324,13 @@ private fun KeypadDigitButton(
                 if (enabled) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
                 else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
             )
-            .clickable(enabled = enabled, onClick = onClick),
+            .pressScale(interactionSource = interactionSource, enabled = enabled)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = androidx.compose.material3.ripple(),
+                enabled = enabled,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -343,11 +352,18 @@ private fun KeypadIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     Box(
         modifier = modifier
             .size(68.dp)
             .clip(CircleShape)
-            .clickable(enabled = enabled, onClick = onClick),
+            .pressScale(interactionSource = interactionSource, enabled = enabled)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = androidx.compose.material3.ripple(),
+                enabled = enabled,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Icon(

@@ -79,10 +79,10 @@ fun CategoryAnalysisSection(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.lg)
+            .padding(horizontal = MaterialTheme.spacing.screen)
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.35f),
+                width = 0.75.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
                 shape = CardShape
             ),
         shape = CardShape,
@@ -163,8 +163,8 @@ fun CategoryAnalysisSection(
                 modifier = Modifier
                     .clip(PillShape)
                     .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        width = 0.75.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
                         shape = PillShape
                     )
             ) {
@@ -241,7 +241,7 @@ fun CategoryAnalysisSection(
                 }
             } else {
                 HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f),
                     modifier = Modifier.padding(bottom = MaterialTheme.spacing.sm)
                 )
 
@@ -256,7 +256,7 @@ fun CategoryAnalysisSection(
                     )
 
                     HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f),
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f),
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }

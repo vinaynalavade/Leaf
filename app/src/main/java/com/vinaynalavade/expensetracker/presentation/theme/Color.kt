@@ -7,19 +7,19 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 // ==========================================================================
-// Leaf Monochrome Core Palette (Multinational Fintech Quality)
+// Leaf Luxury Core Palette (Fintech Quality)
 // ==========================================================================
 
-// Charcoal & Near-Black (Authoritative Main Actions, FABs, Primary Controls)
-val Charcoal950 = Color(0xFF111111) // Near-Black Primary Action / Night Canvas
-val Charcoal900 = Color(0xFF18181B) // Elevated Dark Surface / Card
-val Charcoal850 = Color(0xFF202024) // Secondary Elevated Surface in Dark
-val Charcoal800 = Color(0xFF27272A) // Subtle Dark Borders & Outlines
-val Charcoal700 = Color(0xFF3F3F46) // Active Dark Chip Fill
+// Charcoal & Obsidian (Authoritative Main Actions, FABs, Primary Controls)
+val Charcoal950 = Color(0xFF0F1013) // Deep Obsidian Night Canvas
+val Charcoal900 = Color(0xFF17181D) // Primary Luxury Dark Surface / Card
+val Charcoal850 = Color(0xFF1F2128) // Secondary Elevated Surface in Dark
+val Charcoal800 = Color(0xFF2B2E37) // Subtle Dark Borders & Outlines
+val Charcoal700 = Color(0xFF3A3E4A) // Active Dark Chip Fill & Dividers
 
 // Pure White & Canvas Neutrals
 val PureWhite = Color(0xFFFFFFFF)
-val CanvasOffWhite = Color(0xFFF7F7F5) // Soft Warm Surface Canvas
+val CanvasOffWhite = Color(0xFFF7F8FA) // Clean Soft Warm Surface Canvas
 
 // Neutral Grays (Multi-tiered Hierarchy for Secondary Elements, Text, Dividers)
 val NeutralGray900 = Color(0xFF111827)
@@ -30,7 +30,7 @@ val NeutralGray500 = Color(0xFF6B7280) // Secondary Gray - Captions, Metadata & 
 val NeutralGray400 = Color(0xFF9CA3AF) // Muted Icons & Disabled States
 val NeutralGray300 = Color(0xFFD1D5DB) // Subtle Dividers
 val NeutralGray200 = Color(0xFFE5E7EB) // Card Outlines & Borders
-val NeutralGray100 = Color(0xFFF3F4F6) // Level 2 Surface / Inactive Pill Background
+val NeutralGray100 = Color(0xFFF1F3F5) // Level 2 Surface / Inactive Pill Background
 val NeutralGray50 = Color(0xFFFAFAFA)
 
 // ==========================================================================
@@ -38,14 +38,14 @@ val NeutralGray50 = Color(0xFFFAFAFA)
 // ==========================================================================
 val BrandGreen = Color(0xFF028166)          // Primary Brand Accent
 val BrandGreenDark = Color(0xFF014D3D)      // Deep Pressed Green
-val BrandGreenLight = Color(0xFF03A37F)     // Dark Theme Accent Highlight
+val BrandGreenLight = Color(0xFF05B38C)     // Dark Theme Accent Highlight
 val BrandGreenContainer = Color(0xFFEDF7F4) // Light Mode Subtle Tint Container
 val BrandGreenOnContainer = Color(0xFF024B3B)
 val BrandGreenDarkContainer = Color(0xFF0B2E24)
 val BrandGreenDarkOnContainer = Color(0xFFA7F3D0)
 
 // ==========================================================================
-// Financial Semantic Colors (Emerald Income, Rose Expense)
+// Financial Semantic Colors (Emerald Income, Rose Expense, Amber Warning, Blue Info)
 // ==========================================================================
 val IncomeEmerald = Color(0xFF10B981)
 val IncomeEmeraldDark = Color(0xFF059669)
@@ -63,6 +63,16 @@ val ExpenseOnContainerLight = Color(0xFF9F1239)
 val ExpenseContainerDark = Color(0xFF4C0519)
 val ExpenseOnContainerDark = Color(0xFFFECDD3)
 
+val WarningAmber = Color(0xFFD97706)
+val WarningAmberLight = Color(0xFFFBBF24)
+val WarningContainerLight = Color(0xFFFEF3C7)
+val WarningContainerDark = Color(0xFF451A03)
+
+val InfoBlue = Color(0xFF2563EB)
+val InfoBlueLight = Color(0xFF60A5FA)
+val InfoContainerLight = Color(0xFFEFF6FF)
+val InfoContainerDark = Color(0xFF1E3A8A)
+
 /**
  * Dedicated semantic colors for financial operations across Light and Dark themes.
  */
@@ -73,7 +83,11 @@ data class FinancialColors(
     val onIncomeContainer: Color,
     val expense: Color,
     val expenseContainer: Color,
-    val onExpenseContainer: Color
+    val onExpenseContainer: Color,
+    val warning: Color = WarningAmber,
+    val warningContainer: Color = WarningContainerLight,
+    val info: Color = InfoBlue,
+    val infoContainer: Color = InfoContainerLight
 )
 
 val LightFinancialColors = FinancialColors(
@@ -82,7 +96,11 @@ val LightFinancialColors = FinancialColors(
     onIncomeContainer = IncomeOnContainerLight,
     expense = ExpenseRoseDark,
     expenseContainer = ExpenseContainerLight,
-    onExpenseContainer = ExpenseOnContainerLight
+    onExpenseContainer = ExpenseOnContainerLight,
+    warning = WarningAmber,
+    warningContainer = WarningContainerLight,
+    info = InfoBlue,
+    infoContainer = InfoContainerLight
 )
 
 val DarkFinancialColors = FinancialColors(
@@ -91,12 +109,16 @@ val DarkFinancialColors = FinancialColors(
     onIncomeContainer = IncomeOnContainerDark,
     expense = ExpenseRoseLight,
     expenseContainer = ExpenseContainerDark,
-    onExpenseContainer = ExpenseOnContainerDark
+    onExpenseContainer = ExpenseOnContainerDark,
+    warning = WarningAmberLight,
+    warningContainer = WarningContainerDark,
+    info = InfoBlueLight,
+    infoContainer = InfoContainerDark
 )
 
 val LocalFinancialColors = staticCompositionLocalOf { LightFinancialColors }
 
-// Material 3 Light Color Scheme (Monochrome-First, Charcoal #111111, Pure White, Soft Canvas #F7F7F5)
+// Material 3 Light Color Scheme (Monochrome-First, Charcoal #0F1013, Pure White, Soft Canvas #F7F8FA)
 val LightColorScheme = lightColorScheme(
     primary = Charcoal950,
     onPrimary = PureWhite,
@@ -157,3 +179,4 @@ val DarkColorScheme = darkColorScheme(
     inverseOnSurface = Charcoal950,
     inversePrimary = Charcoal950
 )
+

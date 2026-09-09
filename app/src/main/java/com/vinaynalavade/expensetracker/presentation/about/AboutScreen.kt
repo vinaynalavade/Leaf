@@ -65,6 +65,7 @@ import com.vinaynalavade.expensetracker.BuildConfig
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
@@ -139,7 +140,7 @@ fun AboutScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.md),
+                .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.md),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.lg)
         ) {
@@ -261,7 +262,7 @@ fun AboutScreen(
                                 .padding(10.dp)
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_kharchaflow_logo),
+                                painter = painterResource(id = R.drawable.ic_leaf_logo),
                                 contentDescription = stringResource(R.string.app_name),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Fit
@@ -572,13 +573,13 @@ private fun AboutSectionCard(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                 shape = CardShape
             ),
         shape = CardShape,
         color = MaterialTheme.colorScheme.surface
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.lg)) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = icon,
@@ -669,7 +670,7 @@ private fun AboutActionRow(
 private fun AboutDivider() {
     HorizontalDivider(
         modifier = Modifier.padding(vertical = 4.dp),
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
     )
 }
 
@@ -716,7 +717,7 @@ private fun AboutLegalDialog(
                 Text(text = "Close", fontWeight = FontWeight.Bold)
             }
         },
-        shape = CardShape,
+        shape = DialogShape,
         containerColor = MaterialTheme.colorScheme.surface
     )
 }

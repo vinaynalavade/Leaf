@@ -47,7 +47,7 @@ fun PaymentMethodSelector(
     onMethodSelect: (PaymentMethod) -> Unit,
     modifier: Modifier = Modifier,
     isCompact: Boolean = false,
-    horizontalPadding: Dp = if (isCompact) 0.dp else MaterialTheme.spacing.lg,
+    horizontalPadding: Dp = if (isCompact) 0.dp else MaterialTheme.spacing.screen,
     showLabel: Boolean = true
 ) {
     Column(
@@ -111,7 +111,7 @@ private fun PaymentMethodOption(
         targetValue = if (isSelected) {
             MaterialTheme.colorScheme.primary
         } else {
-            MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
         },
         animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing),
         label = "borderColor"

@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vinaynalavade.expensetracker.core.utils.DateTimeUtils
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.Instant
@@ -62,7 +63,7 @@ fun TransactionDateSelector(
     selectedDateEpoch: Long,
     onDateSelect: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    horizontalPadding: Dp = MaterialTheme.spacing.lg
+    horizontalPadding: Dp = MaterialTheme.spacing.screen
 ) {
     val context = LocalContext.current
     var showDatePickerDialog by remember { mutableStateOf(false) }
@@ -252,6 +253,7 @@ fun TransactionDateSelector(
 
         DatePickerDialog(
             onDismissRequest = { showDatePickerDialog = false },
+            shape = DialogShape,
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -332,7 +334,7 @@ fun TransactionDateSelector(
                     Text("Cancel")
                 }
             },
-            shape = CardShape,
+            shape = DialogShape,
             containerColor = MaterialTheme.colorScheme.surface
         )
     }

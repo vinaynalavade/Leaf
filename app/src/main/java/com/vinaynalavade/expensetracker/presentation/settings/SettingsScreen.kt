@@ -246,20 +246,18 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.md),
+                .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.md),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.lg)
         ) {
-            // 1. Profile Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_profile)) {
-                ProfileCard(
-                    userPreferences = userPreferences,
-                    googleBackupState = googleBackupState,
-                    onAvatarClick = { showProfilePhotoOptionsDialog = true },
-                    onEditNameClick = { showEditProfileDialog = true },
-                    onConnectGoogleClick = { googleSignInLauncher.launch(viewModel.getGoogleSignInIntent()) },
-                    onDisconnectGoogleClick = { showDisconnectGoogleDialog = true }
-                )
-            }
+            // 1. Profile Hero Section
+            ProfileCard(
+                userPreferences = userPreferences,
+                googleBackupState = googleBackupState,
+                onAvatarClick = { showProfilePhotoOptionsDialog = true },
+                onEditNameClick = { showEditProfileDialog = true },
+                onConnectGoogleClick = { googleSignInLauncher.launch(viewModel.getGoogleSignInIntent()) },
+                onDisconnectGoogleClick = { showDisconnectGoogleDialog = true }
+            )
 
             // 2. Preferences Section
             SettingsSectionContainer(title = "PREFERENCES") {
@@ -781,6 +779,34 @@ fun SettingsScreen(
             onDismiss = {
                 pendingCropImageUri = null
             }
+        )
+    }
+
+    if (showEditProfileDialog) {
+        EditProfileDialog(
+            currentName = userPreferences.userName,
+            onSave = { newName ->
+                viewModel.onProfileNameChanged(newName)
+                showEditProfileDialog = false
+            },
+            onDismiss = { showEditProfileDialog = false }
+        )
+    }
+
+    if (showProfilePhotoOptionsDialog) {
+        ProfilePhotoOptionsDialog(
+            hasCustomPhoto = !userPreferences.profileImageUri.isNullOrBlank(),
+            onChoosePhoto = {
+                showProfilePhotoOptionsDialog = false
+                photoPickerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            },
+            onRemovePhoto = {
+                showProfilePhotoOptionsDialog = false
+                viewModel.onProfileImageSelected(null)
+            },
+            onDismiss = { showProfilePhotoOptionsDialog = false }
         )
     }
 }

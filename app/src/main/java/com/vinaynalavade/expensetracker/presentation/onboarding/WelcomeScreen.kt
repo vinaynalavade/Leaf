@@ -130,7 +130,7 @@ fun WelcomeScreen(
                             modifier = Modifier.fillMaxSize().padding(12.dp)
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_kharchaflow_logo),
+                                painter = painterResource(id = R.drawable.ic_leaf_logo),
                                 contentDescription = stringResource(R.string.app_name),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Fit

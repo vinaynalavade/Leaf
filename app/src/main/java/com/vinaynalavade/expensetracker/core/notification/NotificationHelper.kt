@@ -20,7 +20,7 @@ import com.vinaynalavade.expensetracker.domain.model.NotificationChannelType
  */
 object NotificationHelper {
 
-    const val CHANNEL_DAILY_REMINDER = "channel_daily_reminder"
+    const val CHANNEL_DAILY_REMINDER = "channel_daily_reminders"
     const val CHANNEL_BUDGET_ALERTS = "channel_budget_alerts"
     const val CHANNEL_PAYMENT_REMINDERS = "channel_payment_reminders"
     const val CHANNEL_SAVINGS_GOALS = "channel_savings_goals"
@@ -46,6 +46,15 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+            // Remove legacy channel without custom sound if present
+            notificationManager.deleteNotificationChannel("channel_daily_reminder")
+
+            val soundUri = android.net.Uri.parse("android.resource://${context.packageName}/${R.raw.leaf_chime}")
+            val audioAttributes = android.media.AudioAttributes.Builder()
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+
             val channels = listOf(
                 NotificationChannel(
                     CHANNEL_DAILY_REMINDER,
@@ -54,6 +63,7 @@ object NotificationHelper {
                 ).apply {
                     description = NotificationChannelType.DAILY_REMINDER.description
                     enableVibration(true)
+                    setSound(soundUri, audioAttributes)
                 },
                 NotificationChannel(
                     CHANNEL_BUDGET_ALERTS,
@@ -62,6 +72,7 @@ object NotificationHelper {
                 ).apply {
                     description = NotificationChannelType.BUDGET_ALERTS.description
                     enableVibration(true)
+                    setSound(soundUri, audioAttributes)
                 },
                 NotificationChannel(
                     CHANNEL_PAYMENT_REMINDERS,
@@ -70,6 +81,7 @@ object NotificationHelper {
                 ).apply {
                     description = NotificationChannelType.PAYMENT_REMINDERS.description
                     enableVibration(true)
+                    setSound(soundUri, audioAttributes)
                 },
                 NotificationChannel(
                     CHANNEL_SAVINGS_GOALS,
@@ -78,6 +90,7 @@ object NotificationHelper {
                 ).apply {
                     description = NotificationChannelType.SAVINGS_GOALS.description
                     enableVibration(true)
+                    setSound(soundUri, audioAttributes)
                 },
                 NotificationChannel(
                     CHANNEL_FINANCIAL_INSIGHTS,

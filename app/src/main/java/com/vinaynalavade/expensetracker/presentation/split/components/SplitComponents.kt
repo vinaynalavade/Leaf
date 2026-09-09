@@ -57,6 +57,7 @@ import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
 import com.vinaynalavade.expensetracker.presentation.components.PaymentMethodSelector
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.IncomeEmerald
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
@@ -365,6 +366,7 @@ fun SettlementConfirmDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        shape = DialogShape,
         title = {
             Text(
                 text = stringResource(R.string.split_settle_confirm_title),
@@ -435,6 +437,7 @@ fun DeleteSplitConfirmDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        shape = DialogShape,
         title = {
             Text(
                 text = stringResource(R.string.split_delete_confirm_title),

@@ -91,7 +91,7 @@ fun StatementsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
-                        .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.md)
+                        .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.md)
                         .height(52.dp)
                 ) {
                     if (isGeneratingPdf) {
@@ -111,7 +111,7 @@ fun StatementsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.sm)
+                .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.sm)
         ) {
             Text(
                 text = "SELECT PERIOD",
@@ -133,7 +133,7 @@ fun StatementsScreen(
                         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
                         border = androidx.compose.foundation.BorderStroke(
                             width = if (isSelected) 1.5.dp else 1.dp,
-                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                         ),
                         modifier = Modifier
                             .clip(PillShape)
@@ -178,18 +178,19 @@ private fun StatementPreviewContent(report: StatementReport) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), shape = CardShape),
+            .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), shape = CardShape),
         shape = CardShape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.lg)) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(text = "Statement Period", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = report.currency.code, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
             Text(text = report.periodTitle, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.md), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+            HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.md), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
@@ -231,13 +232,14 @@ private fun StatementPreviewContent(report: StatementReport) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), shape = CardShape),
+            .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), shape = CardShape),
         shape = CardShape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
             report.ledgerItems.take(8).forEachIndexed { idx, item ->
-                if (idx > 0) HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.xs), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
+                if (idx > 0) HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.xs), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

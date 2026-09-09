@@ -135,7 +135,7 @@ fun RecurringTransactionsScreen(
                             .fillMaxSize()
                             .padding(innerPadding),
                         contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.spacing.lg,
+                            horizontal = MaterialTheme.spacing.screen,
                             vertical = MaterialTheme.spacing.md
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm)
@@ -187,13 +187,14 @@ private fun RecurringCard(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                 shape = CardShape
             ),
         shape = CardShape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

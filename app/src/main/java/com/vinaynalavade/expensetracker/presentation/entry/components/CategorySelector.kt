@@ -54,7 +54,7 @@ fun CategorySelector(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.lg)
+            .padding(horizontal = MaterialTheme.spacing.screen)
     ) {
         Text(
             text = "CATEGORY",
@@ -112,7 +112,7 @@ private fun CategoryOptionChip(
     val borderColor = if (isSelected) {
         MaterialTheme.colorScheme.primary
     } else {
-        MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
     }
 
     val textColor = if (isSelected) {

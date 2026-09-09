@@ -3,6 +3,7 @@ package com.vinaynalavade.expensetracker.presentation.dashboard.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.ArrowDownward
@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,8 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
+import com.vinaynalavade.expensetracker.presentation.theme.InnerCardShape
+import com.vinaynalavade.expensetracker.presentation.theme.SquircleIconShape
 import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
@@ -47,7 +50,7 @@ fun QuickActionsSection(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.lg),
+            .padding(horizontal = MaterialTheme.spacing.screen),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm)
     ) {
         QuickActionButton(
@@ -70,9 +73,9 @@ fun QuickActionsSection(
 
         QuickActionButton(
             label = "History",
-            icon = androidx.compose.material.icons.Icons.AutoMirrored.Filled.ReceiptLong,
+            icon = Icons.AutoMirrored.Filled.ReceiptLong,
             iconTint = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             onClick = onViewTransactionsClick,
             modifier = Modifier.weight(1f)
         )
@@ -81,7 +84,7 @@ fun QuickActionsSection(
             label = "Categories",
             icon = Icons.Default.Category,
             iconTint = MaterialTheme.colorScheme.secondary,
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
             onClick = onViewCategoriesClick,
             modifier = Modifier.weight(1f)
         )
@@ -97,24 +100,31 @@ private fun QuickActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = modifier
-            .clip(ButtonShape)
+            .pressScale(interactionSource = interactionSource)
+            .clip(InnerCardShape)
             .background(MaterialTheme.colorScheme.surface)
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
-                shape = ButtonShape
+                width = 0.75.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
+                shape = InnerCardShape
             )
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = androidx.compose.material3.ripple(),
+                onClick = onClick
+            )
             .padding(vertical = MaterialTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(38.dp)
-                .clip(CircleShape)
+                .size(40.dp)
+                .clip(SquircleIconShape)
                 .background(containerColor),
             contentAlignment = Alignment.Center
         ) {
@@ -126,13 +136,14 @@ private fun QuickActionButton(
             )
         }
 
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
+

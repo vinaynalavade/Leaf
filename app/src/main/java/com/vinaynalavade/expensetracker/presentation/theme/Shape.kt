@@ -6,19 +6,24 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Shape scale for professional financial components.
- * Moderate rounding avoids childish pill-like aesthetics while remaining modern and soft.
+ * Hierarchical continuous curvature provides a soft, luxury feel while maintaining clarity.
  */
 val Shapes = Shapes(
-    extraSmall = RoundedCornerShape(6.dp),
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(12.dp),
-    large = RoundedCornerShape(16.dp),
-    extraLarge = RoundedCornerShape(24.dp)
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(28.dp)
 )
 
-val CardShape = RoundedCornerShape(16.dp)
-val HeroCardShape = RoundedCornerShape(20.dp)
-val ButtonShape = RoundedCornerShape(12.dp)
-val ChipShape = RoundedCornerShape(8.dp)
-val SheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+val HeroCardShape = RoundedCornerShape(28.dp)
+val CardShape = RoundedCornerShape(24.dp)
+val InnerCardShape = RoundedCornerShape(16.dp)
+val ButtonShape = RoundedCornerShape(16.dp)
+val InputShape = RoundedCornerShape(16.dp)
+val ChipShape = RoundedCornerShape(10.dp)
+val SquircleIconShape = RoundedCornerShape(14.dp)
+val SheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+val DialogShape = RoundedCornerShape(28.dp)
 val PillShape = RoundedCornerShape(percent = 50)
+

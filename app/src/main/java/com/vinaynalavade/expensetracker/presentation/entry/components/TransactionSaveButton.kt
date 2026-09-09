@@ -10,6 +10,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.PureWhite
 import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
@@ -43,9 +45,11 @@ fun TransactionSaveButton(
         MaterialTheme.financialColors.expense
     }
 
+    val interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     Button(
         onClick = onSaveClick,
         enabled = isEnabled && !isSaving,
+        interactionSource = interactionSource,
         shape = ButtonShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor,
@@ -56,7 +60,8 @@ fun TransactionSaveButton(
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
-            .padding(horizontal = MaterialTheme.spacing.lg)
+            .padding(horizontal = MaterialTheme.spacing.screen)
+            .pressScale(interactionSource = interactionSource, enabled = isEnabled && !isSaving)
     ) {
         if (isSaving) {
             CircularProgressIndicator(

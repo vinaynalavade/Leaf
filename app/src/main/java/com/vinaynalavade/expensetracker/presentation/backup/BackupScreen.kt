@@ -89,6 +89,7 @@ import com.vinaynalavade.expensetracker.domain.usecase.ExportedFileResult
 import com.vinaynalavade.expensetracker.presentation.components.AppTopBar
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
@@ -241,7 +242,7 @@ fun BackupScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.md),
+                    .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.md),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.lg)
             ) {
 
@@ -933,7 +934,7 @@ fun BackupScreen(
                     Text("Cancel")
                 }
             },
-            shape = CardShape,
+            shape = DialogShape,
             containerColor = MaterialTheme.colorScheme.surface
         )
     }
@@ -958,14 +959,14 @@ private fun BackupSection(
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                     shape = CardShape
                 ),
             shape = CardShape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
-            Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+            Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
                 content()
             }
         }

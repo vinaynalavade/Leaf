@@ -106,7 +106,7 @@ fun CalendarScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.xs)
+                    .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.xs)
             ) {
                 // 1. Month Header with Nav Arrows
                 Row(
@@ -148,7 +148,7 @@ fun CalendarScreen(
                         .fillMaxWidth()
                         .border(
                             width = 1.dp,
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                             shape = CardShape
                         ),
                     shape = CardShape,

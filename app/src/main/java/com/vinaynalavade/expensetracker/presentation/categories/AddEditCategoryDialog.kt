@@ -43,6 +43,7 @@ import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
+import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 private val AVAILABLE_ICONS = listOf(
@@ -264,7 +265,7 @@ fun AddEditCategoryDialog(
                 Text(text = "Cancel")
             }
         },
-        shape = CardShape,
+        shape = DialogShape,
         containerColor = MaterialTheme.colorScheme.surface
     )
 }

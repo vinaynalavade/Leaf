@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.domain.model.CategorySpending
@@ -75,7 +76,7 @@ fun MonthlySummaryScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.sm)
+                .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.sm)
         ) {
             // Month Selector Row
             Row(
@@ -108,7 +109,11 @@ fun MonthlySummaryScreen(
                     LoadingView()
                 }
                 is UiState.Empty -> {
-                    Text(text = "No records for this month.")
+                    Text(
+                        text = "No records for this month.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
                 is UiState.Error -> {
                     Text(text = state.message, color = MaterialTheme.colorScheme.error)
@@ -138,29 +143,31 @@ private fun MonthlySummaryContent(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                 shape = HeroCardShape
             ),
         shape = HeroCardShape,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.lg)) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
             Text(
                 text = "CLOSING BALANCE",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                letterSpacing = 0.8.sp
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
             AmountDisplay(
                 amount = summary.closingBalance,
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold
             )
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = MaterialTheme.spacing.md),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
             )
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -177,7 +184,7 @@ private fun MonthlySummaryContent(
         }
     }
 
-    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
+    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
 
     // 2. Expense Category Breakdown
     if (summary.expenseBreakdown.isNotEmpty()) {
@@ -185,30 +192,35 @@ private fun MonthlySummaryContent(
             text = "TOP EXPENSE CATEGORIES",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            letterSpacing = 0.8.sp
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                     shape = CardShape
                 ),
             shape = CardShape,
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
-            Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+            Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
                 summary.expenseBreakdown.take(5).forEachIndexed { idx, item ->
-                    if (idx > 0) HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.spacing.sm), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
+                    if (idx > 0) HorizontalDivider(
+                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.sm),
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                    )
                     CategorySpendingRow(item = item)
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
     }
 
     // 3. Transactions in Month
@@ -216,9 +228,10 @@ private fun MonthlySummaryContent(
         text = "MONTH ACTIVITY (${summary.transactions.size})",
         style = MaterialTheme.typography.labelSmall,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        letterSpacing = 0.8.sp
     )
-    Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
+    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
 
     if (summary.transactions.isEmpty()) {
         Text(
@@ -231,7 +244,7 @@ private fun MonthlySummaryContent(
             TransactionItem(
                 transaction = tx,
                 onClick = { onTransactionClick(tx.id) },
-                modifier = Modifier.padding(vertical = 3.dp)
+                modifier = Modifier.padding(vertical = 2.dp)
             )
         }
     }
@@ -268,13 +281,13 @@ private fun CategorySpendingRow(item: CategorySpending) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                CategoryIcon(iconName = item.category.iconName, colorHex = item.category.colorHex, size = 30.dp, iconSize = 16.dp)
+                CategoryIcon(iconName = item.category.iconName, colorHex = item.category.colorHex, size = 34.dp, iconSize = 18.dp)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
                 Text(text = item.category.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
             }
             Text(text = item.totalAmount.format(), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
         }
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         LinearProgressIndicator(
             progress = { item.percentageOfTotal },
             modifier = Modifier

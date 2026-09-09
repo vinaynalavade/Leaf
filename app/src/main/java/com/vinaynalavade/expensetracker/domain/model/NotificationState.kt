@@ -29,7 +29,7 @@ enum class RecurringReminderAdvance(val days: Int, val label: String) {
 
 enum class NotificationChannelType(val channelId: String, val channelName: String, val description: String) {
     DAILY_REMINDER(
-        "channel_daily_reminder",
+        "channel_daily_reminders",
         "Daily Expense Reminders",
         "Gentle daily reminder to record your financial transactions"
     ),

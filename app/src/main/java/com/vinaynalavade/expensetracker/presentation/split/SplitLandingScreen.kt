@@ -104,7 +104,10 @@ fun SplitLandingScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                contentPadding = PaddingValues(MaterialTheme.spacing.md),
+                contentPadding = PaddingValues(
+                    horizontal = MaterialTheme.spacing.screen,
+                    vertical = MaterialTheme.spacing.md
+                ),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.md)
             ) {
                 // Header & Explanation
@@ -154,11 +157,12 @@ fun SplitLandingScreen(
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surface
                                 ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 border = CardDefaults.outlinedCardBorder().copy(
                                     brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                                 )
                             ) {
-                                Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+                                Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
                                     Text(
                                         text = stringResource(R.string.split_to_collect),
                                         style = MaterialTheme.typography.labelSmall,
@@ -180,11 +184,12 @@ fun SplitLandingScreen(
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surface
                                 ),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 border = CardDefaults.outlinedCardBorder().copy(
                                     brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                                 )
                             ) {
-                                Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+                                Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
                                     Text(
                                         text = stringResource(R.string.split_collected),
                                         style = MaterialTheme.typography.labelSmall,

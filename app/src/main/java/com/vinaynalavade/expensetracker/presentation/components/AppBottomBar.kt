@@ -51,12 +51,12 @@ fun AppBottomBar(
                     color = borderColor,
                     start = Offset(0f, 0f),
                     end = Offset(size.width, 0f),
-                    strokeWidth = 1.dp.toPx()
+                    strokeWidth = 0.75.dp.toPx()
                 )
             },
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface,
-        tonalElevation = 2.dp,
+        tonalElevation = 1.dp,
         windowInsets = WindowInsets.navigationBars
     ) {
         BottomNavItems.forEach { screen ->
@@ -84,7 +84,7 @@ fun AppBottomBar(
                         Icon(
                             imageVector = icon,
                             contentDescription = stringResource(screen.titleResId),
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 },
@@ -92,7 +92,7 @@ fun AppBottomBar(
                     Text(
                         text = stringResource(screen.titleResId),
                         style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             letterSpacing = (-0.2).sp
                         ),
                         maxLines = 1,
@@ -104,9 +104,9 @@ fun AppBottomBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -36,11 +37,12 @@ import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.YearMonth
 
 /**
- * Modern, calm financial dashboard screen with interactive category analysis.
+ * Modern, luxury financial dashboard screen with interactive category analysis.
  */
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
+    userName: String? = null,
     currency: Currency = Currency.DEFAULT,
     onNavigateToAddExpense: () -> Unit,
     onNavigateToAddIncome: () -> Unit,
@@ -59,7 +61,7 @@ fun DashboardScreen(
                 onClick = onOpenQuickAdd,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = MaterialTheme.shapes.large
+                shape = CircleShape
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -79,11 +81,21 @@ fun DashboardScreen(
                 contentPadding = PaddingValues(bottom = 96.dp)
             ) {
                 item {
-                    GreetingHeader()
+                    GreetingHeader(userName = userName)
                 }
 
                 item {
                     BalanceHeroCard(summary = uiState.summary)
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+                    QuickActionsSection(
+                        onAddExpenseClick = onNavigateToAddExpense,
+                        onAddIncomeClick = onNavigateToAddIncome,
+                        onViewTransactionsClick = onNavigateToTransactions,
+                        onViewCategoriesClick = onNavigateToCategories
+                    )
                 }
 
                 item {
@@ -104,12 +116,7 @@ fun DashboardScreen(
 
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
-                    QuickActionsSection(
-                        onAddExpenseClick = onNavigateToAddExpense,
-                        onAddIncomeClick = onNavigateToAddIncome,
-                        onViewTransactionsClick = onNavigateToTransactions,
-                        onViewCategoriesClick = onNavigateToCategories
-                    )
+                    MonthlyOverviewCard(summary = uiState.summary)
                 }
 
                 item {
@@ -141,15 +148,10 @@ fun DashboardScreen(
                             showDateInSubtitle = false
                         )
                         HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.lg),
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.screen),
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)
                         )
                     }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
-                    MonthlyOverviewCard(summary = uiState.summary)
                 }
             }
         }

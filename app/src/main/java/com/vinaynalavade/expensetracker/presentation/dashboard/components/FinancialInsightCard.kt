@@ -47,12 +47,12 @@ fun MonthlyOverviewCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.lg)
+            .padding(horizontal = MaterialTheme.spacing.screen)
             .clip(CardShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                width = 0.75.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
                 shape = CardShape
             )
             .padding(MaterialTheme.spacing.md)

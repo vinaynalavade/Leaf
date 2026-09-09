@@ -164,7 +164,7 @@ fun TransactionsScreen(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.lg, vertical = MaterialTheme.spacing.xs)
+                        .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.xs)
                 )
             }
 
@@ -221,7 +221,7 @@ fun TransactionsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    horizontal = MaterialTheme.spacing.lg,
+                                    horizontal = MaterialTheme.spacing.screen,
                                     vertical = MaterialTheme.spacing.xs
                                 )
                         )
@@ -250,8 +250,8 @@ fun TransactionsScreen(
                                     showDateInSubtitle = false
                                 )
                                 HorizontalDivider(
-                                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.lg),
-                                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.screen),
+                                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
                                 )
                             }
                         }
@@ -300,7 +300,7 @@ private fun FilterBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(horizontal = MaterialTheme.spacing.lg),
+                .padding(horizontal = MaterialTheme.spacing.screen),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -318,7 +318,7 @@ private fun FilterBar(
                 modifier = Modifier
                     .height(20.dp)
                     .width(1.dp)
-                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
             )
 
             // Date Range Filter Chips
@@ -350,13 +350,13 @@ private fun FilterBar(
             if (isFilterActive) {
                 Surface(
                     shape = PillShape,
-                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.6f),
+                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
                     modifier = Modifier
                         .clip(PillShape)
                         .clickable(onClick = onResetFilters)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
@@ -386,21 +386,26 @@ private fun FilterChipItem(
     icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
     onClick: () -> Unit
 ) {
+    val interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
     Surface(
         shape = PillShape,
         color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
         border = if (!isSelected) {
             androidx.compose.foundation.BorderStroke(
                 1.dp,
-                MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
             )
         } else null,
         modifier = Modifier
             .clip(PillShape)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = androidx.compose.material3.ripple(),
+                onClick = onClick
+            )
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 7.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -434,18 +439,19 @@ private fun TransactionSummaryCard(
     Card(
         shape = CardShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            containerColor = MaterialTheme.colorScheme.surface
         ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier.border(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
             shape = CardShape
         )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.md),
+                .padding(MaterialTheme.spacing.card),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)
         ) {
             Row(
@@ -463,21 +469,21 @@ private fun TransactionSummaryCard(
 
                 Surface(
                     shape = PillShape,
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
                 ) {
                     Text(
                         text = "${summary.transactionCount} ${if (summary.transactionCount == 1) "entry" else "entries"}",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)
                     )
                 }
             }
 
             HorizontalDivider(
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f),
-                modifier = Modifier.padding(vertical = 2.dp)
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
+                modifier = Modifier.padding(vertical = 4.dp)
             )
 
             Row(
@@ -493,7 +499,7 @@ private fun TransactionSummaryCard(
                     )
                     Text(
                         text = "+${Amount(summary.totalIncome).format()}",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.financialColors.income
                     )
@@ -508,7 +514,7 @@ private fun TransactionSummaryCard(
                     )
                     Text(
                         text = Amount(summary.totalExpense).format(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.financialColors.expense
                     )
@@ -528,7 +534,7 @@ private fun TransactionSummaryCard(
                     val prefix = if (isPositive && summary.netBalance > 0) "+" else ""
                     Text(
                         text = "$prefix${Amount(summary.netBalance).format()}",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = if (isPositive) MaterialTheme.financialColors.income else MaterialTheme.financialColors.expense
                     )
@@ -544,14 +550,14 @@ private fun MonthHeaderBanner(monthGroup: MonthlyTransactionGroup) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = MaterialTheme.spacing.lg,
-                end = MaterialTheme.spacing.lg,
+                start = MaterialTheme.spacing.screen,
+                end = MaterialTheme.spacing.screen,
                 top = MaterialTheme.spacing.md,
-                bottom = MaterialTheme.spacing.xs
+                bottom = MaterialTheme.spacing.xxs
             )
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(10.dp)
             )
             .padding(horizontal = MaterialTheme.spacing.md, vertical = MaterialTheme.spacing.xs)
     ) {
@@ -586,8 +592,8 @@ private fun DayHeaderBanner(dayGroup: DailyTransactionGroup) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = MaterialTheme.spacing.lg,
-                end = MaterialTheme.spacing.lg,
+                start = MaterialTheme.spacing.screen,
+                end = MaterialTheme.spacing.screen,
                 top = MaterialTheme.spacing.sm,
                 bottom = MaterialTheme.spacing.xxs
             ),

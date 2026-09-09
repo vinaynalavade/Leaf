@@ -24,7 +24,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/ic_kharchaflow_logo"
+                android:src="@drawable/ic_leaf_logo"
                 android:contentDescription="Leaf"
                 android:scaleType="fitCenter"
                 android:layout_marginEnd="6dp" />

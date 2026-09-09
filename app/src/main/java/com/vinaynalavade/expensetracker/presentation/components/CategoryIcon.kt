@@ -45,9 +45,9 @@ fun CategoryIcon(
     iconName: String,
     colorHex: String,
     modifier: Modifier = Modifier,
-    size: Dp = 42.dp,
-    iconSize: Dp = 20.dp,
-    cornerRadius: Dp = 12.dp,
+    size: Dp = 44.dp,
+    iconSize: Dp = 22.dp,
+    cornerRadius: Dp = 14.dp,
     contentDescription: String? = null
 ) {
     val categoryColor = parseColor(colorHex)
@@ -57,7 +57,7 @@ fun CategoryIcon(
         modifier = modifier
             .size(size)
             .clip(RoundedCornerShape(cornerRadius))
-            .background(categoryColor.copy(alpha = 0.14f)),
+            .background(categoryColor.copy(alpha = 0.12f)),
         contentAlignment = Alignment.Center
     ) {
         Icon(

@@ -1,28 +1,21 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,13 +30,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Clean, compact, and balanced greeting header for the Dashboard.
+ * Clean, compact, and luxury personalized greeting header for the Dashboard.
  */
 @Composable
 fun GreetingHeader(
+    userName: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val greeting = getContextualGreeting()
+    val greeting = getContextualGreeting(userName)
     val formattedDate = LocalDate.now().format(
         DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault())
     )
@@ -52,13 +46,13 @@ fun GreetingHeader(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                horizontal = MaterialTheme.spacing.lg,
+                horizontal = MaterialTheme.spacing.screen,
                 vertical = MaterialTheme.spacing.sm
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f, fill = false)) {
             Text(
                 text = greeting,
                 style = MaterialTheme.typography.titleLarge,
@@ -73,13 +67,15 @@ fun GreetingHeader(
             )
         }
 
+        Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
+
         // Compact Brand Badge on the right
         Surface(
             shape = PillShape,
             color = MaterialTheme.colorScheme.surface,
             border = androidx.compose.foundation.BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)
+                width = 0.75.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
             ),
             shadowElevation = 0.dp
         ) {
@@ -88,9 +84,9 @@ fun GreetingHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_kharchaflow_logo),
+                    painter = painterResource(id = R.drawable.ic_leaf_logo),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(18.dp),
                     contentScale = ContentScale.Fit
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -105,12 +101,22 @@ fun GreetingHeader(
     }
 }
 
-private fun getContextualGreeting(): String {
+private fun getContextualGreeting(userName: String?): String {
     val hour = LocalTime.now().hour
-    return when (hour) {
+    val timeGreeting = when (hour) {
         in 4..11 -> "Good morning"
         in 12..16 -> "Good afternoon"
         in 17..22 -> "Good evening"
         else -> "Welcome back"
     }
+
+    val cleanName = userName?.trim()?.takeIf { it.isNotBlank() }
+    val firstName = cleanName?.split(Regex("\\s+"))?.firstOrNull()?.takeIf { it.isNotBlank() }
+
+    return if (firstName != null) {
+        "$timeGreeting, $firstName"
+    } else {
+        timeGreeting
+    }
 }
+
