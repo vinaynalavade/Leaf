@@ -100,6 +100,11 @@ fun DashboardScreen(
 
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+                    MonthlyOverviewCard(summary = uiState.summary)
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
                     CategoryAnalysisSection(
                         analysisResult = uiState.categoryAnalysis,
                         selectedMonth = uiState.selectedMonth,
@@ -114,10 +119,6 @@ fun DashboardScreen(
                     )
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
-                    MonthlyOverviewCard(summary = uiState.summary)
-                }
 
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))

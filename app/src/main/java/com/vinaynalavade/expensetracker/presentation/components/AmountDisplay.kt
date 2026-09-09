@@ -41,11 +41,14 @@ fun AmountDisplay(
         else -> formattedNumber
     }
 
-    val textColor = overrideColor ?: when (type) {
-        TransactionType.INCOME -> MaterialTheme.financialColors.income
-        TransactionType.EXPENSE -> MaterialTheme.financialColors.expense
-        null -> MaterialTheme.colorScheme.onSurface
-    }
+    val textColor = overrideColor
+        ?: if (style.color != Color.Unspecified) style.color
+        else when (type) {
+            TransactionType.INCOME -> MaterialTheme.financialColors.income
+            TransactionType.EXPENSE -> MaterialTheme.financialColors.expense
+            null -> MaterialTheme.colorScheme.onSurface
+        }
+
 
     val accessibilityDesc = when (type) {
         TransactionType.INCOME -> "Income amount $formattedNumber"

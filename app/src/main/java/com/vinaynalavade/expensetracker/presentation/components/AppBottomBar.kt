@@ -22,6 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vinaynalavade.expensetracker.presentation.navigation.Screen
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+
 val BottomNavItems = listOf(
     Screen.Dashboard,
     Screen.Transactions,
@@ -32,8 +36,8 @@ val BottomNavItems = listOf(
 
 /**
  * Premium, modern Bottom Navigation Bar for Leaf.
- * Provides clear active tab hierarchy, refined pill indicators, high-contrast readable typography,
- * single-line text protection across device screen widths, and edge-to-edge window inset support.
+ * Features 20dp smooth rounded top geometry, luxury active indicator pills,
+ * high-contrast typography, single-line text protection, and edge-to-edge inset handling.
  */
 @Composable
 fun AppBottomBar(
@@ -42,10 +46,13 @@ fun AppBottomBar(
     modifier: Modifier = Modifier
 ) {
     val borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+    val barShape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp)
 
     NavigationBar(
         modifier = modifier
             .fillMaxWidth()
+            .shadow(elevation = 6.dp, shape = barShape)
+            .clip(barShape)
             .drawBehind {
                 drawLine(
                     color = borderColor,
@@ -56,9 +63,10 @@ fun AppBottomBar(
             },
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface,
-        tonalElevation = 1.dp,
+        tonalElevation = 2.dp,
         windowInsets = WindowInsets.navigationBars
     ) {
+
         BottomNavItems.forEach { screen ->
             val isSelected = currentRoute == screen.route ||
                 (screen == Screen.Transactions && currentRoute?.startsWith("transactions") == true) ||

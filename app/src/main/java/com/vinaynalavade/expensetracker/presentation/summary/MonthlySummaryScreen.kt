@@ -1,7 +1,10 @@
 package com.vinaynalavade.expensetracker.presentation.summary
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,10 +50,14 @@ import com.vinaynalavade.expensetracker.presentation.components.TransactionItem
 import com.vinaynalavade.expensetracker.presentation.components.UiState
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.HeroCardShape
+import com.vinaynalavade.expensetracker.presentation.theme.HeroEmeraldGradient
+import com.vinaynalavade.expensetracker.presentation.theme.HeroObsidianGradient
+import com.vinaynalavade.expensetracker.presentation.theme.PureWhite
 import com.vinaynalavade.expensetracker.presentation.theme.financialColors
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+
 
 @Composable
 fun MonthlySummaryScreen(
@@ -138,51 +148,82 @@ private fun MonthlySummaryContent(
     onTransactionClick: (Long) -> Unit
 ) {
     // 1. Hero Balance Overview Card
-    Card(
+    val isDark = isSystemInDarkTheme()
+    val heroGradient = if (isDark) HeroObsidianGradient else HeroEmeraldGradient
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(
+                elevation = if (isDark) 0.dp else 4.dp,
+                shape = HeroCardShape,
+                ambientColor = Color(0xFF025442).copy(alpha = 0.25f),
+                spotColor = Color(0xFF025442).copy(alpha = 0.35f)
+            )
+            .clip(HeroCardShape)
+            .background(heroGradient)
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                width = 0.75.dp,
+                color = if (isDark) Color(0xFF263242) else Color.White.copy(alpha = 0.25f),
                 shape = HeroCardShape
-            ),
-        shape = HeroCardShape,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            )
+            .padding(20.dp)
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "CLOSING BALANCE",
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                letterSpacing = 0.8.sp
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.2.sp
+                ),
+                color = Color.White.copy(alpha = 0.80f)
             )
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+            Spacer(modifier = Modifier.height(6.dp))
             AmountDisplay(
                 amount = summary.closingBalance,
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.displayMedium.copy(
+                    color = PureWhite,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = (-1.0).sp
+                ),
+                showPrefix = false
             )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = MaterialTheme.spacing.md),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                SummaryStat(label = "Opening Balance", amount = summary.openingBalance)
-                SummaryStat(label = "Net Change", amount = summary.netChange, isHighlight = true)
+                SummaryStat(
+                    label = "Opening Balance",
+                    amount = summary.openingBalance,
+                    color = Color.White.copy(alpha = 0.95f)
+                )
+                SummaryStat(
+                    label = "Net Change",
+                    amount = summary.netChange,
+                    color = if (summary.netChange.isNegative) Color(0xFFFB7185) else Color(0xFF34D399),
+                    isHighlight = true
+                )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                SummaryStat(label = "Total Income", amount = summary.totalIncome, color = MaterialTheme.financialColors.income)
-                SummaryStat(label = "Total Expenses", amount = summary.totalExpense, color = MaterialTheme.financialColors.expense)
+                SummaryStat(
+                    label = "Total Income",
+                    amount = summary.totalIncome,
+                    color = Color(0xFF34D399)
+                )
+                SummaryStat(
+                    label = "Total Expenses",
+                    amount = summary.totalExpense,
+                    color = Color(0xFFFB7185)
+                )
             }
         }
     }
+
+
 
     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
 

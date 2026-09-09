@@ -161,23 +161,21 @@ private fun ThemeSegmentItem(
     )
 
     Surface(
+        onClick = onClick,
         shape = RoundedCornerShape(10.dp),
         color = animatedBg,
         border = if (isSelected) BorderStroke(1.dp, animatedBorderColor) else null,
+        interactionSource = interactionSource,
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .clip(RoundedCornerShape(10.dp))
             .pressScale(interactionSource = interactionSource)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = androidx.compose.material3.ripple(),
-                onClick = onClick
-            )
             .semantics {
                 selected = isSelected
                 role = Role.RadioButton
             }
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

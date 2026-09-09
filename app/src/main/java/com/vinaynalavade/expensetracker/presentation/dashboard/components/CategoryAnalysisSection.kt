@@ -272,80 +272,113 @@ private fun CategoryBreakdownRow(
     isHighlighted: Boolean,
     onClick: () -> Unit
 ) {
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val defaultPrimary = MaterialTheme.colorScheme.primary
+    val categoryColor = remember(category.categoryColor) {
+        if (!category.categoryColor.isNullOrBlank()) {
+            try {
+                val hex = if (category.categoryColor.startsWith("#")) category.categoryColor else "#${category.categoryColor}"
+                Color(android.graphics.Color.parseColor(hex))
+            } catch (_: Exception) {
+                defaultPrimary
+            }
+        } else defaultPrimary
+    }
+
     val bgColor = if (isHighlighted) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
     } else {
         Color.Transparent
     }
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.medium)
             .background(bgColor)
             .clickable(onClick = onClick)
-            .padding(vertical = MaterialTheme.spacing.xs, horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp, horizontal = 6.dp)
     ) {
-        CategoryIcon(
-            iconName = category.categoryIcon,
-            colorHex = category.categoryColor,
-            size = 32.dp,
-            iconSize = 16.dp,
-            cornerRadius = 8.dp
-        )
-
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = category.categoryName,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CategoryIcon(
+                iconName = category.categoryIcon,
+                colorHex = category.categoryColor,
+                size = 36.dp,
+                iconSize = 18.dp,
+                cornerRadius = 10.dp
             )
 
-            val countText = if (category.transactionCount == 1) "1 transaction" else "${category.transactionCount} transactions"
-            Text(
-                text = countText,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+            Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = category.categoryName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = category.amount.format(currency),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            val formattedPercentage = if (category.percentage >= 10f || category.percentage % 1f == 0f) {
-                "${Math.round(category.percentage)}%"
-            } else {
-                String.format(Locale.getDefault(), "%.1f%%", category.percentage)
+                val countText = if (category.transactionCount == 1) "1 transaction" else "${category.transactionCount} transactions"
+                Text(
+                    text = countText,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
 
-            Text(
-                text = formattedPercentage,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary
+            Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = category.amount.format(currency),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                val formattedPercentage = if (category.percentage >= 10f || category.percentage % 1f == 0f) {
+                    "${Math.round(category.percentage)}%"
+                } else {
+                    String.format(Locale.getDefault(), "%.1f%%", category.percentage)
+                }
+
+                Text(
+                    text = formattedPercentage,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = categoryColor
+                )
+            }
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f),
+                modifier = Modifier.size(16.dp)
             )
         }
 
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-            modifier = Modifier.size(16.dp)
+        // Visual Proportion Bar
+        androidx.compose.material3.LinearProgressIndicator(
+            progress = { (category.percentage / 100f).coerceIn(0f, 1f) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 44.dp)
+                .height(4.dp)
+                .clip(PillShape),
+            color = categoryColor,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+            strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
         )
     }
 }
+

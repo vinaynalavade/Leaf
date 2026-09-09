@@ -158,20 +158,22 @@ fun SplitLandingScreen(
                                     containerColor = MaterialTheme.colorScheme.surface
                                 ),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                border = CardDefaults.outlinedCardBorder().copy(
-                                    brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                border = androidx.compose.foundation.BorderStroke(
+                                    width = 0.75.dp,
+                                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
                                 )
                             ) {
-                                Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
+                                Column(modifier = Modifier.padding(all = 16.dp)) {
                                     Text(
                                         text = stringResource(R.string.split_to_collect),
                                         style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = uiState.totalToCollect.format(uiState.currency),
-                                        style = MaterialTheme.typography.titleMedium,
+                                        style = MaterialTheme.typography.titleLarge,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary
                                     )
@@ -185,26 +187,29 @@ fun SplitLandingScreen(
                                     containerColor = MaterialTheme.colorScheme.surface
                                 ),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                                border = CardDefaults.outlinedCardBorder().copy(
-                                    brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                border = androidx.compose.foundation.BorderStroke(
+                                    width = 0.75.dp,
+                                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
                                 )
                             ) {
-                                Column(modifier = Modifier.padding(MaterialTheme.spacing.card)) {
+                                Column(modifier = Modifier.padding(all = 16.dp)) {
                                     Text(
                                         text = stringResource(R.string.split_collected),
                                         style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = uiState.totalCollected.format(uiState.currency),
-                                        style = MaterialTheme.typography.titleMedium,
+                                        style = MaterialTheme.typography.titleLarge,
                                         fontWeight = FontWeight.Bold,
                                         color = IncomeEmerald
                                     )
                                 }
                             }
                         }
+
 
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
 
