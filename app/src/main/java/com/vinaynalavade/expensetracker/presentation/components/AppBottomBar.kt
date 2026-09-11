@@ -30,8 +30,8 @@ val BottomNavItems = listOf(
     Screen.Dashboard,
     Screen.Transactions,
     Screen.Split,
-    Screen.Analytics,
-    Screen.Settings
+    Screen.Planning,
+    Screen.Insights
 )
 
 /**
@@ -70,8 +70,9 @@ fun AppBottomBar(
         BottomNavItems.forEach { screen ->
             val isSelected = currentRoute == screen.route ||
                 (screen == Screen.Transactions && currentRoute?.startsWith("transactions") == true) ||
-                (screen == Screen.Analytics && currentRoute == Screen.MonthlySummary.route) ||
-                (screen == Screen.Split && currentRoute == Screen.Split.route)
+                (screen == Screen.Insights && (currentRoute == Screen.Insights.route || currentRoute == Screen.MonthlySummary.route)) ||
+                (screen == Screen.Planning && (currentRoute == Screen.Planning.route || currentRoute?.startsWith("goal_detail") == true)) ||
+                (screen == Screen.Split && (currentRoute == Screen.Split.route || currentRoute?.startsWith("split") == true))
 
             NavigationBarItem(
                 selected = isSelected,

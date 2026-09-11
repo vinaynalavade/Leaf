@@ -1,9 +1,7 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vinaynalavade.expensetracker.R
+import com.vinaynalavade.expensetracker.presentation.settings.components.ProfileAvatar
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
-import com.vinaynalavade.expensetracker.presentation.theme.SquircleIconShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.LocalDate
 import java.time.LocalTime
@@ -35,18 +32,19 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Luxury personalized greeting header for the Dashboard featuring user avatar, time-aware greeting, and brand badge.
+ * Luxury personalized greeting header for the Dashboard featuring user avatar, time-aware greeting, and subtle Leaf brand badge.
  */
 @Composable
 fun GreetingHeader(
-    userName: String? = null,
+    displayName: String? = null,
+    profileImageUri: String? = null,
+    onAvatarClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val greeting = getContextualGreeting(userName)
+    val greeting = getContextualGreeting(displayName)
     val formattedDate = LocalDate.now().format(
         DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault())
     )
-    val initials = getInitials(userName)
 
     Row(
         modifier = modifier
@@ -62,21 +60,14 @@ fun GreetingHeader(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f, fill = false)
         ) {
-            // User Avatar Squircle
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(SquircleIconShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = initials,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
+            // User Avatar (uses existing profile picture if available, or initials fallback)
+            ProfileAvatar(
+                imageUri = profileImageUri,
+                displayName = displayName ?: "",
+                size = 46.dp,
+                showEditBadge = false,
+                onEditClick = onAvatarClick
+            )
 
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
 
@@ -132,7 +123,7 @@ fun GreetingHeader(
     }
 }
 
-private fun getContextualGreeting(userName: String?): String {
+private fun getContextualGreeting(displayName: String?): String {
     val hour = LocalTime.now().hour
     val timeGreeting = when (hour) {
         in 4..11 -> "Good morning"
@@ -141,23 +132,14 @@ private fun getContextualGreeting(userName: String?): String {
         else -> "Welcome back"
     }
 
-    val cleanName = userName?.trim()?.takeIf { it.isNotBlank() }
+    val cleanName = displayName?.trim()?.takeIf { it.isNotBlank() }
     val firstName = cleanName?.split(Regex("\\s+"))?.firstOrNull()?.takeIf { it.isNotBlank() }
 
     return if (firstName != null) {
         "$timeGreeting, $firstName"
     } else {
-        "$timeGreeting, buddy"
+        timeGreeting
     }
 }
 
-private fun getInitials(userName: String?): String {
-    val cleanName = userName?.trim()?.takeIf { it.isNotBlank() } ?: return "L"
-    val parts = cleanName.split(Regex("\\s+")).filter { it.isNotBlank() }
-    return when {
-        parts.size >= 2 -> "${parts[0].first().uppercaseChar()}${parts[1].first().uppercaseChar()}"
-        parts.size == 1 -> parts[0].take(2).uppercase()
-        else -> "L"
-    }
-}
 

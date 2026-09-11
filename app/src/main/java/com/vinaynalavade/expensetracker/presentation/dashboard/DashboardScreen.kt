@@ -42,14 +42,19 @@ import java.time.YearMonth
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    userName: String? = null,
+    displayName: String? = null,
+    profileImageUri: String? = null,
     currency: Currency = Currency.DEFAULT,
     onNavigateToAddExpense: () -> Unit,
     onNavigateToAddIncome: () -> Unit,
     onNavigateToTransactions: () -> Unit,
     onNavigateToCategories: () -> Unit,
+    onNavigateToPlanning: () -> Unit = {},
+    onNavigateToGoalDetail: (Long) -> Unit = {},
+    onNavigateToTools: () -> Unit = {},
     onNavigateToCategoryTransactions: (YearMonth, String, TransactionType) -> Unit = { _, _, _ -> },
     onNavigateToTransactionDetail: (Long) -> Unit = {},
+    onProfileClick: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -81,11 +86,37 @@ fun DashboardScreen(
                 contentPadding = PaddingValues(bottom = 96.dp)
             ) {
                 item {
-                    GreetingHeader(userName = userName)
+                    GreetingHeader(
+                        displayName = displayName,
+                        profileImageUri = profileImageUri,
+                        onAvatarClick = onProfileClick
+                    )
                 }
 
                 item {
                     BalanceHeroCard(summary = uiState.summary)
+                }
+
+                // Deterministic Budget Card (Overall -> Highest spend category -> Set Monthly Budget prompt)
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardBudgetCard(
+                        budgetProgress = uiState.featuredBudget,
+                        currency = currency,
+                        onClick = onNavigateToPlanning
+                    )
+                }
+
+                // Top Active Savings Goal Card (if any active goals exist)
+                uiState.topActiveGoal?.let { topGoal ->
+                    item {
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                        com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard(
+                            goal = topGoal,
+                            currency = currency,
+                            onClick = { onNavigateToGoalDetail(topGoal.id) }
+                        )
+                    }
                 }
 
                 item {

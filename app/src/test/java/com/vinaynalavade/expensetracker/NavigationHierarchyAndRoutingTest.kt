@@ -16,8 +16,8 @@ class NavigationHierarchyAndRoutingTest {
         assertTrue(routes.contains(Screen.Dashboard.route))
         assertTrue(routes.contains(Screen.Transactions.route))
         assertTrue(routes.contains(Screen.Split.route))
-        assertTrue(routes.contains(Screen.Analytics.route))
-        assertTrue(routes.contains(Screen.Settings.route))
+        assertTrue(routes.contains(Screen.Planning.route))
+        assertTrue(routes.contains(Screen.Insights.route))
         assertEquals(5, BottomNavItems.size)
     }
 
@@ -36,8 +36,8 @@ class NavigationHierarchyAndRoutingTest {
                 Screen.Dashboard,
                 Screen.Transactions,
                 Screen.Split,
-                Screen.Analytics,
-                Screen.Settings
+                Screen.Planning,
+                Screen.Insights
             ),
             BottomNavItems
         )

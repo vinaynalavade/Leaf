@@ -121,6 +121,26 @@ interface AppContainer {
     val updateSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateSplitExpenseUseCase
     val deleteSplitExpenseUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitExpenseUseCase
     val updateParticipantSettlementUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase
+
+    val budgetRepository: com.vinaynalavade.expensetracker.domain.repository.BudgetRepository
+    val savingsGoalRepository: com.vinaynalavade.expensetracker.domain.repository.SavingsGoalRepository
+    val splitGroupRepository: com.vinaynalavade.expensetracker.domain.repository.SplitGroupRepository
+
+    val getBudgetProgressUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetBudgetProgressUseCase
+    val saveBudgetUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveBudgetUseCase
+    val deleteBudgetUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteBudgetUseCase
+    val getSavingsGoalsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase
+    val getSavingsGoalByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalByIdUseCase
+    val saveSavingsGoalUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalUseCase
+    val deleteSavingsGoalUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase
+    val setSavingsGoalArchivedUseCase: com.vinaynalavade.expensetracker.domain.usecase.SetSavingsGoalArchivedUseCase
+    val saveSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase
+    val deleteSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase
+    val getSpendingTrendsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSpendingTrendsUseCase
+    val getSplitGroupsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitGroupsUseCase
+    val saveSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSplitGroupUseCase
+    val deleteSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitGroupUseCase
+    val getGroupNetBalancesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
@@ -475,5 +495,83 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val updateParticipantSettlementUseCase: com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase by lazy {
         com.vinaynalavade.expensetracker.domain.usecase.UpdateParticipantSettlementUseCase(splitRepository)
+    }
+
+    override val budgetRepository: com.vinaynalavade.expensetracker.domain.repository.BudgetRepository by lazy {
+        com.vinaynalavade.expensetracker.data.repository.BudgetRepositoryImpl(database.budgetDao())
+    }
+
+    override val savingsGoalRepository: com.vinaynalavade.expensetracker.domain.repository.SavingsGoalRepository by lazy {
+        com.vinaynalavade.expensetracker.data.repository.SavingsGoalRepositoryImpl(database.savingsGoalDao())
+    }
+
+    override val splitGroupRepository: com.vinaynalavade.expensetracker.domain.repository.SplitGroupRepository by lazy {
+        com.vinaynalavade.expensetracker.data.repository.SplitGroupRepositoryImpl(database.splitGroupDao())
+    }
+
+    override val getBudgetProgressUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetBudgetProgressUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetBudgetProgressUseCase(
+            budgetRepository = budgetRepository,
+            transactionRepository = transactionRepository
+        )
+    }
+
+    override val saveBudgetUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveBudgetUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveBudgetUseCase(budgetRepository)
+    }
+
+    override val deleteBudgetUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteBudgetUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteBudgetUseCase(budgetRepository)
+    }
+
+    override val getSavingsGoalsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase(savingsGoalRepository)
+    }
+
+    override val getSavingsGoalByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalByIdUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalByIdUseCase(savingsGoalRepository)
+    }
+
+    override val saveSavingsGoalUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalUseCase(savingsGoalRepository)
+    }
+
+    override val deleteSavingsGoalUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase(savingsGoalRepository)
+    }
+
+    override val setSavingsGoalArchivedUseCase: com.vinaynalavade.expensetracker.domain.usecase.SetSavingsGoalArchivedUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SetSavingsGoalArchivedUseCase(savingsGoalRepository)
+    }
+
+    override val saveSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase(savingsGoalRepository)
+    }
+
+    override val deleteSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase(savingsGoalRepository)
+    }
+
+    override val getSpendingTrendsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSpendingTrendsUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSpendingTrendsUseCase(
+            transactionRepository = transactionRepository,
+            categoryRepository = categoryRepository
+        )
+    }
+
+    override val getSplitGroupsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitGroupsUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetSplitGroupsUseCase(splitGroupRepository)
+    }
+
+    override val saveSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSplitGroupUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveSplitGroupUseCase(splitGroupRepository)
+    }
+
+    override val deleteSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitGroupUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitGroupUseCase(splitGroupRepository)
+    }
+
+    override val getGroupNetBalancesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase(splitRepository)
     }
 }

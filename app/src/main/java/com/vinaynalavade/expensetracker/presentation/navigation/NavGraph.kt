@@ -17,6 +17,7 @@ import com.vinaynalavade.expensetracker.di.AppContainer
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vinaynalavade.expensetracker.domain.model.GoogleBackupState
 import com.vinaynalavade.expensetracker.domain.model.UserPreferences
 import com.vinaynalavade.expensetracker.presentation.transactions.TransactionFilter
 import com.vinaynalavade.expensetracker.presentation.backup.BackupScreen
@@ -63,11 +64,27 @@ import com.vinaynalavade.expensetracker.presentation.split.detail.SplitDetailVie
 import com.vinaynalavade.expensetracker.presentation.split.edit.EditSplitScreen
 import com.vinaynalavade.expensetracker.presentation.split.edit.EditSplitViewModel
 
+import com.vinaynalavade.expensetracker.presentation.planning.PlanningScreen
+import com.vinaynalavade.expensetracker.presentation.planning.PlanningViewModel
+import com.vinaynalavade.expensetracker.presentation.planning.GoalDetailScreen
+import com.vinaynalavade.expensetracker.presentation.planning.GoalDetailViewModel
+import com.vinaynalavade.expensetracker.presentation.insights.InsightsScreen
+import com.vinaynalavade.expensetracker.presentation.insights.InsightsViewModel
+import com.vinaynalavade.expensetracker.presentation.tools.ToolsLandingScreen
+import com.vinaynalavade.expensetracker.presentation.tools.emi.EmiCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.tools.sip.SipCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.tools.fd.FdCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.tools.rd.RdCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.tools.discount.DiscountCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.tools.gst.GstCalculatorScreen
+
 private fun isPrimaryDestination(route: String?): Boolean {
     return route == Screen.Dashboard.route ||
         route == Screen.Transactions.route ||
         route?.startsWith("transactions") == true ||
         route == Screen.Split.route ||
+        route == Screen.Planning.route ||
+        route == Screen.Insights.route ||
         route == Screen.MonthlySummary.route ||
         route == Screen.Settings.route
 }
@@ -148,15 +165,33 @@ fun NavGraph(
                 factory = DashboardViewModel.Factory(
                     container.getFinancialSummaryUseCase,
                     container.getTransactionsUseCase,
-                    container.getCategoryAnalysisUseCase
+                    container.getCategoryAnalysisUseCase,
+                    container.getBudgetProgressUseCase,
+                    container.getSavingsGoalsUseCase
                 )
             )
             val userPrefs by container.getUserPreferencesUseCase()
                 .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            val googleBackupState by container.getGoogleBackupStateUseCase()
+                .collectAsStateWithLifecycle(initialValue = GoogleBackupState.Disconnected)
+
+            val effectiveDisplayName = when {
+                !userPrefs.userName.isNullOrBlank() -> userPrefs.userName
+                googleBackupState is GoogleBackupState.Connected && !(googleBackupState as GoogleBackupState.Connected).account.displayName.isNullOrBlank() ->
+                    (googleBackupState as GoogleBackupState.Connected).account.displayName
+                else -> null
+            }
+            val effectiveProfileImageUri = when {
+                !userPrefs.profileImageUri.isNullOrBlank() -> userPrefs.profileImageUri
+                googleBackupState is GoogleBackupState.Connected && !(googleBackupState as GoogleBackupState.Connected).account.photoUrl.isNullOrBlank() ->
+                    (googleBackupState as GoogleBackupState.Connected).account.photoUrl
+                else -> null
+            }
 
             DashboardScreen(
                 viewModel = viewModel,
-                userName = userPrefs.userName,
+                displayName = effectiveDisplayName,
+                profileImageUri = effectiveProfileImageUri,
                 currency = userPrefs.currency,
                 onNavigateToAddExpense = {
                     navController.navigate(Screen.AddExpense.route)
@@ -170,6 +205,15 @@ fun NavGraph(
                 onNavigateToCategories = {
                     navigateToPrimary(Screen.Categories.route)
                 },
+                onNavigateToPlanning = {
+                    navigateToPrimary(Screen.Planning.route)
+                },
+                onNavigateToGoalDetail = { goalId ->
+                    navController.navigate(Screen.GoalDetail.createRoute(goalId))
+                },
+                onNavigateToTools = {
+                    navController.navigate(Screen.Tools.route)
+                },
                 onNavigateToCategoryTransactions = { month, categoryName, type ->
                     navController.navigate(
                         Screen.Transactions.createRoute(
@@ -180,6 +224,9 @@ fun NavGraph(
                 },
                 onNavigateToTransactionDetail = { id ->
                     navController.navigate(Screen.TransactionDetail.createRoute(id))
+                },
+                onProfileClick = {
+                    navigateToPrimary(Screen.Settings.route)
                 },
                 onOpenQuickAdd = onOpenQuickAdd
             )
@@ -352,6 +399,7 @@ fun NavGraph(
                 onNavigateToBackup = { navController.navigate(Screen.BackupRestore.route) },
                 onNavigateToAppLockSetup = { navController.navigate(Screen.AppLockSetup.route) },
                 onNavigateToChangePin = { navController.navigate(Screen.ChangePin.route) },
+                onNavigateToTools = { navController.navigate(Screen.Tools.route) },
                 onNavigateToAbout = { navController.navigate(Screen.About.route) }
             )
         }
@@ -562,11 +610,15 @@ fun NavGraph(
             )
         }
 
-        // Split & Collect Destinations (v1.0.6)
+        // Split & Collect Destinations (v1.0.6 & v1.0.8)
         composable(Screen.Split.route) {
             val viewModel: SplitLandingViewModel = viewModel(
                 factory = SplitLandingViewModel.Factory(
                     getSplitExpensesUseCase = container.getSplitExpensesUseCase,
+                    getSplitGroupsUseCase = container.getSplitGroupsUseCase,
+                    saveSplitGroupUseCase = container.saveSplitGroupUseCase,
+                    deleteSplitGroupUseCase = container.deleteSplitGroupUseCase,
+                    getGroupNetBalancesUseCase = container.getGroupNetBalancesUseCase,
                     getUserPreferencesUseCase = container.getUserPreferencesUseCase
                 )
             )
@@ -586,6 +638,7 @@ fun NavGraph(
                 factory = CreateSplitViewModel.Factory(
                     saveSplitExpenseUseCase = container.saveSplitExpenseUseCase,
                     getCategoriesUseCase = container.getCategoriesUseCase,
+                    getSplitGroupsUseCase = container.getSplitGroupsUseCase,
                     getUserPreferencesUseCase = container.getUserPreferencesUseCase,
                     qrStorageManager = container.splitQrStorageManager
                 )
@@ -647,6 +700,142 @@ fun NavGraph(
                     navController.popBackStack()
                     onShowSnackbar("Split expense updated")
                 }
+            )
+        }
+
+        // Planning Module (v1.0.8)
+        composable(Screen.Planning.route) {
+            val viewModel: PlanningViewModel = viewModel(
+                factory = PlanningViewModel.Factory(
+                    getBudgetProgressUseCase = container.getBudgetProgressUseCase,
+                    saveBudgetUseCase = container.saveBudgetUseCase,
+                    deleteBudgetUseCase = container.deleteBudgetUseCase,
+                    getSavingsGoalsUseCase = container.getSavingsGoalsUseCase,
+                    saveSavingsGoalUseCase = container.saveSavingsGoalUseCase,
+                    deleteSavingsGoalUseCase = container.deleteSavingsGoalUseCase,
+                    setSavingsGoalArchivedUseCase = container.setSavingsGoalArchivedUseCase,
+                    saveSavingsGoalContributionUseCase = container.saveSavingsGoalContributionUseCase,
+                    deleteSavingsGoalContributionUseCase = container.deleteSavingsGoalContributionUseCase,
+                    getCategoriesUseCase = container.getCategoriesUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            PlanningScreen(
+                viewModel = viewModel,
+                onNavigateToGoalDetail = { goalId ->
+                    navController.navigate(Screen.GoalDetail.createRoute(goalId))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.GoalDetail.route,
+            arguments = listOf(navArgument("goalId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val goalId = backStackEntry.arguments?.getLong("goalId") ?: 0L
+            val viewModel: GoalDetailViewModel = viewModel(
+                factory = GoalDetailViewModel.Factory(
+                    goalId = goalId,
+                    getSavingsGoalByIdUseCase = container.getSavingsGoalByIdUseCase,
+                    saveSavingsGoalContributionUseCase = container.saveSavingsGoalContributionUseCase,
+                    deleteSavingsGoalContributionUseCase = container.deleteSavingsGoalContributionUseCase,
+                    setSavingsGoalArchivedUseCase = container.setSavingsGoalArchivedUseCase,
+                    deleteSavingsGoalUseCase = container.deleteSavingsGoalUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            GoalDetailScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // Insights Module (v1.0.8)
+        composable(Screen.Insights.route) {
+            val insightsViewModel: InsightsViewModel = viewModel(
+                factory = InsightsViewModel.Factory(
+                    getSpendingTrendsUseCase = container.getSpendingTrendsUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            val monthlySummaryViewModel: MonthlySummaryViewModel = viewModel(
+                factory = MonthlySummaryViewModel.Factory(
+                    container.getMonthlyLedgerUseCase
+                )
+            )
+            InsightsScreen(
+                insightsViewModel = insightsViewModel,
+                monthlySummaryViewModel = monthlySummaryViewModel,
+                onNavigateToTransactionDetail = { transactionId ->
+                    navController.navigate(Screen.TransactionDetail.createRoute(transactionId))
+                }
+            )
+        }
+
+        // Tools & Financial Calculators (v1.0.8)
+        composable(Screen.Tools.route) {
+            ToolsLandingScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToEmi = { navController.navigate(Screen.EmiCalculator.route) },
+                onNavigateToSip = { navController.navigate(Screen.SipCalculator.route) },
+                onNavigateToFd = { navController.navigate(Screen.FdCalculator.route) },
+                onNavigateToRd = { navController.navigate(Screen.RdCalculator.route) },
+                onNavigateToDiscount = { navController.navigate(Screen.DiscountCalculator.route) },
+                onNavigateToGst = { navController.navigate(Screen.GstCalculator.route) }
+            )
+        }
+
+        composable(Screen.EmiCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            EmiCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.SipCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            SipCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.FdCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            FdCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.RdCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            RdCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.DiscountCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            DiscountCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.GstCalculator.route) {
+            val userPrefs by container.getUserPreferencesUseCase()
+                .collectAsStateWithLifecycle(initialValue = UserPreferences())
+            GstCalculatorScreen(
+                currency = userPrefs.currency,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

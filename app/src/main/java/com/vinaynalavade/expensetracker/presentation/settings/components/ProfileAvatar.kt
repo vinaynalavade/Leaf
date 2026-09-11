@@ -66,8 +66,21 @@ fun ProfileAvatar(
 
         withContext(Dispatchers.IO) {
             try {
-                val uri = Uri.parse(imageUri)
-                context.contentResolver.openInputStream(uri)?.use { stream ->
+                fun openStream(): java.io.InputStream? {
+                    return if (imageUri.startsWith("http://", ignoreCase = true) ||
+                        imageUri.startsWith("https://", ignoreCase = true)
+                    ) {
+                        val connection = java.net.URL(imageUri).openConnection()
+                        connection.connectTimeout = 5000
+                        connection.readTimeout = 5000
+                        connection.getInputStream()
+                    } else {
+                        val uri = Uri.parse(imageUri)
+                        context.contentResolver.openInputStream(uri)
+                    }
+                }
+
+                openStream()?.use { stream ->
                     // Decode bounds first for memory-safe sampling
                     val options = BitmapFactory.Options().apply {
                         inJustDecodeBounds = true
@@ -83,7 +96,7 @@ fun ProfileAvatar(
                     }
 
                     // Decode actual bitmap with sample size
-                    context.contentResolver.openInputStream(uri)?.use { actualStream ->
+                    openStream()?.use { actualStream ->
                         val decodeOptions = BitmapFactory.Options().apply {
                             inSampleSize = sampleSize
                             inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -94,7 +107,7 @@ fun ProfileAvatar(
                     }
                 }
             } catch (e: Exception) {
-                // Fail gracefully: SecurityException, FileNotFoundException, etc.
+                // Fail gracefully: SecurityException, FileNotFoundException, NetworkException, etc.
                 bitmap = null
                 loadFailed = true
             }

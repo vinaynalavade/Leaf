@@ -21,6 +21,7 @@ data class SplitExpense(
     val addToTransactions: Boolean = false,
     val expenseTransactionId: Long? = null,
     val paymentMethod: PaymentMethod = PaymentMethod.CASH,
+    val groupId: Long? = null,
     val participants: List<SplitParticipant> = emptyList(),
     val createdAt: Long = date,
     val updatedAt: Long = date

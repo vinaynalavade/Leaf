@@ -87,6 +87,104 @@ object JsonBackupParser {
             sb.append("      \"updatedAt\": ").append(rec.updatedAt).append("\n")
             sb.append("    }").append(if (index < backup.recurringTransactions.size - 1) "," else "").append("\n")
         }
+        sb.append("  ],\n")
+
+        // Budgets
+        sb.append("  \"budgets\": [\n")
+        backup.budgets.forEachIndexed { index, b ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(b.id).append(",\n")
+            sb.append("      \"categoryId\": ").append(b.categoryId ?: "null").append(",\n")
+            sb.append("      \"amountSubunits\": ").append(b.amountSubunits).append(",\n")
+            sb.append("      \"month\": ").append(b.month).append(",\n")
+            sb.append("      \"year\": ").append(b.year).append(",\n")
+            sb.append("      \"createdAt\": ").append(b.createdAt).append(",\n")
+            sb.append("      \"updatedAt\": ").append(b.updatedAt).append("\n")
+            sb.append("    }").append(if (index < backup.budgets.size - 1) "," else "").append("\n")
+        }
+        sb.append("  ],\n")
+
+        // Savings Goals
+        sb.append("  \"savingsGoals\": [\n")
+        backup.savingsGoals.forEachIndexed { index, sg ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(sg.id).append(",\n")
+            sb.append("      \"name\": \"").append(escape(sg.name)).append("\",\n")
+            sb.append("      \"targetAmountSubunits\": ").append(sg.targetAmountSubunits).append(",\n")
+            sb.append("      \"targetDate\": ").append(sg.targetDate ?: "null").append(",\n")
+            sb.append("      \"note\": ").append(if (sg.note != null) "\"${escape(sg.note)}\"" else "null").append(",\n")
+            sb.append("      \"iconName\": \"").append(escape(sg.iconName)).append("\",\n")
+            sb.append("      \"colorHex\": \"").append(escape(sg.colorHex)).append("\",\n")
+            sb.append("      \"isArchived\": ").append(sg.isArchived).append(",\n")
+            sb.append("      \"createdAt\": ").append(sg.createdAt).append(",\n")
+            sb.append("      \"updatedAt\": ").append(sg.updatedAt).append("\n")
+            sb.append("    }").append(if (index < backup.savingsGoals.size - 1) "," else "").append("\n")
+        }
+        sb.append("  ],\n")
+
+        // Savings Goal Contributions
+        sb.append("  \"savingsGoalContributions\": [\n")
+        backup.savingsGoalContributions.forEachIndexed { index, c ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(c.id).append(",\n")
+            sb.append("      \"goalId\": ").append(c.goalId).append(",\n")
+            sb.append("      \"amountSubunits\": ").append(c.amountSubunits).append(",\n")
+            sb.append("      \"note\": ").append(if (c.note != null) "\"${escape(c.note)}\"" else "null").append(",\n")
+            sb.append("      \"timestamp\": ").append(c.timestamp).append(",\n")
+            sb.append("      \"createdAt\": ").append(c.createdAt).append("\n")
+            sb.append("    }").append(if (index < backup.savingsGoalContributions.size - 1) "," else "").append("\n")
+        }
+        sb.append("  ],\n")
+
+        // Split Groups
+        sb.append("  \"splitGroups\": [\n")
+        backup.splitGroups.forEachIndexed { index, g ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(g.id).append(",\n")
+            sb.append("      \"name\": \"").append(escape(g.name)).append("\",\n")
+            sb.append("      \"iconName\": \"").append(escape(g.iconName)).append("\",\n")
+            sb.append("      \"colorHex\": \"").append(escape(g.colorHex)).append("\",\n")
+            sb.append("      \"createdAt\": ").append(g.createdAt).append("\n")
+            sb.append("    }").append(if (index < backup.splitGroups.size - 1) "," else "").append("\n")
+        }
+        sb.append("  ],\n")
+
+        // Split Expenses
+        sb.append("  \"splitExpenses\": [\n")
+        backup.splitExpenses.forEachIndexed { index, se ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(se.id).append(",\n")
+            sb.append("      \"title\": \"").append(escape(se.title)).append("\",\n")
+            sb.append("      \"totalAmountSubunits\": ").append(se.totalAmountSubunits).append(",\n")
+            sb.append("      \"date\": ").append(se.date).append(",\n")
+            sb.append("      \"categoryId\": ").append(se.categoryId).append(",\n")
+            sb.append("      \"paidBy\": \"").append(escape(se.paidBy)).append("\",\n")
+            sb.append("      \"splitMethod\": \"").append(escape(se.splitMethod)).append("\",\n")
+            sb.append("      \"qrImagePath\": ").append(if (se.qrImagePath != null) "\"${escape(se.qrImagePath)}\"" else "null").append(",\n")
+            sb.append("      \"addToTransactions\": ").append(se.addToTransactions).append(",\n")
+            sb.append("      \"expenseTransactionId\": ").append(se.expenseTransactionId ?: "null").append(",\n")
+            sb.append("      \"paymentMethod\": \"").append(escape(se.paymentMethod)).append("\",\n")
+            sb.append("      \"groupId\": ").append(se.groupId ?: "null").append(",\n")
+            sb.append("      \"createdAt\": ").append(se.createdAt).append(",\n")
+            sb.append("      \"updatedAt\": ").append(se.updatedAt).append("\n")
+            sb.append("    }").append(if (index < backup.splitExpenses.size - 1) "," else "").append("\n")
+        }
+        sb.append("  ],\n")
+
+        // Split Participants
+        sb.append("  \"splitParticipants\": [\n")
+        backup.splitParticipants.forEachIndexed { index, sp ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(sp.id).append(",\n")
+            sb.append("      \"splitExpenseId\": ").append(sp.splitExpenseId).append(",\n")
+            sb.append("      \"name\": \"").append(escape(sp.name)).append("\",\n")
+            sb.append("      \"isCurrentUser\": ").append(sp.isCurrentUser).append(",\n")
+            sb.append("      \"amountSubunits\": ").append(sp.amountSubunits).append(",\n")
+            sb.append("      \"settlementStatus\": \"").append(escape(sp.settlementStatus)).append("\",\n")
+            sb.append("      \"settledAt\": ").append(sp.settledAt ?: "null").append(",\n")
+            sb.append("      \"settlementTransactionId\": ").append(sp.settlementTransactionId ?: "null").append("\n")
+            sb.append("    }").append(if (index < backup.splitParticipants.size - 1) "," else "").append("\n")
+        }
         sb.append("  ]\n")
 
         sb.append("}")
@@ -208,6 +306,160 @@ object JsonBackupParser {
             )
         }
 
+        // Parse Budgets
+        val budgetsArray = root.getArray("budgets") ?: emptyList()
+        val budgets = budgetsArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val categoryId = obj.getLong("categoryId")
+            val amountSubunits = obj.getLong("amountSubunits") ?: return@mapNotNull null
+            val month = obj.getInt("month") ?: return@mapNotNull null
+            val year = obj.getInt("year") ?: return@mapNotNull null
+            val budgetCreatedAt = obj.getLong("createdAt") ?: System.currentTimeMillis()
+            val budgetUpdatedAt = obj.getLong("updatedAt") ?: System.currentTimeMillis()
+
+            BackupBudget(
+                id = id,
+                categoryId = categoryId,
+                amountSubunits = amountSubunits,
+                month = month,
+                year = year,
+                createdAt = budgetCreatedAt,
+                updatedAt = budgetUpdatedAt
+            )
+        }
+
+        // Parse Savings Goals
+        val savingsGoalsArray = root.getArray("savingsGoals") ?: emptyList()
+        val savingsGoals = savingsGoalsArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val name = obj.getString("name") ?: return@mapNotNull null
+            val targetAmountSubunits = obj.getLong("targetAmountSubunits") ?: return@mapNotNull null
+            val targetDate = obj.getLong("targetDate")
+            val note = obj.getString("note")
+            val iconName = obj.getString("iconName") ?: "savings"
+            val colorHex = obj.getString("colorHex") ?: "#10B981"
+            val isArchived = obj.getBoolean("isArchived") ?: false
+            val goalCreatedAt = obj.getLong("createdAt") ?: System.currentTimeMillis()
+            val goalUpdatedAt = obj.getLong("updatedAt") ?: System.currentTimeMillis()
+
+            BackupSavingsGoal(
+                id = id,
+                name = name,
+                targetAmountSubunits = targetAmountSubunits,
+                targetDate = targetDate,
+                note = note,
+                iconName = iconName,
+                colorHex = colorHex,
+                isArchived = isArchived,
+                createdAt = goalCreatedAt,
+                updatedAt = goalUpdatedAt
+            )
+        }
+
+        // Parse Savings Goal Contributions
+        val contributionsArray = root.getArray("savingsGoalContributions") ?: emptyList()
+        val savingsGoalContributions = contributionsArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val goalId = obj.getLong("goalId") ?: return@mapNotNull null
+            val amountSubunits = obj.getLong("amountSubunits") ?: return@mapNotNull null
+            val note = obj.getString("note")
+            val timestamp = obj.getLong("timestamp") ?: System.currentTimeMillis()
+            val contribCreatedAt = obj.getLong("createdAt") ?: System.currentTimeMillis()
+
+            BackupSavingsGoalContribution(
+                id = id,
+                goalId = goalId,
+                amountSubunits = amountSubunits,
+                note = note,
+                timestamp = timestamp,
+                createdAt = contribCreatedAt
+            )
+        }
+
+        // Parse Split Groups
+        val splitGroupsArray = root.getArray("splitGroups") ?: emptyList()
+        val splitGroups = splitGroupsArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val name = obj.getString("name") ?: return@mapNotNull null
+            val iconName = obj.getString("iconName") ?: "group"
+            val colorHex = obj.getString("colorHex") ?: "#3B82F6"
+            val groupCreatedAt = obj.getLong("createdAt") ?: System.currentTimeMillis()
+
+            BackupSplitGroup(
+                id = id,
+                name = name,
+                iconName = iconName,
+                colorHex = colorHex,
+                createdAt = groupCreatedAt
+            )
+        }
+
+        // Parse Split Expenses
+        val splitExpensesArray = root.getArray("splitExpenses") ?: emptyList()
+        val splitExpenses = splitExpensesArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val title = obj.getString("title") ?: return@mapNotNull null
+            val totalAmountSubunits = obj.getLong("totalAmountSubunits") ?: return@mapNotNull null
+            val date = obj.getLong("date") ?: return@mapNotNull null
+            val categoryId = obj.getLong("categoryId") ?: return@mapNotNull null
+            val paidBy = obj.getString("paidBy") ?: "Me"
+            val splitMethod = obj.getString("splitMethod") ?: "EQUAL"
+            val qrImagePath = obj.getString("qrImagePath")
+            val addToTransactions = obj.getBoolean("addToTransactions") ?: false
+            val expenseTransactionId = obj.getLong("expenseTransactionId")
+            val paymentMethod = obj.getString("paymentMethod") ?: "CASH"
+            val groupId = obj.getLong("groupId")
+            val expenseCreatedAt = obj.getLong("createdAt") ?: date
+            val expenseUpdatedAt = obj.getLong("updatedAt") ?: date
+
+            BackupSplitExpense(
+                id = id,
+                title = title,
+                totalAmountSubunits = totalAmountSubunits,
+                date = date,
+                categoryId = categoryId,
+                paidBy = paidBy,
+                splitMethod = splitMethod,
+                qrImagePath = qrImagePath,
+                addToTransactions = addToTransactions,
+                expenseTransactionId = expenseTransactionId,
+                paymentMethod = paymentMethod,
+                groupId = groupId,
+                createdAt = expenseCreatedAt,
+                updatedAt = expenseUpdatedAt
+            )
+        }
+
+        // Parse Split Participants
+        val splitParticipantsArray = root.getArray("splitParticipants") ?: emptyList()
+        val splitParticipants = splitParticipantsArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val splitExpenseId = obj.getLong("splitExpenseId") ?: return@mapNotNull null
+            val name = obj.getString("name") ?: return@mapNotNull null
+            val isCurrentUser = obj.getBoolean("isCurrentUser") ?: false
+            val amountSubunits = obj.getLong("amountSubunits") ?: return@mapNotNull null
+            val settlementStatus = obj.getString("settlementStatus") ?: "PENDING"
+            val settledAt = obj.getLong("settledAt")
+            val settlementTransactionId = obj.getLong("settlementTransactionId")
+
+            BackupSplitParticipant(
+                id = id,
+                splitExpenseId = splitExpenseId,
+                name = name,
+                isCurrentUser = isCurrentUser,
+                amountSubunits = amountSubunits,
+                settlementStatus = settlementStatus,
+                settledAt = settledAt,
+                settlementTransactionId = settlementTransactionId
+            )
+        }
+
         return BackupData(
             backupVersion = backupVersion,
             appVersion = appVersion,
@@ -215,7 +467,13 @@ object JsonBackupParser {
             categories = categories,
             transactions = transactions,
             recurringTransactions = recurringTransactions,
-            preferences = preferences
+            preferences = preferences,
+            budgets = budgets,
+            savingsGoals = savingsGoals,
+            savingsGoalContributions = savingsGoalContributions,
+            splitGroups = splitGroups,
+            splitExpenses = splitExpenses,
+            splitParticipants = splitParticipants
         )
     }
 

@@ -264,6 +264,7 @@ fun CreateSplitScreen(
                         onTitleChange = { viewModel.onTitleChange(it) },
                         onAmountChange = { viewModel.onAmountChange(it) },
                         onCategorySelect = { viewModel.onCategorySelect(it) },
+                        onGroupSelect = { viewModel.onGroupSelect(it) },
                         onAddToTransactionsChange = { viewModel.onAddToTransactionsChange(it) },
                         onPaymentMethodChange = { viewModel.onPaymentMethodChange(it) },
                         onOpenDatePicker = { showDatePicker = true }
@@ -354,6 +355,7 @@ private fun Step1ExpenseDetails(
     onTitleChange: (String) -> Unit,
     onAmountChange: (String) -> Unit,
     onCategorySelect: (com.vinaynalavade.expensetracker.domain.model.Category) -> Unit,
+    onGroupSelect: (Long?) -> Unit,
     onAddToTransactionsChange: (Boolean) -> Unit,
     onPaymentMethodChange: (PaymentMethod) -> Unit,
     onOpenDatePicker: () -> Unit
@@ -499,6 +501,40 @@ private fun Step1ExpenseDetails(
                         selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 )
+            }
+        }
+
+        if (uiState.availableGroups.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+
+            Text(
+                text = "Group (Optional)",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)
+            ) {
+                FilterChip(
+                    selected = uiState.selectedGroupId == null,
+                    onClick = { onGroupSelect(null) },
+                    label = { Text("None") },
+                    shape = PillShape
+                )
+                uiState.availableGroups.forEach { group ->
+                    val isSelected = uiState.selectedGroupId == group.id
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = { onGroupSelect(group.id) },
+                        label = { Text(group.name) },
+                        shape = PillShape
+                    )
+                }
             }
         }
 

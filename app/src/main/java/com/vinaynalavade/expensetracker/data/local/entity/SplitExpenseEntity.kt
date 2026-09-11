@@ -20,10 +20,17 @@ import com.vinaynalavade.expensetracker.domain.model.SplitParticipant
             parentColumns = ["id"],
             childColumns = ["category_id"],
             onDelete = ForeignKey.RESTRICT
+        ),
+        ForeignKey(
+            entity = SplitGroupEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["group_id"],
+            onDelete = ForeignKey.SET_NULL
         )
     ],
     indices = [
-        Index("category_id")
+        Index("category_id"),
+        Index("group_id")
     ]
 )
 data class SplitExpenseEntity(
@@ -61,6 +68,9 @@ data class SplitExpenseEntity(
     @ColumnInfo(name = "payment_method", defaultValue = "CASH")
     val paymentMethod: String = "CASH",
 
+    @ColumnInfo(name = "group_id")
+    val groupId: Long? = null,
+
     @ColumnInfo(name = "created_at")
     val createdAt: Long = date,
 
@@ -81,6 +91,7 @@ data class SplitExpenseEntity(
             addToTransactions = addToTransactions,
             expenseTransactionId = expenseTransactionId,
             paymentMethod = PaymentMethod.fromString(paymentMethod),
+            groupId = groupId,
             participants = participants,
             createdAt = createdAt,
             updatedAt = updatedAt
@@ -101,6 +112,7 @@ data class SplitExpenseEntity(
                 addToTransactions = splitExpense.addToTransactions,
                 expenseTransactionId = splitExpense.expenseTransactionId,
                 paymentMethod = splitExpense.paymentMethod.name,
+                groupId = splitExpense.groupId,
                 createdAt = splitExpense.createdAt,
                 updatedAt = splitExpense.updatedAt
             )
