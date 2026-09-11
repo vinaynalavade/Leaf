@@ -117,6 +117,20 @@
     }
   }
 
+  // --- Version Comparison Helper ---
+  function isVersionAtLeast(remoteVer, defaultVer) {
+    const parse = (v) => String(v).replace(/^v/i, '').split('.').map(n => parseInt(n, 10) || 0);
+    const r = parse(remoteVer);
+    const d = parse(defaultVer);
+    for (let i = 0; i < Math.max(r.length, d.length); i++) {
+      const rVal = r[i] || 0;
+      const dVal = d[i] || 0;
+      if (rVal > dVal) return true;
+      if (rVal < dVal) return false;
+    }
+    return true;
+  }
+
   // --- Dynamic Release Metadata Fetching ---
   async function initReleaseMetadata() {
     updateReleaseUiElements({
@@ -155,6 +169,12 @@
 
       const rawTag = releaseData.tag_name || '';
       const versionName = rawTag.replace(/^v/i, '') || RELEASE_CONFIG.defaultVersionName;
+
+      // Only update if fetched remote release is at least as new as the configured default
+      if (!isVersionAtLeast(versionName, RELEASE_CONFIG.defaultVersionName)) {
+        return;
+      }
+
       const formattedSize = apkAsset.size
         ? `${(apkAsset.size / (1024 * 1024)).toFixed(1)} MB`
         : RELEASE_CONFIG.defaultApkSize;
