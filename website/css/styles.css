@@ -953,13 +953,15 @@ a:hover {
 /* --- Mockup Bottom Navigation (v1.0.8 5-Tab Bar) --- */
 .mockup-bottom-nav {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   background: var(--bg-surface);
   border-top: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 0.35rem 0.2rem;
+  padding: 0.35rem 0.15rem;
   margin-top: 0.25rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mockup-nav-tab {
@@ -967,11 +969,15 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   color: var(--text-muted);
   font-weight: 600;
-  padding: 2px 6px;
-  border-radius: var(--radius-pill);
+  padding: 3px 4px;
+  border-radius: var(--radius-xs);
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .mockup-nav-tab.active {
@@ -981,9 +987,10 @@ a:hover {
 }
 
 .mockup-nav-tab svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   fill: currentColor;
+  flex-shrink: 0;
 }
 
 /* --- Planning & Budgets Mockup Styles --- */
@@ -1084,6 +1091,8 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 /* --- Feature Stories --- */
@@ -1814,6 +1823,11 @@ a:hover {
   .download-meta {
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .calc-grid-preview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
   }
 }
 
