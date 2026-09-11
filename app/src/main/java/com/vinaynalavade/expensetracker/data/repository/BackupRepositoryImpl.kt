@@ -1,10 +1,16 @@
 package com.vinaynalavade.expensetracker.data.repository
 
 import androidx.room.withTransaction
+import com.vinaynalavade.expensetracker.core.backup.BackupBudget
 import com.vinaynalavade.expensetracker.core.backup.BackupCategory
 import com.vinaynalavade.expensetracker.core.backup.BackupData
 import com.vinaynalavade.expensetracker.core.backup.BackupPreferences
 import com.vinaynalavade.expensetracker.core.backup.BackupRecurringTransaction
+import com.vinaynalavade.expensetracker.core.backup.BackupSavingsGoal
+import com.vinaynalavade.expensetracker.core.backup.BackupSavingsGoalContribution
+import com.vinaynalavade.expensetracker.core.backup.BackupSplitExpense
+import com.vinaynalavade.expensetracker.core.backup.BackupSplitGroup
+import com.vinaynalavade.expensetracker.core.backup.BackupSplitParticipant
 import com.vinaynalavade.expensetracker.core.backup.BackupTransaction
 import com.vinaynalavade.expensetracker.core.backup.BackupValidationResult
 import com.vinaynalavade.expensetracker.core.backup.CsvTransactionHelper
@@ -15,8 +21,14 @@ import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.result.AppError
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.data.local.database.ExpenseTrackerDatabase
+import com.vinaynalavade.expensetracker.data.local.entity.BudgetEntity
 import com.vinaynalavade.expensetracker.data.local.entity.CategoryEntity
 import com.vinaynalavade.expensetracker.data.local.entity.RecurringTransactionEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SavingsGoalContributionEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SavingsGoalEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SplitExpenseEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SplitGroupEntity
+import com.vinaynalavade.expensetracker.data.local.entity.SplitParticipantEntity
 import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
 import com.vinaynalavade.expensetracker.domain.model.Category
 import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
@@ -50,6 +62,11 @@ class BackupRepositoryImpl(
             val transactions = transactionRepository.getTransactions().firstOrNull() ?: emptyList()
             val recurringList = recurringTransactionRepository.getRecurringTransactions().firstOrNull() ?: emptyList()
             val prefs = userPreferencesRepository.getUserPreferences().firstOrNull()
+
+            val budgetsWithCat = database.budgetDao().getAllBudgets().firstOrNull() ?: emptyList()
+            val goalsWithContribs = database.savingsGoalDao().getAllSavingsGoals().firstOrNull() ?: emptyList()
+            val splitGroupsList = database.splitGroupDao().getAllGroups().firstOrNull() ?: emptyList()
+            val splitExpensesWithDetails = database.splitDao().getAllSplitExpenses().firstOrNull() ?: emptyList()
 
             val backupCategories = categories.map { cat ->
                 BackupCategory(
@@ -97,6 +114,90 @@ class BackupRepositoryImpl(
                 )
             }
 
+            val backupBudgets = budgetsWithCat.map { b ->
+                BackupBudget(
+                    id = b.budget.id,
+                    categoryId = b.budget.categoryId,
+                    amountSubunits = b.budget.amountSubunits,
+                    month = b.budget.month,
+                    year = b.budget.year,
+                    createdAt = b.budget.createdAt,
+                    updatedAt = b.budget.updatedAt
+                )
+            }
+
+            val backupSavingsGoals = goalsWithContribs.map { g ->
+                BackupSavingsGoal(
+                    id = g.goal.id,
+                    name = g.goal.name,
+                    targetAmountSubunits = g.goal.targetAmountSubunits,
+                    targetDate = g.goal.targetDate,
+                    note = g.goal.note,
+                    iconName = g.goal.iconName,
+                    colorHex = g.goal.colorHex,
+                    isArchived = g.goal.isArchived,
+                    createdAt = g.goal.createdAt,
+                    updatedAt = g.goal.updatedAt
+                )
+            }
+
+            val backupContributions = goalsWithContribs.flatMap { g ->
+                g.contributions.map { c ->
+                    BackupSavingsGoalContribution(
+                        id = c.id,
+                        goalId = c.goalId,
+                        amountSubunits = c.amountSubunits,
+                        note = c.note,
+                        timestamp = c.timestamp,
+                        createdAt = c.createdAt
+                    )
+                }
+            }
+
+            val backupSplitGroups = splitGroupsList.map { g ->
+                BackupSplitGroup(
+                    id = g.id,
+                    name = g.name,
+                    iconName = g.iconName,
+                    colorHex = g.colorHex,
+                    createdAt = g.createdAt
+                )
+            }
+
+            val backupSplitExpenses = splitExpensesWithDetails.map { s ->
+                BackupSplitExpense(
+                    id = s.expense.id,
+                    title = s.expense.title,
+                    totalAmountSubunits = s.expense.totalAmountSubunits,
+                    date = s.expense.date,
+                    categoryId = s.expense.categoryId,
+                    paidBy = s.expense.paidBy,
+                    splitMethod = s.expense.splitMethod,
+                    qrImagePath = s.expense.qrImagePath,
+                    addToTransactions = s.expense.addToTransactions,
+                    expenseTransactionId = s.expense.expenseTransactionId,
+                    paymentMethod = s.expense.paymentMethod,
+                    groupId = s.expense.groupId,
+                    createdAt = s.expense.createdAt,
+                    updatedAt = s.expense.updatedAt
+                )
+            }
+
+            val backupSplitParticipants = splitExpensesWithDetails.flatMap { s ->
+                s.participants.map { p ->
+                    BackupSplitParticipant(
+                        id = p.id,
+                        splitExpenseId = p.splitExpenseId,
+                        name = p.name,
+                        isCurrentUser = p.isCurrentUser,
+                        amountSubunits = p.amountSubunits,
+                        settlementStatus = p.settlementStatus,
+                        settledAt = p.settledAt,
+                        settlementTransactionId = p.settlementTransactionId
+                    )
+                }
+            }
+
             val backupPreferences = BackupPreferences(
                 openingBalanceSubunits = prefs?.openingBalanceSubunits ?: 0L,
                 currencyCode = prefs?.currency?.code ?: "INR",
@@ -121,7 +222,13 @@ class BackupRepositoryImpl(
                 categories = backupCategories,
                 transactions = backupTransactions,
                 recurringTransactions = backupRecurring,
-                preferences = backupPreferences
+                preferences = backupPreferences,
+                budgets = backupBudgets,
+                savingsGoals = backupSavingsGoals,
+                savingsGoalContributions = backupContributions,
+                splitGroups = backupSplitGroups,
+                splitExpenses = backupSplitExpenses,
+                splitParticipants = backupSplitParticipants
             )
 
             userPreferencesRepository.setLastBackupTimestamp(now)
@@ -168,6 +275,39 @@ class BackupRepositoryImpl(
                 }
                 if (rec.categoryId !in categoryIds) {
                     return BackupValidationResult.Invalid("Relationship integrity error: Recurring transaction ${rec.id} references missing category ${rec.categoryId}.")
+                }
+            }
+
+            // Validate budgets
+            for (b in backup.budgets) {
+                if (b.categoryId != null && b.categoryId !in categoryIds) {
+                    return BackupValidationResult.Invalid("Relationship integrity error: Budget ${b.id} references missing category ${b.categoryId}.")
+                }
+            }
+
+            // Validate savings goal contributions
+            val goalIds = backup.savingsGoals.map { it.id }.toSet()
+            for (c in backup.savingsGoalContributions) {
+                if (c.goalId !in goalIds) {
+                    return BackupValidationResult.Invalid("Relationship integrity error: Contribution ${c.id} references missing savings goal ${c.goalId}.")
+                }
+            }
+
+            // Validate split expenses and participants
+            val groupIds = backup.splitGroups.map { it.id }.toSet()
+            for (se in backup.splitExpenses) {
+                if (se.categoryId !in categoryIds) {
+                    return BackupValidationResult.Invalid("Relationship integrity error: Split expense ${se.id} references missing category ${se.categoryId}.")
+                }
+                if (se.groupId != null && se.groupId !in groupIds) {
+                    return BackupValidationResult.Invalid("Relationship integrity error: Split expense ${se.id} references missing group ${se.groupId}.")
+                }
+            }
+
+            val expenseIds = backup.splitExpenses.map { it.id }.toSet()
+            for (sp in backup.splitParticipants) {
+                if (sp.splitExpenseId !in expenseIds) {
+                    return BackupValidationResult.Invalid("Relationship integrity error: Participant ${sp.id} references missing split expense ${sp.splitExpenseId}.")
                 }
             }
 
@@ -232,15 +372,109 @@ class BackupRepositoryImpl(
                 )
             }
 
+            val budgetEntities = backupData.budgets.map { b ->
+                BudgetEntity(
+                    id = b.id,
+                    categoryId = b.categoryId,
+                    amountSubunits = b.amountSubunits,
+                    month = b.month,
+                    year = b.year,
+                    createdAt = b.createdAt,
+                    updatedAt = b.updatedAt
+                )
+            }
+
+            val savingsGoalEntities = backupData.savingsGoals.map { g ->
+                SavingsGoalEntity(
+                    id = g.id,
+                    name = g.name,
+                    targetAmountSubunits = g.targetAmountSubunits,
+                    targetDate = g.targetDate,
+                    note = g.note,
+                    iconName = g.iconName,
+                    colorHex = g.colorHex,
+                    isArchived = g.isArchived,
+                    createdAt = g.createdAt,
+                    updatedAt = g.updatedAt
+                )
+            }
+
+            val contributionEntities = backupData.savingsGoalContributions.map { c ->
+                SavingsGoalContributionEntity(
+                    id = c.id,
+                    goalId = c.goalId,
+                    amountSubunits = c.amountSubunits,
+                    note = c.note,
+                    timestamp = c.timestamp,
+                    createdAt = c.createdAt
+                )
+            }
+
+            val splitGroupEntities = backupData.splitGroups.map { g ->
+                SplitGroupEntity(
+                    id = g.id,
+                    name = g.name,
+                    iconName = g.iconName,
+                    colorHex = g.colorHex,
+                    createdAt = g.createdAt
+                )
+            }
+
+            val splitExpenseEntities = backupData.splitExpenses.map { se ->
+                SplitExpenseEntity(
+                    id = se.id,
+                    title = se.title,
+                    totalAmountSubunits = se.totalAmountSubunits,
+                    date = se.date,
+                    categoryId = se.categoryId,
+                    paidBy = se.paidBy,
+                    splitMethod = se.splitMethod,
+                    qrImagePath = se.qrImagePath,
+                    addToTransactions = se.addToTransactions,
+                    expenseTransactionId = se.expenseTransactionId,
+                    paymentMethod = se.paymentMethod,
+                    groupId = se.groupId,
+                    createdAt = se.createdAt,
+                    updatedAt = se.updatedAt
+                )
+            }
+
+            val splitParticipantEntities = backupData.splitParticipants.map { sp ->
+                SplitParticipantEntity(
+                    id = sp.id,
+                    splitExpenseId = sp.splitExpenseId,
+                    name = sp.name,
+                    isCurrentUser = sp.isCurrentUser,
+                    amountSubunits = sp.amountSubunits,
+                    settlementStatus = sp.settlementStatus,
+                    settledAt = sp.settledAt,
+                    settlementTransactionId = sp.settlementTransactionId
+                )
+            }
+
             // Execute in an atomic database transaction
             database.withTransaction {
+                // Delete children and dependent tables first
+                database.savingsGoalDao().deleteAllContributions()
+                database.savingsGoalDao().deleteAllGoals()
+                database.budgetDao().deleteAllBudgets()
+                database.splitDao().deleteAllParticipants()
+                database.splitDao().deleteAllSplitExpenses()
+                database.splitGroupDao().deleteAllGroups()
                 database.recurringTransactionDao().deleteAllRecurringTransactions()
                 database.transactionDao().deleteAllTransactions()
                 database.categoryDao().deleteAllCategories()
 
+                // Insert parents first, then children
                 database.categoryDao().insertOrUpdateCategories(categoryEntities)
                 database.transactionDao().insertTransactions(transactionEntities)
                 database.recurringTransactionDao().insertRecurringTransactions(recurringEntities)
+                database.splitGroupDao().insertGroups(splitGroupEntities)
+                database.splitDao().insertExpenses(splitExpenseEntities)
+                database.splitDao().insertParticipants(splitParticipantEntities)
+                database.budgetDao().insertBudgets(budgetEntities)
+                database.savingsGoalDao().insertGoals(savingsGoalEntities)
+                database.savingsGoalDao().insertContributions(contributionEntities)
             }
 
             // Restore user preferences

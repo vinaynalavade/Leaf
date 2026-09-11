@@ -88,7 +88,7 @@ class GoogleDriveBackupRepositoryTest {
 
         val json = JsonBackupParser.toJson(backupData)
         assertNotNull(json)
-        assertTrue(json.contains("\"backupVersion\": 1"))
+        assertTrue(json.contains("\"backupVersion\": ${BackupData.CURRENT_VERSION}"))
         assertTrue(json.contains("\"Food\""))
         assertTrue(json.contains("25000"))
 

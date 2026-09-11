@@ -45,6 +45,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudOff
@@ -157,6 +158,7 @@ fun SettingsScreen(
     onNavigateToBackup: () -> Unit = {},
     onNavigateToAppLockSetup: () -> Unit = {},
     onNavigateToChangePin: () -> Unit = {},
+    onNavigateToTools: () -> Unit = {},
     onNavigateToAbout: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -554,6 +556,14 @@ fun SettingsScreen(
                     icon = Icons.AutoMirrored.Filled.ReceiptLong,
                     title = "Recurring & EMIs",
                     onClick = onNavigateToRecurring
+                )
+
+                SettingsDivider()
+
+                SettingsNavigationTile(
+                    icon = Icons.Default.Calculate,
+                    title = stringResource(R.string.tools_title),
+                    onClick = onNavigateToTools
                 )
             }
 

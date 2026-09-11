@@ -29,13 +29,13 @@ class V106ReleaseRegressionTest {
 
     @Test
     fun testFivePrimaryNavigationTabsContract() {
-        // Must contain exactly 5 tabs in order: Dashboard, Transactions, Split, Analytics, Settings
+        // Must contain exactly 5 tabs in order: Dashboard, Transactions, Split, Planning, Insights
         assertEquals(5, BottomNavItems.size)
         assertEquals(Screen.Dashboard, BottomNavItems[0])
         assertEquals(Screen.Transactions, BottomNavItems[1])
         assertEquals(Screen.Split, BottomNavItems[2])
-        assertEquals(Screen.Analytics, BottomNavItems[3])
-        assertEquals(Screen.Settings, BottomNavItems[4])
+        assertEquals(Screen.Planning, BottomNavItems[3])
+        assertEquals(Screen.Insights, BottomNavItems[4])
     }
 
     @Test

@@ -12,8 +12,10 @@ import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.domain.model.UserPreferences
 import com.vinaynalavade.expensetracker.domain.repository.TransactionRepository
 import com.vinaynalavade.expensetracker.domain.repository.UserPreferencesRepository
+import com.vinaynalavade.expensetracker.domain.usecase.GetBudgetProgressUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetCategoryAnalysisUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetFinancialSummaryUseCase
+import com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetTransactionsUseCase
 import com.vinaynalavade.expensetracker.presentation.dashboard.DashboardViewModel
 import kotlinx.coroutines.flow.Flow
@@ -58,15 +60,21 @@ class DashboardCategoryAnalysisTest {
 
         val fakeTxRepo = FakeTransactionRepository(transactions)
         val fakePrefsRepo = FakePrefsRepository(UserPreferences(openingBalanceSubunits = 100000L))
+        val fakeBudgetRepo = FakeBudgetRepository()
+        val fakeGoalsRepo = FakeSavingsGoalRepository()
 
         val getFinancialSummaryUseCase = GetFinancialSummaryUseCase(fakeTxRepo, fakePrefsRepo)
         val getTransactionsUseCase = GetTransactionsUseCase(fakeTxRepo)
         val getCategoryAnalysisUseCase = GetCategoryAnalysisUseCase(fakeTxRepo)
+        val getBudgetProgressUseCase = GetBudgetProgressUseCase(fakeBudgetRepo, fakeTxRepo)
+        val getSavingsGoalsUseCase = GetSavingsGoalsUseCase(fakeGoalsRepo)
 
         val viewModel = DashboardViewModel(
             getFinancialSummaryUseCase,
             getTransactionsUseCase,
-            getCategoryAnalysisUseCase
+            getCategoryAnalysisUseCase,
+            getBudgetProgressUseCase,
+            getSavingsGoalsUseCase
         )
 
         // 1. Initial Mode should be EXPENSE for current month
@@ -95,6 +103,34 @@ class DashboardCategoryAnalysisTest {
         // 4. Return to Current Month
         viewModel.onCurrentMonth()
         assertEquals(currentYearMonth, viewModel.selectedMonth.value)
+    }
+
+    private class FakeBudgetRepository : com.vinaynalavade.expensetracker.domain.repository.BudgetRepository {
+        override fun getAllBudgets(): Flow<List<com.vinaynalavade.expensetracker.domain.model.Budget>> = flowOf(emptyList())
+        override fun getBudgetsForMonth(year: Int, month: Int): Flow<List<com.vinaynalavade.expensetracker.domain.model.Budget>> = flowOf(emptyList())
+        override fun getBudgetById(id: Long): Flow<com.vinaynalavade.expensetracker.domain.model.Budget?> = flowOf(null)
+        override suspend fun getBudgetByIdSuspend(id: Long): com.vinaynalavade.expensetracker.domain.model.Budget? = null
+        override fun getOverallBudget(year: Int, month: Int): Flow<com.vinaynalavade.expensetracker.domain.model.Budget?> = flowOf(null)
+        override fun getCategoryBudget(year: Int, month: Int, categoryId: Long): Flow<com.vinaynalavade.expensetracker.domain.model.Budget?> = flowOf(null)
+        override suspend fun saveBudget(budget: com.vinaynalavade.expensetracker.domain.model.Budget): AppResult<Long> = AppResult.Success(1L)
+        override suspend fun deleteBudget(id: Long): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun deleteAllBudgets(): AppResult<Unit> = AppResult.Success(Unit)
+    }
+
+    private class FakeSavingsGoalRepository : com.vinaynalavade.expensetracker.domain.repository.SavingsGoalRepository {
+        override fun getActiveSavingsGoals(): Flow<List<com.vinaynalavade.expensetracker.domain.model.SavingsGoal>> = flowOf(emptyList())
+        override fun getArchivedSavingsGoals(): Flow<List<com.vinaynalavade.expensetracker.domain.model.SavingsGoal>> = flowOf(emptyList())
+        override fun getAllSavingsGoals(): Flow<List<com.vinaynalavade.expensetracker.domain.model.SavingsGoal>> = flowOf(emptyList())
+        override fun getSavingsGoalById(id: Long): Flow<com.vinaynalavade.expensetracker.domain.model.SavingsGoal?> = flowOf(null)
+        override suspend fun getSavingsGoalByIdSuspend(id: Long): com.vinaynalavade.expensetracker.domain.model.SavingsGoal? = null
+        override fun getContributionsForGoal(goalId: Long): Flow<List<com.vinaynalavade.expensetracker.domain.model.SavingsGoalContribution>> = flowOf(emptyList())
+        override suspend fun saveSavingsGoal(goal: com.vinaynalavade.expensetracker.domain.model.SavingsGoal): AppResult<Long> = AppResult.Success(1L)
+        override suspend fun deleteSavingsGoal(id: Long): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun setGoalArchived(id: Long, isArchived: Boolean): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun addContribution(contribution: com.vinaynalavade.expensetracker.domain.model.SavingsGoalContribution): AppResult<Long> = AppResult.Success(1L)
+        override suspend fun updateContribution(contribution: com.vinaynalavade.expensetracker.domain.model.SavingsGoalContribution): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun deleteContribution(id: Long): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun deleteAllGoals(): AppResult<Unit> = AppResult.Success(Unit)
     }
 
     private class FakeTransactionRepository(private val allTransactions: List<Transaction>) : TransactionRepository {

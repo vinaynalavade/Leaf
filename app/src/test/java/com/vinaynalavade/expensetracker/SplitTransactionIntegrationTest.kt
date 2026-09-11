@@ -442,6 +442,14 @@ class SplitTransactionIntegrationTest {
             return flowOf(list)
         }
 
+        override fun getSplitExpensesByGroupId(groupId: Long): Flow<List<SplitExpenseWithDetails>> {
+            val list = splitExpenses.values.filter { it.groupId == groupId }.map { exp ->
+                val pList = participants.values.filter { it.splitExpenseId == exp.id }
+                SplitExpenseWithDetails(exp, null, pList)
+            }
+            return flowOf(list)
+        }
+
         override fun getSplitExpenseById(id: Long): Flow<SplitExpenseWithDetails?> {
             val exp = splitExpenses[id]
             val details = exp?.let {
@@ -469,6 +477,10 @@ class SplitTransactionIntegrationTest {
             return assignedId
         }
 
+        override suspend fun insertExpenses(expenses: List<SplitExpenseEntity>) {
+            expenses.forEach { insertExpense(it) }
+        }
+
         override suspend fun insertParticipants(participants: List<SplitParticipantEntity>) {
             participants.forEach {
                 val assignedId = if (it.id != 0L) it.id else participantIdCounter++
@@ -487,6 +499,15 @@ class SplitTransactionIntegrationTest {
         override suspend fun deleteExpenseById(id: Long) {
             splitExpenses.remove(id)
             deleteParticipantsByExpenseId(id)
+        }
+
+        override suspend fun deleteAllParticipants() {
+            participants.clear()
+        }
+
+        override suspend fun deleteAllSplitExpenses() {
+            splitExpenses.clear()
+            participants.clear()
         }
 
         override suspend fun updateParticipantSettlement(participantId: Long, status: String, settledAt: Long?) {

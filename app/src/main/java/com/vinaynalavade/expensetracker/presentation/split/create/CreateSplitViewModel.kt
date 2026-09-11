@@ -35,6 +35,8 @@ data class CreateSplitUiState(
     val date: Long = System.currentTimeMillis(),
     val selectedCategory: Category? = null,
     val availableCategories: List<Category> = emptyList(),
+    val selectedGroupId: Long? = null,
+    val availableGroups: List<com.vinaynalavade.expensetracker.domain.model.SplitGroup> = emptyList(),
     val paidBy: String = "Me",
     val participants: List<String> = listOf("Me"),
     val splitMethod: SplitMethod = SplitMethod.EQUAL,
@@ -68,6 +70,7 @@ data class CreateSplitUiState(
 class CreateSplitViewModel(
     private val saveSplitExpenseUseCase: SaveSplitExpenseUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getSplitGroupsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitGroupsUseCase,
     private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
     private val qrStorageManager: SplitQrStorageManager
 ) : ViewModel() {
@@ -85,6 +88,7 @@ class CreateSplitViewModel(
             val currency = userPrefs?.currency ?: Currency.DEFAULT
             val defaultSource = userPrefs?.defaultExpenseSource ?: PaymentMethod.CASH
             val categories = getCategoriesUseCase().firstOrNull()?.filter { it.type == TransactionType.EXPENSE } ?: emptyList()
+            val groups = getSplitGroupsUseCase().firstOrNull() ?: emptyList()
             val defaultCat = categories.firstOrNull { it.name.contains("Food", ignoreCase = true) } ?: categories.firstOrNull()
 
             _uiState.update {
@@ -92,10 +96,15 @@ class CreateSplitViewModel(
                     currency = currency,
                     paymentMethod = defaultSource,
                     availableCategories = categories,
+                    availableGroups = groups,
                     selectedCategory = defaultCat
                 )
             }
         }
+    }
+
+    fun onGroupSelect(groupId: Long?) {
+        _uiState.update { it.copy(selectedGroupId = groupId) }
     }
 
     fun onAddToTransactionsChange(addToTransactions: Boolean) {
@@ -324,6 +333,7 @@ class CreateSplitViewModel(
                 totalAmount = state.totalAmount,
                 date = state.date,
                 categoryId = state.selectedCategory?.id ?: 1L,
+                groupId = state.selectedGroupId,
                 paidBy = state.paidBy,
                 splitMethod = state.splitMethod,
                 qrImagePath = state.qrImagePath,
@@ -354,6 +364,7 @@ class CreateSplitViewModel(
     class Factory(
         private val saveSplitExpenseUseCase: SaveSplitExpenseUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
+        private val getSplitGroupsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSplitGroupsUseCase,
         private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
         private val qrStorageManager: SplitQrStorageManager
     ) : ViewModelProvider.Factory {
@@ -362,6 +373,7 @@ class CreateSplitViewModel(
             return CreateSplitViewModel(
                 saveSplitExpenseUseCase,
                 getCategoriesUseCase,
+                getSplitGroupsUseCase,
                 getUserPreferencesUseCase,
                 qrStorageManager
             ) as T

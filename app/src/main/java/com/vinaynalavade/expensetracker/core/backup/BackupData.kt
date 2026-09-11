@@ -1,5 +1,5 @@
 package com.vinaynalavade.expensetracker.core.backup
-
+ 
 /**
  * Versioned, full-application backup container.
  */
@@ -10,10 +10,16 @@ data class BackupData(
     val categories: List<BackupCategory>,
     val transactions: List<BackupTransaction>,
     val recurringTransactions: List<BackupRecurringTransaction> = emptyList(),
-    val preferences: BackupPreferences
+    val preferences: BackupPreferences,
+    val budgets: List<BackupBudget> = emptyList(),
+    val savingsGoals: List<BackupSavingsGoal> = emptyList(),
+    val savingsGoalContributions: List<BackupSavingsGoalContribution> = emptyList(),
+    val splitGroups: List<BackupSplitGroup> = emptyList(),
+    val splitExpenses: List<BackupSplitExpense> = emptyList(),
+    val splitParticipants: List<BackupSplitParticipant> = emptyList()
 ) {
     companion object {
-        const val CURRENT_VERSION = 1
+        const val CURRENT_VERSION = 2
     }
 }
 
@@ -55,6 +61,74 @@ data class BackupRecurringTransaction(
     val lastGeneratedDate: Long? = null,
     val createdAt: Long,
     val updatedAt: Long
+)
+
+data class BackupBudget(
+    val id: Long,
+    val categoryId: Long?,
+    val amountSubunits: Long,
+    val month: Int,
+    val year: Int,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+data class BackupSavingsGoal(
+    val id: Long,
+    val name: String,
+    val targetAmountSubunits: Long,
+    val targetDate: Long? = null,
+    val note: String? = null,
+    val iconName: String = "savings",
+    val colorHex: String = "#10B981",
+    val isArchived: Boolean = false,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+data class BackupSavingsGoalContribution(
+    val id: Long,
+    val goalId: Long,
+    val amountSubunits: Long,
+    val note: String? = null,
+    val timestamp: Long,
+    val createdAt: Long
+)
+
+data class BackupSplitGroup(
+    val id: Long,
+    val name: String,
+    val iconName: String = "group",
+    val colorHex: String = "#3B82F6",
+    val createdAt: Long
+)
+
+data class BackupSplitExpense(
+    val id: Long,
+    val title: String,
+    val totalAmountSubunits: Long,
+    val date: Long,
+    val categoryId: Long,
+    val paidBy: String = "Me",
+    val splitMethod: String = "EQUAL",
+    val qrImagePath: String? = null,
+    val addToTransactions: Boolean = false,
+    val expenseTransactionId: Long? = null,
+    val paymentMethod: String = "CASH",
+    val groupId: Long? = null,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+data class BackupSplitParticipant(
+    val id: Long,
+    val splitExpenseId: Long,
+    val name: String,
+    val isCurrentUser: Boolean,
+    val amountSubunits: Long,
+    val settlementStatus: String = "PENDING",
+    val settledAt: Long? = null,
+    val settlementTransactionId: Long? = null
 )
 
 data class BackupPreferences(
