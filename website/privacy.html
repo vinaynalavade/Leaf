@@ -34,7 +34,7 @@
           <li><a href="privacy.html" class="nav-link active" aria-current="page">Privacy</a></li>
           <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
-        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.7/Leaf_v1.0.7.apk" class="btn btn-primary btn-sm dynamic-download-link" download>
+        <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.0.8/Leaf_v1.0.8.apk" class="btn btn-primary btn-sm dynamic-download-link" download>
           <span>Download APK</span>
           <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         </a>
@@ -61,9 +61,9 @@
             Leaf is designed with strict on-device data privacy as a fundamental principle. We believe personal financial data belongs solely to the user and should never be transmitted to third-party marketing servers, data brokers, or analytics networks.
           </p>
 
-          <h2>2. Data Storage & Local Persistence</h2>
+          <h2>2. Data Storage &amp; Local Persistence</h2>
           <p>
-            All financial records, transaction entries, amounts, custom category labels, income/expense sources, payment account selections, shared split expenses, participant allocations, and uploaded UPI QR code images are stored exclusively on your Android device in private local app storage.
+            All financial records, transaction entries, amounts, custom category labels, income/expense sources, payment account selections, monthly budgets, savings goals, contribution records, shared finance split groups, participant debt allocations, and uploaded UPI QR code images are stored exclusively on your Android device in private local app storage.
           </p>
           <ul>
             <li><strong>Zero Remote Accounts:</strong> You do not need to register, create a username, or provide an email address to use Leaf.</li>
@@ -71,7 +71,7 @@
             <li><strong>Zero Advertising:</strong> Leaf contains no advertising SDKs, promotional banners, or tracking identifiers.</li>
           </ul>
 
-          <h2>3. Application Permissions & Usage</h2>
+          <h2>3. Application Permissions &amp; Usage</h2>
           <p>
             Leaf requests only the minimum necessary system permissions required to deliver requested on-device features:
           </p>
@@ -83,15 +83,16 @@
             <li><strong>Internet Access:</strong> Used solely for downloading user-initiated in-app updates from GitHub and for optional user-initiated Google Drive backups.</li>
           </ul>
 
-          <h2>4. Optional Google Drive Cloud Backup</h2>
+          <h2>4. Optional Google Drive Cloud Backup (v2)</h2>
           <p>
-            Leaf supports an optional cloud backup feature. If you choose to enable it:
+            Leaf supports an optional cloud backup feature (Schema v2). If you choose to enable it:
           </p>
           <ul>
             <li><strong>Direct Connection:</strong> Backup operations connect directly between your device and Google's official authorization servers with zero intermediary Leaf servers.</li>
+            <li><strong>Complete Schema Backup:</strong> Cloud backups capture transactions, budgets, savings goals, contributions, and split groups.</li>
             <li><strong>Private App Folder:</strong> Backup files are stored inside your private Google Drive app folder where only your personal installation of Leaf can access them.</li>
             <li><strong>Complete User Ownership:</strong> Leaf has no remote servers and cannot access your Google Drive or view your stored files.</li>
-            <li><strong>Guarded Restores:</strong> Restoring data requires explicit user confirmation to prevent unintended local overwrites.</li>
+            <li><strong>Guarded Restores:</strong> Restoring data requires explicit user confirmation to prevent unintended local overwrites, with full backward compatibility for legacy v1 backups.</li>
           </ul>
 
           <h2>5. On-Device Security & App Lock</h2>

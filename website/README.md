@@ -76,19 +76,19 @@ If GitHub API rate limits or offline conditions occur, the website falls back to
 const RELEASE_CONFIG = {
   owner: 'vinaynalavade',
   repo: 'Leaf',
-  defaultVersionName: '1.0.7',
-  defaultVersionCode: 8,
-  defaultReleaseDate: 'September 9, 2026',
-  defaultApkSize: '4.0 MB',
-  defaultApkFileName: 'Leaf_v1.0.7.apk',
-  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.0.7/Leaf_v1.0.7.apk',
-  defaultSha256: 'de9fa2e625b8cdd390215ec54a44435f58fe286668f364be6f27fdd53d7ffafb',
+  defaultVersionName: '1.0.8',
+  defaultVersionCode: 9,
+  defaultReleaseDate: 'September 11, 2026',
+  defaultApkSize: '4.1 MB',
+  defaultApkFileName: 'Leaf_v1.0.8.apk',
+  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.0.8/Leaf_v1.0.8.apk',
+  defaultSha256: '566b7637a08407c7bd6b9ec2b0ea28b8f926b7d5b9a95b40fd9780276d26ea60',
   repoUrl: 'https://github.com/vinaynalavade/Leaf',
   releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
 };
 ```
 
-When you publish future releases (e.g. `v1.0.7`), simply update these fallback constants in `website/js/main.js`.
+When you publish future releases (e.g. `v1.0.8`), simply update these fallback constants in `website/js/main.js`.
 
 ---
 
