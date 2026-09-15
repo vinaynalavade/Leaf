@@ -61,6 +61,7 @@ class UserPreferencesDataStore(private val context: Context) {
         val IS_APP_TOUR_COMPLETED = booleanPreferencesKey("pref_is_app_tour_completed")
         val DEFAULT_INCOME_SOURCE = stringPreferencesKey("pref_default_income_source")
         val DEFAULT_EXPENSE_SOURCE = stringPreferencesKey("pref_default_expense_source")
+        val IS_BALANCE_VISIBLE = booleanPreferencesKey("pref_is_balance_visible")
     }
 
     val googleConnectedEmailFlow: Flow<String?> = context.dataStore.data
@@ -137,6 +138,7 @@ class UserPreferencesDataStore(private val context: Context) {
             val defaultIncomeSource = PaymentMethod.fromString(defaultIncomeSourceStr ?: PaymentMethod.ACCOUNT.name)
             val defaultExpenseSourceStr = preferences[PreferencesKeys.DEFAULT_EXPENSE_SOURCE]
             val defaultExpenseSource = PaymentMethod.fromString(defaultExpenseSourceStr ?: PaymentMethod.CASH.name)
+            val isBalanceVisible = preferences[PreferencesKeys.IS_BALANCE_VISIBLE] ?: true
 
             UserPreferences(
                 themeMode = themeMode,
@@ -167,7 +169,8 @@ class UserPreferencesDataStore(private val context: Context) {
                 lastDismissedRestoreBackupTimestamp = lastDismissedRestoreTimestamp,
                 isAppTourCompleted = isAppTourCompleted,
                 defaultIncomeSource = defaultIncomeSource,
-                defaultExpenseSource = defaultExpenseSource
+                defaultExpenseSource = defaultExpenseSource,
+                isBalanceVisible = isBalanceVisible
             )
         }
 
@@ -389,6 +392,12 @@ class UserPreferencesDataStore(private val context: Context) {
     suspend fun setDefaultExpenseSource(source: PaymentMethod) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.DEFAULT_EXPENSE_SOURCE] = source.name
+        }
+    }
+
+    suspend fun setBalanceVisible(isVisible: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_BALANCE_VISIBLE] = isVisible
         }
     }
 }

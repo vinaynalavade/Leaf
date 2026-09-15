@@ -30,6 +30,20 @@ class DatabaseMigration5To6Test {
     fun testMigrationVersionNumbers() {
         assertEquals(5, ExpenseTrackerDatabase.MIGRATION_5_6.startVersion)
         assertEquals(6, ExpenseTrackerDatabase.MIGRATION_5_6.endVersion)
+        assertEquals(6, ExpenseTrackerDatabase.MIGRATION_6_7.startVersion)
+        assertEquals(7, ExpenseTrackerDatabase.MIGRATION_6_7.endVersion)
+    }
+
+    @Test
+    fun testMigration6To7DropsRogueIndices() {
+        val executedStatements = mutableListOf<String>()
+        val fakeDb = createRecordingDatabase(executedStatements)
+
+        ExpenseTrackerDatabase.MIGRATION_6_7.migrate(fakeDb)
+
+        val sqls = executedStatements
+        assertTrue("Must drop index_budgets_overall_unique", sqls.any { it.contains("DROP INDEX IF EXISTS `index_budgets_overall_unique`") })
+        assertTrue("Must drop index_budgets_category_unique", sqls.any { it.contains("DROP INDEX IF EXISTS `index_budgets_category_unique`") })
     }
 
     @Test
@@ -52,8 +66,8 @@ class DatabaseMigration5To6Test {
 
         assertTrue("Index budgets year/month missing", sqls.any { it.contains("index_budgets_year_month") && it.contains("`budgets` (`year`, `month`)") })
         assertTrue("Index budgets category_id missing", sqls.any { it.contains("index_budgets_category_id") && it.contains("`budgets` (`category_id`)") })
-        assertTrue("Unique index overall budget missing", sqls.any { it.contains("index_budgets_overall_unique") && it.contains("WHERE `category_id` IS NULL") })
-        assertTrue("Unique index category budget missing", sqls.any { it.contains("index_budgets_category_unique") && it.contains("WHERE `category_id` IS NOT NULL") })
+        assertFalse("Rogue unique index overall budget must NOT be created", sqls.any { it.contains("index_budgets_overall_unique") })
+        assertFalse("Rogue unique index category budget must NOT be created", sqls.any { it.contains("index_budgets_category_unique") })
 
         // 2. Verify savings_goals table creation
         val createSavingsGoalsSql = sqls.firstOrNull { it.contains("CREATE TABLE `savings_goals`") }

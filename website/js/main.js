@@ -12,13 +12,13 @@
   const RELEASE_CONFIG = {
     owner: 'vinaynalavade',
     repo: 'Leaf',
-    defaultVersionName: '1.0.8',
-    defaultVersionCode: 9,
-    defaultReleaseDate: 'September 11, 2026',
-    defaultApkSize: '4.1 MB',
-    defaultApkFileName: 'Leaf_v1.0.8.apk',
-    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.0.8/Leaf_v1.0.8.apk',
-    defaultSha256: '566b7637a08407c7bd6b9ec2b0ea28b8f926b7d5b9a95b40fd9780276d26ea60',
+    defaultVersionName: '1.0.9',
+    defaultVersionCode: 10,
+    defaultReleaseDate: 'September 15, 2026',
+    defaultApkSize: '4.15 MB',
+    defaultApkFileName: 'Leaf_v1.0.9.apk',
+    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.0.9/Leaf_v1.0.9.apk',
+    defaultSha256: '4CD0E4B602EE4506C683F2468A498F9BDEDA863005264728780F779BDD2FAEDE',
     repoUrl: 'https://github.com/vinaynalavade/Leaf',
     releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
   };

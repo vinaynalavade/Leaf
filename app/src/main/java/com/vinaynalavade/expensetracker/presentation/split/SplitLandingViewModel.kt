@@ -66,15 +66,17 @@ class SplitLandingViewModel(
             val toCollectSum = expenses.sumOf { it.toCollectAmount.subunits }
             val collectedSum = expenses.sumOf { it.collectedAmount.subunits }
 
-            _uiState.value.copy(
-                splitExpenses = expenses,
-                groups = groups,
-                groupBalanceSummary = summary,
-                totalToCollect = Amount(toCollectSum),
-                totalCollected = Amount(collectedSum),
-                currency = prefs.currency,
-                isLoading = false
-            )
+            _uiState.update { current ->
+                current.copy(
+                    splitExpenses = expenses,
+                    groups = groups,
+                    groupBalanceSummary = summary,
+                    totalToCollect = Amount(toCollectSum),
+                    totalCollected = Amount(collectedSum),
+                    currency = prefs.currency,
+                    isLoading = false
+                )
+            }
         }.launchIn(viewModelScope)
     }
 

@@ -309,12 +309,16 @@ class EditSplitViewModel(
         _uiState.update { it.copy(isSaving = true) }
 
         viewModelScope.launch {
+            val resolvedCategoryId = state.selectedCategory?.id
+                ?: state.availableCategories.firstOrNull()?.id
+                ?: 1L
+
             val updatedExpense = SplitExpense(
                 id = state.splitId,
                 title = state.title.trim(),
                 totalAmount = state.totalAmount,
                 date = state.date,
-                categoryId = state.selectedCategory?.id ?: 1L,
+                categoryId = resolvedCategoryId,
                 paidBy = state.paidBy,
                 splitMethod = state.splitMethod,
                 qrImagePath = state.qrImagePath,

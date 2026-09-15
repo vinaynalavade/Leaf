@@ -69,6 +69,19 @@ fun UpdateDialog(
         viewModel.checkPermissionAndProceed()
     }
 
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    androidx.compose.runtime.DisposableEffect(lifecycleOwner, uiState) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                viewModel.checkPermissionAndProceed()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     when (val state = uiState) {
         is UpdateUiState.UpdateAvailable -> {
             UpdateAvailableDialog(
@@ -113,8 +126,13 @@ fun UpdateDialog(
         is UpdateUiState.InstallPermissionRequired -> {
             UpdatePermissionRequiredDialog(
                 onAllowClick = {
-                    val intent = PackageInstallerHelper(context).createManageUnknownAppSourcesIntent()
-                    permissionLauncher.launch(intent)
+                    val helper = PackageInstallerHelper(context)
+                    if (helper.canRequestPackageInstalls()) {
+                        viewModel.checkPermissionAndProceed()
+                    } else {
+                        val intent = helper.createManageUnknownAppSourcesIntent()
+                        permissionLauncher.launch(intent)
+                    }
                 },
                 onDismiss = { viewModel.dismissDialog() }
             )

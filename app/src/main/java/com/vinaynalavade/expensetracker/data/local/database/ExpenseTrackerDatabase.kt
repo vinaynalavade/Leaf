@@ -36,7 +36,7 @@ import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
         SavingsGoalEntity::class,
         SavingsGoalContributionEntity::class
     ],
-    version = 6,
+    version = 8,
     exportSchema = false
 )
 abstract class ExpenseTrackerDatabase : RoomDatabase() {
@@ -134,7 +134,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
 
         val MIGRATION_5_6 = object : Migration(5, 6) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                // 1. Budgets Table (Strict CREATE TABLE)
+                // 1. Budgets Table (Strict CREATE TABLE matching Room BudgetEntity)
                 db.execSQL("""
                     CREATE TABLE `budgets` (
                         `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -149,8 +149,6 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                 """)
                 db.execSQL("CREATE INDEX `index_budgets_year_month` ON `budgets` (`year`, `month`)")
                 db.execSQL("CREATE INDEX `index_budgets_category_id` ON `budgets` (`category_id`)")
-                db.execSQL("CREATE UNIQUE INDEX `index_budgets_overall_unique` ON `budgets` (`year`, `month`) WHERE `category_id` IS NULL")
-                db.execSQL("CREATE UNIQUE INDEX `index_budgets_category_unique` ON `budgets` (`year`, `month`, `category_id`) WHERE `category_id` IS NOT NULL")
 
                 // 2. Savings Goals Table (Strict CREATE TABLE)
                 db.execSQL("""
@@ -199,6 +197,20 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("DROP INDEX IF EXISTS `index_budgets_overall_unique`")
+                db.execSQL("DROP INDEX IF EXISTS `index_budgets_category_unique`")
+            }
+        }
+
+        val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `savings_goal_contributions` ADD COLUMN `transaction_id` INTEGER REFERENCES `transactions`(`id`) ON DELETE SET NULL")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_savings_goal_contributions_transaction_id` ON `savings_goal_contributions` (`transaction_id`)")
+            }
+        }
+
         fun getInstance(context: Context): ExpenseTrackerDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -206,7 +218,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                     ExpenseTrackerDatabase::class.java,
                     AppConstants.DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                     .addCallback(DatabaseCallback())
                     .build()
                 INSTANCE = instance

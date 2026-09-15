@@ -15,8 +15,13 @@ data class MonthlyLedgerSummary(
     val openingBalance: Amount,
     val totalIncome: Amount,
     val totalExpense: Amount,
+    val ordinaryExpense: Amount,
+    val savingsAllocation: Amount,
     val netChange: Amount,
     val closingBalance: Amount,
+    val dailyAverageExpense: Amount,
+    val previousMonthExpense: Amount? = null,
+    val momChangePercentage: Double? = null,
     val transactions: List<Transaction>,
     val expenseBreakdown: List<CategorySpending>,
     val incomeBreakdown: List<CategorySpending>

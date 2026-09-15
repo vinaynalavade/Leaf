@@ -126,10 +126,10 @@ class PlanningViewModel(
         }
     }
 
-    fun deleteSavingsGoal(id: Long) {
+    fun deleteSavingsGoal(id: Long, deleteLinkedTransactions: Boolean = false) {
         viewModelScope.launch {
             try {
-                deleteSavingsGoalUseCase(id)
+                deleteSavingsGoalUseCase(id, deleteLinkedTransactions)
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
             }
@@ -146,16 +146,17 @@ class PlanningViewModel(
         }
     }
 
-    fun addContribution(goalId: Long, amount: Double, note: String?) {
+    fun addContribution(goalId: Long, amount: Double, note: String?, deductFromAccount: Boolean) {
         viewModelScope.launch {
             try {
                 saveSavingsGoalContributionUseCase(
-                    SavingsGoalContribution(
+                    contribution = SavingsGoalContribution(
                         goalId = goalId,
                         amount = Amount.fromSubunits((amount * 100).toLong()),
                         note = note,
                         timestamp = System.currentTimeMillis()
-                    )
+                    ),
+                    deductFromAccount = deductFromAccount
                 )
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
@@ -163,10 +164,10 @@ class PlanningViewModel(
         }
     }
 
-    fun deleteContribution(contributionId: Long) {
+    fun deleteContribution(contributionId: Long, deleteLinkedTransaction: Boolean = false) {
         viewModelScope.launch {
             try {
-                deleteSavingsGoalContributionUseCase(contributionId)
+                deleteSavingsGoalContributionUseCase(contributionId, deleteLinkedTransaction)
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
             }

@@ -1,7 +1,9 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -89,35 +95,65 @@ fun GreetingHeader(
             }
         }
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
+        Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
 
-        // Luxury Leaf Pill Badge
-        Surface(
-            shape = PillShape,
-            color = MaterialTheme.colorScheme.surface,
-            border = androidx.compose.foundation.BorderStroke(
-                width = 0.75.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
-            ),
-            shadowElevation = 1.dp
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-                verticalAlignment = Alignment.CenterVertically
+            // Luxury Leaf Pill Badge
+            Surface(
+                shape = PillShape,
+                color = MaterialTheme.colorScheme.surface,
+                border = androidx.compose.foundation.BorderStroke(
+                    width = 0.75.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+                ),
+                shadowElevation = 1.dp
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_leaf_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    contentScale = ContentScale.Fit
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_leaf_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            // Premium Native Material 3 Profile / Settings Button
+            if (onAvatarClick != null) {
+                Surface(
+                    onClick = onAvatarClick,
+                    shape = androidx.compose.foundation.shape.CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.70f),
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    border = androidx.compose.foundation.BorderStroke(
+                        width = 0.75.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.40f)
+                    ),
+                    shadowElevation = 1.dp,
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        androidx.compose.material3.Icon(
+                            imageVector = androidx.compose.material.icons.Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.nav_settings),
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         }
     }

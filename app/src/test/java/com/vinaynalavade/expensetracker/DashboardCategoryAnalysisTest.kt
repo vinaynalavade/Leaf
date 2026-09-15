@@ -62,19 +62,20 @@ class DashboardCategoryAnalysisTest {
         val fakePrefsRepo = FakePrefsRepository(UserPreferences(openingBalanceSubunits = 100000L))
         val fakeBudgetRepo = FakeBudgetRepository()
         val fakeGoalsRepo = FakeSavingsGoalRepository()
+        val fakeSplitRepo = FakeSplitRepository()
 
         val getFinancialSummaryUseCase = GetFinancialSummaryUseCase(fakeTxRepo, fakePrefsRepo)
-        val getTransactionsUseCase = GetTransactionsUseCase(fakeTxRepo)
         val getCategoryAnalysisUseCase = GetCategoryAnalysisUseCase(fakeTxRepo)
         val getBudgetProgressUseCase = GetBudgetProgressUseCase(fakeBudgetRepo, fakeTxRepo)
         val getSavingsGoalsUseCase = GetSavingsGoalsUseCase(fakeGoalsRepo)
 
         val viewModel = DashboardViewModel(
             getFinancialSummaryUseCase,
-            getTransactionsUseCase,
             getCategoryAnalysisUseCase,
             getBudgetProgressUseCase,
-            getSavingsGoalsUseCase
+            getSavingsGoalsUseCase,
+            fakeSplitRepo,
+            fakePrefsRepo
         )
 
         // 1. Initial Mode should be EXPENSE for current month
@@ -103,6 +104,21 @@ class DashboardCategoryAnalysisTest {
         // 4. Return to Current Month
         viewModel.onCurrentMonth()
         assertEquals(currentYearMonth, viewModel.selectedMonth.value)
+    }
+
+    private class FakeSplitRepository : com.vinaynalavade.expensetracker.domain.repository.SplitRepository {
+        override fun getAllSplitExpenses(): Flow<List<com.vinaynalavade.expensetracker.domain.model.SplitExpense>> = flowOf(emptyList())
+        override fun getSplitExpenseById(id: Long): Flow<com.vinaynalavade.expensetracker.domain.model.SplitExpense?> = flowOf(null)
+        override suspend fun getSplitExpenseByIdOnce(id: Long): com.vinaynalavade.expensetracker.domain.model.SplitExpense? = null
+        override suspend fun insertSplitExpense(splitExpense: com.vinaynalavade.expensetracker.domain.model.SplitExpense): AppResult<Long> = AppResult.Success(1L)
+        override suspend fun updateSplitExpense(splitExpense: com.vinaynalavade.expensetracker.domain.model.SplitExpense): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun deleteSplitExpense(id: Long): AppResult<Unit> = AppResult.Success(Unit)
+        override suspend fun updateParticipantSettlement(
+            participantId: Long,
+            status: com.vinaynalavade.expensetracker.domain.model.SettlementStatus,
+            paymentMethod: PaymentMethod,
+            settledAt: Long?
+        ): AppResult<Unit> = AppResult.Success(Unit)
     }
 
     private class FakeBudgetRepository : com.vinaynalavade.expensetracker.domain.repository.BudgetRepository {

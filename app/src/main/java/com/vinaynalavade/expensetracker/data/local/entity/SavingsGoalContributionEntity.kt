@@ -16,10 +16,17 @@ import com.vinaynalavade.expensetracker.domain.model.SavingsGoalContribution
             parentColumns = ["id"],
             childColumns = ["goal_id"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = TransactionEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["transaction_id"],
+            onDelete = ForeignKey.SET_NULL
         )
     ],
     indices = [
-        Index(value = ["goal_id"])
+        Index(value = ["goal_id"]),
+        Index(value = ["transaction_id"])
     ]
 )
 data class SavingsGoalContributionEntity(
@@ -39,6 +46,9 @@ data class SavingsGoalContributionEntity(
     @ColumnInfo(name = "timestamp")
     val timestamp: Long = System.currentTimeMillis(),
 
+    @ColumnInfo(name = "transaction_id")
+    val transactionId: Long? = null,
+
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis()
 ) {
@@ -49,6 +59,7 @@ data class SavingsGoalContributionEntity(
             amount = Amount.fromSubunits(amountSubunits),
             note = note,
             timestamp = timestamp,
+            transactionId = transactionId,
             createdAt = createdAt
         )
     }
@@ -61,6 +72,7 @@ data class SavingsGoalContributionEntity(
                 amountSubunits = contribution.amount.subunits,
                 note = contribution.note,
                 timestamp = contribution.timestamp,
+                transactionId = contribution.transactionId,
                 createdAt = contribution.createdAt
             )
         }

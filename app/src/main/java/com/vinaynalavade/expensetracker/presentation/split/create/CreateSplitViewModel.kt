@@ -328,11 +328,15 @@ class CreateSplitViewModel(
         _uiState.update { it.copy(isSaving = true) }
 
         viewModelScope.launch {
+            val resolvedCategoryId = state.selectedCategory?.id
+                ?: state.availableCategories.firstOrNull()?.id
+                ?: 1L
+
             val expense = SplitExpense(
                 title = state.title.trim(),
                 totalAmount = state.totalAmount,
                 date = state.date,
-                categoryId = state.selectedCategory?.id ?: 1L,
+                categoryId = resolvedCategoryId,
                 groupId = state.selectedGroupId,
                 paidBy = state.paidBy,
                 splitMethod = state.splitMethod,

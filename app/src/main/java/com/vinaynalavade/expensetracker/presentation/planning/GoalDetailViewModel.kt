@@ -3,6 +3,7 @@ package com.vinaynalavade.expensetracker.presentation.planning
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.domain.model.SavingsGoal
 import com.vinaynalavade.expensetracker.domain.model.SavingsGoalContribution
@@ -60,16 +61,17 @@ class GoalDetailViewModel(
         }.launchIn(viewModelScope)
     }
 
-    fun addContribution(amount: Double, note: String?) {
+    fun addContribution(amount: Double, note: String?, deductFromAccount: Boolean) {
         viewModelScope.launch {
             try {
                 saveSavingsGoalContributionUseCase(
-                    SavingsGoalContribution(
+                    contribution = SavingsGoalContribution(
                         goalId = goalId,
-                        amount = com.vinaynalavade.expensetracker.core.model.Amount.fromSubunits((amount * 100).toLong()),
+                        amount = Amount.fromSubunits((amount * 100).toLong()),
                         note = note,
                         timestamp = System.currentTimeMillis()
-                    )
+                    ),
+                    deductFromAccount = deductFromAccount
                 )
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
@@ -77,10 +79,10 @@ class GoalDetailViewModel(
         }
     }
 
-    fun deleteContribution(contributionId: Long) {
+    fun deleteContribution(contributionId: Long, deleteLinkedTransaction: Boolean = false) {
         viewModelScope.launch {
             try {
-                deleteSavingsGoalContributionUseCase(contributionId)
+                deleteSavingsGoalContributionUseCase(contributionId, deleteLinkedTransaction)
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
             }
@@ -98,10 +100,10 @@ class GoalDetailViewModel(
         }
     }
 
-    fun deleteGoal() {
+    fun deleteGoal(deleteLinkedTransactions: Boolean = false) {
         viewModelScope.launch {
             try {
-                deleteSavingsGoalUseCase(goalId)
+                deleteSavingsGoalUseCase(goalId, deleteLinkedTransactions)
                 _uiState.update { it.copy(isDeleted = true) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }

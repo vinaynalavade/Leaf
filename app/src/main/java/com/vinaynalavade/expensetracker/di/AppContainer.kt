@@ -537,7 +537,7 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     }
 
     override val deleteSavingsGoalUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase by lazy {
-        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase(savingsGoalRepository)
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalUseCase(savingsGoalRepository, transactionRepository)
     }
 
     override val setSavingsGoalArchivedUseCase: com.vinaynalavade.expensetracker.domain.usecase.SetSavingsGoalArchivedUseCase by lazy {
@@ -545,11 +545,15 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     }
 
     override val saveSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase by lazy {
-        com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase(savingsGoalRepository)
+        com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase(
+            savingsGoalRepository = savingsGoalRepository,
+            transactionRepository = transactionRepository,
+            categoryRepository = categoryRepository
+        )
     }
 
     override val deleteSavingsGoalContributionUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase by lazy {
-        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase(savingsGoalRepository)
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteSavingsGoalContributionUseCase(savingsGoalRepository, transactionRepository)
     }
 
     override val getSpendingTrendsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetSpendingTrendsUseCase by lazy {

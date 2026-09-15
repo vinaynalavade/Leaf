@@ -16,12 +16,22 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.time.YearMonth
 
+enum class SummaryFilterTab(val label: String) {
+    ALL("All"),
+    EXPENSES("Expenses"),
+    INCOME("Income"),
+    SAVINGS("Savings")
+}
+
 class MonthlySummaryViewModel(
     private val getMonthlyLedgerUseCase: GetMonthlyLedgerUseCase
 ) : ViewModel() {
 
     private val _selectedMonth = MutableStateFlow(YearMonth.now())
     val selectedMonth: StateFlow<YearMonth> = _selectedMonth.asStateFlow()
+
+    private val _selectedTab = MutableStateFlow(SummaryFilterTab.ALL)
+    val selectedTab: StateFlow<SummaryFilterTab> = _selectedTab.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<UiState<MonthlyLedgerSummary>> = _selectedMonth
@@ -36,6 +46,10 @@ class MonthlySummaryViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = UiState.Loading
         )
+
+    fun onTabSelected(tab: SummaryFilterTab) {
+        _selectedTab.value = tab
+    }
 
     fun onPreviousMonth() {
         _selectedMonth.value = _selectedMonth.value.minusMonths(1)

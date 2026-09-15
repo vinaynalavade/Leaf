@@ -19,7 +19,8 @@ import java.util.Locale
 
 /**
  * On-device PDF generator for professional Leaf financial statements.
- * Zero external libraries or internet connections required.
+ * Features bank-grade right-aligned figures, robust multi-page rendering,
+ * newest-first transaction ordering, and clean typography.
  */
 object PdfUtils {
 
@@ -31,6 +32,10 @@ object PdfUtils {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+        val sansSerif = Typeface.create("sans-serif", Typeface.NORMAL)
+        val sansSerifMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+        val sansSerifBold = Typeface.create("sans-serif", Typeface.BOLD)
+
         var pageNumber = 1
         var pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
         var page = pdfDocument.startPage(pageInfo)
@@ -39,74 +44,107 @@ object PdfUtils {
         val margin = 36f
         var currentY = margin + 20f
 
-        // 1. Draw Header
-        paint.color = Color.rgb(7, 165, 132) // Emerald Teal
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        textPaint.textSize = 20f
-        textPaint.color = Color.rgb(6, 78, 59)
+        // Column X coordinates and right-alignment boundaries
+        val dateX = margin + 6f
+        val descX = margin + 74f
+        val catX = margin + 225f
+
+        val inRight = margin + 375f
+        val outRight = margin + 445f
+        val balRight = pageWidth - margin - 8f
+
+        fun drawTableHeader(c: Canvas, y: Float) {
+            paint.color = Color.rgb(241, 245, 249)
+            paint.style = Paint.Style.FILL
+            c.drawRoundRect(margin, y, pageWidth - margin, y + 22f, 4f, 4f, paint)
+
+            textPaint.textSize = 8.5f
+            textPaint.typeface = sansSerifBold
+            textPaint.color = Color.rgb(71, 85, 105)
+
+            // Left-aligned text columns
+            textPaint.textAlign = Paint.Align.LEFT
+            c.drawText("DATE", dateX, y + 14.5f, textPaint)
+            c.drawText("DESCRIPTION", descX, y + 14.5f, textPaint)
+            c.drawText("CATEGORY", catX, y + 14.5f, textPaint)
+
+            // Right-aligned numerical columns
+            textPaint.textAlign = Paint.Align.RIGHT
+            c.drawText("INCOME", inRight, y + 14.5f, textPaint)
+            c.drawText("EXPENSE", outRight, y + 14.5f, textPaint)
+            c.drawText("BALANCE", balRight, y + 14.5f, textPaint)
+
+            textPaint.textAlign = Paint.Align.LEFT
+        }
+
+        // 1. Draw Document Header
+        textPaint.typeface = sansSerifBold
+        textPaint.textSize = 22f
+        textPaint.color = Color.rgb(6, 78, 59) // Emerald Dark
         canvas.drawText("LEAF", margin, currentY, textPaint)
 
-        textPaint.textSize = 10f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textPaint.textSize = 9.5f
+        textPaint.typeface = sansSerif
         textPaint.color = Color.rgb(100, 116, 139)
-        canvas.drawText("Created by ${AppConstants.APP_CREATOR}", margin, currentY + 14f, textPaint)
+        canvas.drawText(AppConstants.CREATOR_BRANDING, margin, currentY + 14f, textPaint)
 
         textPaint.textSize = 14f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        textPaint.typeface = sansSerifBold
         textPaint.color = Color.rgb(15, 23, 42)
-        val subtitle = "Financial Statement"
-        val subtitleWidth = textPaint.measureText(subtitle)
-        canvas.drawText(subtitle, pageWidth - margin - subtitleWidth, currentY, textPaint)
+        textPaint.textAlign = Paint.Align.RIGHT
+        canvas.drawText("Financial Statement", pageWidth - margin, currentY, textPaint)
 
         textPaint.textSize = 9f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        val dateText = "Generated on ${SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault()).format(Date())}"
-        val dateWidth = textPaint.measureText(dateText)
-        canvas.drawText(dateText, pageWidth - margin - dateWidth, currentY + 14f, textPaint)
+        textPaint.typeface = sansSerif
+        textPaint.color = Color.rgb(100, 116, 139)
+        val dateText = "Generated: ${SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault()).format(Date())}"
+        canvas.drawText(dateText, pageWidth - margin, currentY + 14f, textPaint)
 
-        currentY += 36f
+        textPaint.textAlign = Paint.Align.LEFT
+        currentY += 34f
 
         // Divider
         paint.color = Color.rgb(226, 232, 240)
-        paint.strokeWidth = 1.5f
+        paint.strokeWidth = 1.25f
         canvas.drawLine(margin, currentY, pageWidth - margin, currentY, paint)
 
-        currentY += 20f
+        currentY += 18f
 
         // 2. Period & Currency Context
-        textPaint.textSize = 11f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        textPaint.textSize = 10.5f
+        textPaint.typeface = sansSerifBold
         textPaint.color = Color.rgb(79, 70, 229)
         canvas.drawText("Statement Period: ${report.periodTitle}", margin, currentY, textPaint)
 
+        textPaint.textAlign = Paint.Align.RIGHT
         val currText = "Base Currency: ${report.currency.name} (${report.currency.symbol})"
-        val currWidth = textPaint.measureText(currText)
-        canvas.drawText(currText, pageWidth - margin - currWidth, currentY, textPaint)
+        canvas.drawText(currText, pageWidth - margin, currentY, textPaint)
+        textPaint.textAlign = Paint.Align.LEFT
 
-        currentY += 20f
+        currentY += 18f
 
-        // 3. Summary Box
+        // 3. Summary Box (4 metric tiles)
         paint.color = Color.rgb(248, 250, 252)
         paint.style = Paint.Style.FILL
-        canvas.drawRoundRect(margin, currentY, pageWidth - margin, currentY + 54f, 8f, 8f, paint)
+        canvas.drawRoundRect(margin, currentY, pageWidth - margin, currentY + 52f, 8f, 8f, paint)
 
         paint.color = Color.rgb(226, 232, 240)
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 1f
-        canvas.drawRoundRect(margin, currentY, pageWidth - margin, currentY + 54f, 8f, 8f, paint)
+        canvas.drawRoundRect(margin, currentY, pageWidth - margin, currentY + 52f, 8f, 8f, paint)
 
         val colWidth = (pageWidth - margin * 2) / 4
-        val sumY = currentY + 18f
+        val sumY = currentY + 17f
 
         fun drawSummaryCol(title: String, amountStr: String, colIdx: Int, color: Int) {
-            val colX = margin + colIdx * colWidth + 10f
+            val colX = margin + colIdx * colWidth + 12f
             textPaint.textSize = 8f
-            textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            textPaint.typeface = sansSerifMedium
             textPaint.color = Color.rgb(100, 116, 139)
             canvas.drawText(title.uppercase(), colX, sumY, textPaint)
 
             textPaint.textSize = 11f
-            textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            textPaint.typeface = sansSerifBold
             textPaint.color = color
             canvas.drawText(amountStr, colX, sumY + 18f, textPaint)
         }
@@ -116,41 +154,20 @@ object PdfUtils {
         drawSummaryCol("Total Expense", "- " + report.totalExpense.format(report.currency), 2, Color.rgb(239, 68, 68))
         drawSummaryCol("Closing Balance", report.closingBalance.format(report.currency), 3, Color.rgb(79, 70, 229))
 
-        currentY += 74f
+        currentY += 70f
 
         // 4. Ledger Table Header
-        paint.color = Color.rgb(241, 245, 249)
-        paint.style = Paint.Style.FILL
-        canvas.drawRect(margin, currentY, pageWidth - margin, currentY + 22f, paint)
-
-        textPaint.textSize = 9f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        textPaint.color = Color.rgb(71, 85, 105)
-
-        val dateX = margin + 6f
-        val descX = margin + 70f
-        val catX = margin + 220f
-        val inX = margin + 330f
-        val outX = margin + 400f
-        val balX = margin + 470f
-
-        canvas.drawText("Date", dateX, currentY + 14f, textPaint)
-        canvas.drawText("Description", descX, currentY + 14f, textPaint)
-        canvas.drawText("Category", catX, currentY + 14f, textPaint)
-        canvas.drawText("Income", inX, currentY + 14f, textPaint)
-        canvas.drawText("Expense", outX, currentY + 14f, textPaint)
-        canvas.drawText("Balance", balX, currentY + 14f, textPaint)
-
+        drawTableHeader(canvas, currentY)
         currentY += 26f
 
-        // 5. Table Rows
+        // 5. Table Rows (Newest first)
         val rowHeight = 22f
         val bottomThreshold = pageHeight - margin - 30f
 
         report.ledgerItems.forEachIndexed { index, item ->
             if (currentY + rowHeight > bottomThreshold) {
                 // Draw Footer for current page
-                drawPageFooter(canvas, pageNumber, margin, pageWidth, pageHeight, textPaint)
+                drawPageFooter(canvas, pageNumber, margin, pageWidth, pageHeight, textPaint, sansSerif)
                 pdfDocument.finishPage(page)
 
                 pageNumber++
@@ -159,22 +176,8 @@ object PdfUtils {
                 canvas = page.canvas
                 currentY = margin + 20f
 
-                // Redraw table header on new page
-                paint.color = Color.rgb(241, 245, 249)
-                paint.style = Paint.Style.FILL
-                canvas.drawRect(margin, currentY, pageWidth - margin, currentY + 22f, paint)
-
-                textPaint.textSize = 9f
-                textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                textPaint.color = Color.rgb(71, 85, 105)
-
-                canvas.drawText("Date", dateX, currentY + 14f, textPaint)
-                canvas.drawText("Description", descX, currentY + 14f, textPaint)
-                canvas.drawText("Category", catX, currentY + 14f, textPaint)
-                canvas.drawText("Income", inX, currentY + 14f, textPaint)
-                canvas.drawText("Expense", outX, currentY + 14f, textPaint)
-                canvas.drawText("Balance", balX, currentY + 14f, textPaint)
-
+                // Redraw repeated table header on new page
+                drawTableHeader(canvas, currentY)
                 currentY += 26f
             }
 
@@ -185,49 +188,54 @@ object PdfUtils {
                 canvas.drawRect(margin, currentY - 4f, pageWidth - margin, currentY + rowHeight - 6f, paint)
             }
 
-            textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            textPaint.typeface = sansSerif
             textPaint.textSize = 8.5f
             textPaint.color = Color.rgb(15, 23, 42)
+            textPaint.textAlign = Paint.Align.LEFT
 
             canvas.drawText(item.dateString, dateX, currentY + 10f, textPaint)
 
-            val cleanDesc = if (item.description.length > 28) item.description.take(25) + "..." else item.description
+            val cleanDesc = if (item.description.length > 26) item.description.take(23) + "..." else item.description
             canvas.drawText(cleanDesc, descX, currentY + 10f, textPaint)
 
             val cleanCat = if (item.categoryName.length > 18) item.categoryName.take(15) + "..." else item.categoryName
             canvas.drawText(cleanCat, catX, currentY + 10f, textPaint)
 
+            // Right-aligned amounts
+            textPaint.textAlign = Paint.Align.RIGHT
+
             // Income
             if (item.type == TransactionType.INCOME && item.amount != null) {
                 textPaint.color = Color.rgb(16, 185, 129)
-                canvas.drawText("+ " + item.amount.format(report.currency, includeSymbol = false), inX, currentY + 10f, textPaint)
+                canvas.drawText("+ " + item.amount.format(report.currency, includeSymbol = false), inRight, currentY + 10f, textPaint)
             } else {
                 textPaint.color = Color.rgb(148, 163, 184)
-                canvas.drawText("—", inX, currentY + 10f, textPaint)
+                canvas.drawText("—", inRight, currentY + 10f, textPaint)
             }
 
             // Expense
             if (item.type == TransactionType.EXPENSE && item.amount != null) {
                 textPaint.color = Color.rgb(239, 68, 68)
-                canvas.drawText("- " + item.amount.format(report.currency, includeSymbol = false), outX, currentY + 10f, textPaint)
+                canvas.drawText("- " + item.amount.format(report.currency, includeSymbol = false), outRight, currentY + 10f, textPaint)
             } else {
                 textPaint.color = Color.rgb(148, 163, 184)
-                canvas.drawText("—", outX, currentY + 10f, textPaint)
+                canvas.drawText("—", outRight, currentY + 10f, textPaint)
             }
 
             // Running Balance
-            textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            textPaint.typeface = sansSerifBold
             textPaint.color = Color.rgb(15, 23, 42)
-            canvas.drawText(item.runningBalance.format(report.currency), balX, currentY + 10f, textPaint)
+            canvas.drawText(item.runningBalance.format(report.currency), balRight, currentY + 10f, textPaint)
 
+            textPaint.textAlign = Paint.Align.LEFT
             currentY += rowHeight
         }
 
-        drawPageFooter(canvas, pageNumber, margin, pageWidth, pageHeight, textPaint)
+        drawPageFooter(canvas, pageNumber, margin, pageWidth, pageHeight, textPaint, sansSerif)
         pdfDocument.finishPage(page)
 
         val statementsDir = File(context.cacheDir, "statements").apply { mkdirs() }
-        val fileName = "ExpenseTracker_Statement_${System.currentTimeMillis()}.pdf"
+        val fileName = "Leaf_Statement_${System.currentTimeMillis()}.pdf"
         val outputFile = File(statementsDir, fileName)
 
         FileOutputStream(outputFile).use { out ->
@@ -238,17 +246,26 @@ object PdfUtils {
         return outputFile
     }
 
-    private fun drawPageFooter(canvas: Canvas, pageNumber: Int, margin: Float, pageWidth: Int, pageHeight: Int, textPaint: Paint) {
-        val footerY = pageHeight - margin + 10f
+    private fun drawPageFooter(
+        canvas: Canvas,
+        pageNumber: Int,
+        margin: Float,
+        pageWidth: Int,
+        pageHeight: Int,
+        textPaint: Paint,
+        sansSerif: Typeface
+    ) {
+        val footerY = pageHeight - margin + 12f
         textPaint.textSize = 8f
-        textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textPaint.typeface = sansSerif
         textPaint.color = Color.rgb(148, 163, 184)
+        textPaint.textAlign = Paint.Align.LEFT
 
-        canvas.drawText("Leaf • Personal Financial Statement", margin, footerY, textPaint)
+        canvas.drawText("Leaf • ${AppConstants.CREATOR_BRANDING}", margin, footerY, textPaint)
 
-        val pageText = "Page $pageNumber"
-        val pageTextWidth = textPaint.measureText(pageText)
-        canvas.drawText(pageText, pageWidth - margin - pageTextWidth, footerY, textPaint)
+        textPaint.textAlign = Paint.Align.RIGHT
+        canvas.drawText("Page $pageNumber", pageWidth - margin, footerY, textPaint)
+        textPaint.textAlign = Paint.Align.LEFT
     }
 
     fun createShareIntent(context: Context, pdfFile: File): Intent {
@@ -261,7 +278,7 @@ object PdfUtils {
         return Intent(Intent.ACTION_SEND).apply {
             type = "application/pdf"
             putExtra(Intent.EXTRA_STREAM, uri)
-            putExtra(Intent.EXTRA_SUBJECT, "Leaf Statement")
+            putExtra(Intent.EXTRA_SUBJECT, "Leaf Financial Statement")
             putExtra(Intent.EXTRA_TEXT, "Here is my Leaf financial statement.")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }

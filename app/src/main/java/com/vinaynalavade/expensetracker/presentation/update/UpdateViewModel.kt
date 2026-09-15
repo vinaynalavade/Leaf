@@ -180,6 +180,13 @@ class UpdateViewModel(
      * Launches Android's official Package Installer.
      */
     fun installApk(apkFile: File) {
+        if (!packageInstallerHelper.canRequestPackageInstalls()) {
+            val currentRelease = (_uiState.value as? UpdateUiState.ReadyToInstall)?.releaseInfo
+            if (currentRelease != null) {
+                _uiState.value = UpdateUiState.InstallPermissionRequired(apkFile, currentRelease)
+                return
+            }
+        }
         packageInstallerHelper.launchInstaller(apkFile)
     }
 

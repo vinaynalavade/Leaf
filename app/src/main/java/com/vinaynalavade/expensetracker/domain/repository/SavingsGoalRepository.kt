@@ -12,6 +12,7 @@ interface SavingsGoalRepository {
     fun getSavingsGoalById(id: Long): Flow<SavingsGoal?>
     suspend fun getSavingsGoalByIdSuspend(id: Long): SavingsGoal?
     fun getContributionsForGoal(goalId: Long): Flow<List<SavingsGoalContribution>>
+    suspend fun getContributionByIdSuspend(id: Long): SavingsGoalContribution? = null
     suspend fun saveSavingsGoal(goal: SavingsGoal): AppResult<Long>
     suspend fun deleteSavingsGoal(id: Long): AppResult<Unit>
     suspend fun setGoalArchived(id: Long, isArchived: Boolean): AppResult<Unit>
