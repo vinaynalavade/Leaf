@@ -351,18 +351,49 @@ fun PlanningScreen(
     }
 
     goalToDelete?.let { goalId ->
+        val goal = uiState.savingsGoals.find { it.id == goalId }
+        val hasLinkedTransactions = goal?.contributions?.any { it.transactionId != null } == true
         AlertDialog(
             onDismissRequest = { goalToDelete = null },
             title = { Text(stringResource(R.string.goal_delete_title)) },
-            text = { Text("Are you sure you want to delete this savings goal and all its contributions?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.deleteSavingsGoal(goalId)
-                        goalToDelete = null
+            text = {
+                Text(
+                    if (hasLinkedTransactions) {
+                        "Are you sure you want to delete this savings goal? This goal has contributions linked to your transaction history. Choose whether to remove the linked transactions or keep your ledger history intact."
+                    } else {
+                        "Are you sure you want to delete this savings goal and all its contributions?"
                     }
-                ) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                )
+            },
+            confirmButton = {
+                if (hasLinkedTransactions) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteSavingsGoal(goalId, deleteLinkedTransactions = true)
+                                goalToDelete = null
+                            }
+                        ) {
+                            Text("Delete Goal & Transactions", color = MaterialTheme.colorScheme.error)
+                        }
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteSavingsGoal(goalId, deleteLinkedTransactions = false)
+                                goalToDelete = null
+                            }
+                        ) {
+                            Text("Keep Transactions Only")
+                        }
+                    }
+                } else {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteSavingsGoal(goalId)
+                            goalToDelete = null
+                        }
+                    ) {
+                        Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                    }
                 }
             },
             dismissButton = {
@@ -378,8 +409,8 @@ fun PlanningScreen(
             goal = goal,
             currency = uiState.currency,
             onDismiss = { goalForContribution = null },
-            onSave = { amount, note ->
-                viewModel.addContribution(goal.id, amount, note)
+            onSave = { amount, note, deductFromAccount ->
+                viewModel.addContribution(goal.id, amount, note, deductFromAccount)
                 goalForContribution = null
             }
         )

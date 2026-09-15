@@ -57,9 +57,10 @@ import com.vinaynalavade.expensetracker.presentation.theme.spacing
 @Composable
 fun BalanceHeroCard(
     summary: FinancialSummary,
+    isBalanceVisible: Boolean = true,
+    onToggleBalanceVisibility: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    var isBalanceVisible by remember { mutableStateOf(true) }
     val isDark = isSystemInDarkTheme()
     val heroGradient = if (isDark) HeroObsidianGradient else HeroEmeraldGradient
 
@@ -101,7 +102,7 @@ fun BalanceHeroCard(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     IconButton(
-                        onClick = { isBalanceVisible = !isBalanceVisible },
+                        onClick = onToggleBalanceVisibility,
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(

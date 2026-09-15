@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
  *   must be guarded with [getContainerSafely].
  * - Flow collection uses one-shot [firstOrNull] to avoid leaking subscriptions.
  * - Each widget type is updated independently so one failure cannot block others.
+ * - Persistent balance visibility preference is respected to prevent sensitive data flashing.
  */
 object WidgetUpdateManager {
 
@@ -44,11 +45,11 @@ object WidgetUpdateManager {
 
     const val ACTION_WIDGET_REFRESH = "com.vinaynalavade.expensetracker.ACTION_WIDGET_REFRESH"
     const val ACTION_TODAY_WIDGET_REFRESH = "com.vinaynalavade.expensetracker.ACTION_TODAY_WIDGET_REFRESH"
+    const val ACTION_TOGGLE_BALANCE_VISIBILITY = "com.vinaynalavade.expensetracker.ACTION_TOGGLE_BALANCE_VISIBILITY"
 
     /**
      * Safely obtains the [AppContainer] from the application context.
-     * Returns null if the application is not yet initialized (e.g., widget update triggered
-     * before Application.onCreate() completes after process restart).
+     * Returns null if the application is not yet initialized.
      */
     private fun getContainerSafely(context: Context): AppContainer? {
         val app = context.applicationContext as? ExpenseTrackerApp ?: return null
@@ -57,6 +58,22 @@ object WidgetUpdateManager {
             return null
         }
         return app.container
+    }
+
+    /**
+     * Toggles persistent balance visibility and immediately triggers refresh across all widgets.
+     */
+    fun toggleBalanceVisibility(context: Context) {
+        val container = getContainerSafely(context) ?: return
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val prefs = container.getUserPreferencesUseCase().firstOrNull() ?: UserPreferences()
+                container.userPreferencesRepository.setBalanceVisible(!prefs.isBalanceVisible)
+                refreshAllWidgets(context)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to toggle balance visibility", e)
+            }
+        }
     }
 
     /**
@@ -106,7 +123,7 @@ object WidgetUpdateManager {
     /**
      * Updates all active Total Balance widget instances with live domain data.
      * Displays Total Balance as the hero primary metric, alongside Monthly Income & Expenses.
-     * When App Lock is active and locked, redacts financial values to prevent privacy leaks.
+     * When App Lock is active and locked or balance visibility is toggled off, redacts financial values.
      */
     fun updateFinancialSummaryWidgets(
         context: Context,
@@ -121,10 +138,11 @@ object WidgetUpdateManager {
                 val prefs = container.getUserPreferencesUseCase().firstOrNull()
                 val currency = prefs?.currency ?: Currency.DEFAULT
                 val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
+                val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
 
-                val balanceStr = if (isLocked) "••••••" else (summary?.balance?.format(currency) ?: "₹0.00")
-                val monthlyIncomeStr = if (isLocked) "+••••" else "+${summary?.monthlyIncome?.format(currency) ?: "₹0.00"}"
-                val monthlyExpenseStr = if (isLocked) "-••••" else "-${summary?.monthlyExpense?.format(currency) ?: "₹0.00"}"
+                val balanceStr = if (!isVisible) "••••••••" else (summary?.balance?.format(currency) ?: "₹0.00")
+                val monthlyIncomeStr = if (!isVisible) "+••••" else "+${summary?.monthlyIncome?.format(currency) ?: "₹0.00"}"
+                val monthlyExpenseStr = if (!isVisible) "-••••" else "-${summary?.monthlyExpense?.format(currency) ?: "₹0.00"}"
                 val monthLabelStr = if (isLocked) "Protected" else (summary?.monthLabel?.ifBlank { "This Month" } ?: "This Month")
 
                 // 1. Root tap -> Open MainActivity (Dashboard)
@@ -175,6 +193,17 @@ object WidgetUpdateManager {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
+                // 5. Visibility toggle icon tap -> Broadcast to toggle visibility
+                val toggleIntent = Intent(context, ExpenseTrackerWidgetProvider::class.java).apply {
+                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
+                }
+                val togglePendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    104,
+                    toggleIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
                 for (widgetId in appWidgetIds) {
                     val views = RemoteViews(context.packageName, R.layout.widget_expense_tracker).apply {
                         setTextViewText(R.id.widget_total_balance, balanceStr)
@@ -182,7 +211,13 @@ object WidgetUpdateManager {
                         setTextViewText(R.id.widget_monthly_expense, monthlyExpenseStr)
                         setTextViewText(R.id.widget_month_label, monthLabelStr)
 
+                        setImageViewResource(
+                            R.id.widget_btn_toggle_visibility,
+                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                        )
+
                         setOnClickPendingIntent(R.id.widget_root, mainPendingIntent)
+                        setOnClickPendingIntent(R.id.widget_btn_toggle_visibility, togglePendingIntent)
                         setOnClickPendingIntent(R.id.widget_btn_refresh, refreshPendingIntent)
                         setOnClickPendingIntent(R.id.widget_btn_add_expense, expensePendingIntent)
                         setOnClickPendingIntent(R.id.widget_btn_add_income, incomePendingIntent)
@@ -198,7 +233,7 @@ object WidgetUpdateManager {
     /**
      * Updates all active Today's Expense widget instances with live domain data.
      * Displays Today's spending as a single glanceable metric.
-     * When App Lock is active and locked, redacts the expense metric.
+     * When App Lock is active and locked or balance visibility is toggled off, redacts the expense metric.
      */
     fun updateTodayExpenseWidgets(
         context: Context,
@@ -213,8 +248,9 @@ object WidgetUpdateManager {
                 val prefs = container.getUserPreferencesUseCase().firstOrNull()
                 val currency = prefs?.currency ?: Currency.DEFAULT
                 val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
+                val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
 
-                val todayExpenseStr = if (isLocked) "••••••" else (todayExpense?.format(currency) ?: "₹0.00")
+                val todayExpenseStr = if (!isVisible) "••••••••" else (todayExpense?.format(currency) ?: "₹0.00")
 
                 // 1. Root tap -> Open MainActivity (Dashboard)
                 val mainIntent = Intent(context, MainActivity::class.java).apply {
@@ -238,11 +274,28 @@ object WidgetUpdateManager {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
+                // 3. Visibility toggle icon tap
+                val toggleIntent = Intent(context, TodayExpenseWidgetProvider::class.java).apply {
+                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
+                }
+                val togglePendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    302,
+                    toggleIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
                 for (widgetId in appWidgetIds) {
                     val views = RemoteViews(context.packageName, R.layout.widget_today_expense).apply {
                         setTextViewText(R.id.today_widget_amount, todayExpenseStr)
 
+                        setImageViewResource(
+                            R.id.today_widget_btn_toggle_visibility,
+                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                        )
+
                         setOnClickPendingIntent(R.id.today_widget_root, mainPendingIntent)
+                        setOnClickPendingIntent(R.id.today_widget_btn_toggle_visibility, togglePendingIntent)
                         setOnClickPendingIntent(R.id.today_widget_btn_refresh, refreshPendingIntent)
                     }
                     appWidgetManager.updateAppWidget(widgetId, views)

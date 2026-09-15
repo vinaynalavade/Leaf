@@ -391,26 +391,56 @@ fun GoalDetailScreen(
             goal = goal,
             currency = uiState.currency,
             onDismiss = { showAddContributionDialog = false },
-            onSave = { amount, note ->
-                viewModel.addContribution(amount, note)
+            onSave = { amount, note, deductFromAccount ->
+                viewModel.addContribution(amount, note, deductFromAccount)
                 showAddContributionDialog = false
             }
         )
     }
 
     if (showDeleteConfirmDialog) {
+        val hasLinkedTransactions = goal.contributions.any { it.transactionId != null }
         AlertDialog(
             onDismissRequest = { showDeleteConfirmDialog = false },
             title = { Text(stringResource(R.string.goal_delete_title)) },
-            text = { Text(stringResource(R.string.goal_delete_message, goal.name)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.deleteGoal()
-                        showDeleteConfirmDialog = false
+            text = {
+                Text(
+                    text = if (hasLinkedTransactions) {
+                        "${stringResource(R.string.goal_delete_message, goal.name)}\n\nThis goal has contributions linked to your transaction history. Choose whether to remove the linked transactions or preserve your ledger history."
+                    } else {
+                        stringResource(R.string.goal_delete_message, goal.name)
                     }
-                ) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                )
+            },
+            confirmButton = {
+                if (hasLinkedTransactions) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteGoal(deleteLinkedTransactions = true)
+                                showDeleteConfirmDialog = false
+                            }
+                        ) {
+                            Text("Delete Goal & Transactions", color = MaterialTheme.colorScheme.error)
+                        }
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteGoal(deleteLinkedTransactions = false)
+                                showDeleteConfirmDialog = false
+                            }
+                        ) {
+                            Text("Keep Transactions Only")
+                        }
+                    }
+                } else {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteGoal()
+                            showDeleteConfirmDialog = false
+                        }
+                    ) {
+                        Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                    }
                 }
             },
             dismissButton = {
@@ -422,18 +452,48 @@ fun GoalDetailScreen(
     }
 
     contributionToDelete?.let { contrib ->
+        val isLinked = contrib.transactionId != null
         AlertDialog(
             onDismissRequest = { contributionToDelete = null },
             title = { Text("Delete Contribution") },
-            text = { Text("Are you sure you want to delete this contribution? Goal progress will be updated.") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.deleteContribution(contrib.id)
-                        contributionToDelete = null
+            text = {
+                Text(
+                    text = if (isLinked) {
+                        "This contribution is linked to an account transaction. Would you like to also delete the transaction from your transaction history?"
+                    } else {
+                        "Are you sure you want to delete this contribution? Goal progress will be updated."
                     }
-                ) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                )
+            },
+            confirmButton = {
+                if (isLinked) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteContribution(contrib.id, deleteLinkedTransaction = true)
+                                contributionToDelete = null
+                            }
+                        ) {
+                            Text("Delete Both", color = MaterialTheme.colorScheme.error)
+                        }
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteContribution(contrib.id, deleteLinkedTransaction = false)
+                                contributionToDelete = null
+                            }
+                        ) {
+                            Text("Keep Transaction")
+                        }
+                    }
+                } else {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteContribution(contrib.id)
+                            contributionToDelete = null
+                        }
+                    ) {
+                        Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                    }
                 }
             },
             dismissButton = {

@@ -11,5 +11,6 @@ data class SavingsGoalContribution(
     val amount: Amount,
     val note: String? = null,
     val timestamp: Long = System.currentTimeMillis(),
+    val transactionId: Long? = null,
     val createdAt: Long = System.currentTimeMillis()
 )

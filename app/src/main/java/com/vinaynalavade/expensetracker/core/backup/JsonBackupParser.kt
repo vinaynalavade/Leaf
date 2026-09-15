@@ -225,7 +225,8 @@ object JsonBackupParser {
             ?: throw IllegalArgumentException("Invalid JSON root: Expected a JSON Object")
 
         val backupVersion = root.getInt("backupVersion")
-            ?: throw IllegalArgumentException("Missing required 'backupVersion' in backup file")
+            ?: root.getInt("version")
+            ?: 1
         val appVersion = root.getString("appVersion") ?: "1.0.0"
         val createdAt = root.getLong("createdAt") ?: System.currentTimeMillis()
 

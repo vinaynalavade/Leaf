@@ -70,7 +70,10 @@ fun CategorySelector(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sm)
         ) {
-            categories.forEach { category ->
+            val userCategories = categories.filter {
+                !it.name.equals(com.vinaynalavade.expensetracker.core.constants.AppConstants.CATEGORY_SAVINGS_AND_GOALS, ignoreCase = true)
+            }
+            userCategories.forEach { category ->
                 val isSelected = selectedCategory?.id == category.id
                 CategoryOptionChip(
                     category = category,

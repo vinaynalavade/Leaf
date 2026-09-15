@@ -110,17 +110,10 @@ fun NavGraph(
         }
     }
 
-    androidx.compose.runtime.LaunchedEffect(isFirstLaunch, isAppTourCompleted) {
+    androidx.compose.runtime.LaunchedEffect(isFirstLaunch) {
         if (isFirstLaunch) {
             navController.navigate(Screen.Welcome.route) {
                 launchSingleTop = true
-            }
-        } else if (!isAppTourCompleted) {
-            val current = navController.currentDestination?.route
-            if (current != Screen.Welcome.route && current != Screen.AppTour.route) {
-                navController.navigate(Screen.AppTour.route) {
-                    launchSingleTop = true
-                }
             }
         }
     }
@@ -164,10 +157,11 @@ fun NavGraph(
             val viewModel: DashboardViewModel = viewModel(
                 factory = DashboardViewModel.Factory(
                     container.getFinancialSummaryUseCase,
-                    container.getTransactionsUseCase,
                     container.getCategoryAnalysisUseCase,
                     container.getBudgetProgressUseCase,
-                    container.getSavingsGoalsUseCase
+                    container.getSavingsGoalsUseCase,
+                    container.splitRepository,
+                    container.userPreferencesRepository
                 )
             )
             val userPrefs by container.getUserPreferencesUseCase()
@@ -211,6 +205,9 @@ fun NavGraph(
                 onNavigateToGoalDetail = { goalId ->
                     navController.navigate(Screen.GoalDetail.createRoute(goalId))
                 },
+                onNavigateToSplit = {
+                    navigateToPrimary(Screen.Split.route)
+                },
                 onNavigateToTools = {
                     navController.navigate(Screen.Tools.route)
                 },
@@ -221,9 +218,6 @@ fun NavGraph(
                             query = categoryName
                         )
                     )
-                },
-                onNavigateToTransactionDetail = { id ->
-                    navController.navigate(Screen.TransactionDetail.createRoute(id))
                 },
                 onProfileClick = {
                     navigateToPrimary(Screen.Settings.route)

@@ -52,6 +52,15 @@
             android:layout_marginEnd="6dp" />
 
         <ImageView
+            android:id="@+id/today_widget_btn_toggle_visibility"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_visibility"
+            android:contentDescription="Toggle Balance Visibility"
+            android:padding="2dp"
+            android:layout_marginEnd="6dp" />
+
+        <ImageView
             android:id="@+id/today_widget_btn_refresh"
             android:layout_width="20dp"
             android:layout_height="20dp"

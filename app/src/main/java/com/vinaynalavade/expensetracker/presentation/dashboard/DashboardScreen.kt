@@ -1,35 +1,43 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
+import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
-import com.vinaynalavade.expensetracker.presentation.components.EmptyStateView
 import com.vinaynalavade.expensetracker.presentation.components.LoadingView
-import com.vinaynalavade.expensetracker.presentation.components.SectionHeader
-import com.vinaynalavade.expensetracker.presentation.components.TransactionItem
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.BalanceHeroCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.CategoryAnalysisSection
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardBudgetCard
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardSplitCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.GreetingHeader
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.MonthlyOverviewCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.QuickActionsSection
@@ -37,7 +45,8 @@ import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.YearMonth
 
 /**
- * Modern, luxury financial dashboard screen with interactive category analysis.
+ * Modern, luxury financial dashboard screen with streamlined hierarchy,
+ * active splits insights, persistent balance visibility, and elegant branding footer.
  */
 @Composable
 fun DashboardScreen(
@@ -51,9 +60,9 @@ fun DashboardScreen(
     onNavigateToCategories: () -> Unit,
     onNavigateToPlanning: () -> Unit = {},
     onNavigateToGoalDetail: (Long) -> Unit = {},
+    onNavigateToSplit: () -> Unit = {},
     onNavigateToTools: () -> Unit = {},
     onNavigateToCategoryTransactions: (YearMonth, String, TransactionType) -> Unit = { _, _, _ -> },
-    onNavigateToTransactionDetail: (Long) -> Unit = {},
     onProfileClick: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
     modifier: Modifier = Modifier
@@ -94,13 +103,17 @@ fun DashboardScreen(
                 }
 
                 item {
-                    BalanceHeroCard(summary = uiState.summary)
+                    BalanceHeroCard(
+                        summary = uiState.summary,
+                        isBalanceVisible = uiState.isBalanceVisible,
+                        onToggleBalanceVisibility = { viewModel.toggleBalanceVisibility() }
+                    )
                 }
 
                 // Deterministic Budget Card (Overall -> Highest spend category -> Set Monthly Budget prompt)
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
-                    com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardBudgetCard(
+                    DashboardBudgetCard(
                         budgetProgress = uiState.featuredBudget,
                         currency = currency,
                         onClick = onNavigateToPlanning
@@ -111,10 +124,22 @@ fun DashboardScreen(
                 uiState.topActiveGoal?.let { topGoal ->
                     item {
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
-                        com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard(
+                        DashboardGoalCard(
                             goal = topGoal,
                             currency = currency,
                             onClick = { onNavigateToGoalDetail(topGoal.id) }
+                        )
+                    }
+                }
+
+                // Active Splits Card (Handles both To Collect and To Pay unsettled splits)
+                if (uiState.unsettledSplits.isNotEmpty()) {
+                    item {
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                        DashboardSplitCard(
+                            unsettledSplits = uiState.unsettledSplits,
+                            currency = currency,
+                            onClick = onNavigateToSplit
                         )
                     }
                 }
@@ -150,38 +175,23 @@ fun DashboardScreen(
                     )
                 }
 
-
+                // Footer with exact branding phrase
                 item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
-                    SectionHeader(
-                        title = "Recent Activity",
-                        actionText = if (uiState.recentTransactions.isNotEmpty()) "View all" else null,
-                        onActionClick = onNavigateToTransactions
-                    )
-                }
-
-                if (uiState.recentTransactions.isEmpty()) {
-                    item {
-                        EmptyStateView(
-                            title = stringResource(R.string.no_transactions_title),
-                            description = stringResource(R.string.no_transactions_desc),
-                            actionButtonText = "Record First Transaction",
-                            onActionClick = onOpenQuickAdd
-                        )
-                    }
-                } else {
-                    items(
-                        items = uiState.recentTransactions,
-                        key = { it.id }
-                    ) { transaction ->
-                        TransactionItem(
-                            transaction = transaction,
-                            onClick = { onNavigateToTransactionDetail(transaction.id) },
-                            showDateInSubtitle = false
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.screen),
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xxl))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = MaterialTheme.spacing.md),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = AppConstants.CREATOR_BRANDING,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 11.sp,
+                                letterSpacing = 0.5.sp
+                            ),
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
                     }
                 }

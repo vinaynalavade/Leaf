@@ -43,6 +43,10 @@ class SavingsGoalRepositoryImpl(
         return savingsGoalDao.getContributionsForGoal(goalId).map { list -> list.map { it.toDomainModel() } }
     }
 
+    override suspend fun getContributionByIdSuspend(id: Long): SavingsGoalContribution? = withContext(ioDispatcher) {
+        savingsGoalDao.getContributionById(id)?.toDomainModel()
+    }
+
     override suspend fun saveSavingsGoal(goal: SavingsGoal): AppResult<Long> = withContext(ioDispatcher) {
         try {
             val entity = SavingsGoalEntity.fromDomainModel(goal)

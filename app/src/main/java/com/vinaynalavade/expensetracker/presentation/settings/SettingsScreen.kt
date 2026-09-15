@@ -589,6 +589,7 @@ fun SettingsScreen(
             currentName = currentName,
             onSave = { newName ->
                 viewModel.onProfileNameChanged(newName)
+                showEditProfileDialog = false
             },
             onDismiss = { showEditProfileDialog = false }
         )
@@ -598,11 +599,13 @@ fun SettingsScreen(
         ProfilePhotoOptionsDialog(
             hasCustomPhoto = !userPreferences.profileImageUri.isNullOrBlank(),
             onChoosePhoto = {
+                showProfilePhotoOptionsDialog = false
                 photoPickerLauncher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
             },
             onRemovePhoto = {
+                showProfilePhotoOptionsDialog = false
                 viewModel.onRemoveProfileImage()
             },
             onDismiss = { showProfilePhotoOptionsDialog = false }
@@ -792,33 +795,7 @@ fun SettingsScreen(
         )
     }
 
-    if (showEditProfileDialog) {
-        EditProfileDialog(
-            currentName = userPreferences.userName,
-            onSave = { newName ->
-                viewModel.onProfileNameChanged(newName)
-                showEditProfileDialog = false
-            },
-            onDismiss = { showEditProfileDialog = false }
-        )
-    }
 
-    if (showProfilePhotoOptionsDialog) {
-        ProfilePhotoOptionsDialog(
-            hasCustomPhoto = !userPreferences.profileImageUri.isNullOrBlank(),
-            onChoosePhoto = {
-                showProfilePhotoOptionsDialog = false
-                photoPickerLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                )
-            },
-            onRemovePhoto = {
-                showProfilePhotoOptionsDialog = false
-                viewModel.onProfileImageSelected(null)
-            },
-            onDismiss = { showProfilePhotoOptionsDialog = false }
-        )
-    }
 }
 
 

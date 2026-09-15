@@ -271,4 +271,13 @@ class UserPreferencesRepositoryImpl(
             AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set default expense source.", e))
         }
     }
+
+    override suspend fun setBalanceVisible(isVisible: Boolean): AppResult<Unit> {
+        return try {
+            dataStore.setBalanceVisible(isVisible)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set balance visibility.", e))
+        }
+    }
 }

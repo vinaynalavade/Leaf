@@ -117,6 +117,7 @@ fun ProfileAvatar(
     Box(
         modifier = modifier
             .size(size)
+            .clip(CircleShape)
             .then(
                 if (onEditClick != null) Modifier.clickable(onClick = onEditClick) else Modifier
             ),
@@ -156,28 +157,6 @@ fun ProfileAvatar(
             }
         }
 
-        // Camera / Edit Badge
-        if (showEditBadge && onEditClick != null) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                shadowElevation = 4.dp,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .offset(x = 2.dp, y = 2.dp)
-                    .size((size.value * 0.36f).dp.coerceIn(20.dp, 28.dp))
-                    .border(1.5.dp, MaterialTheme.colorScheme.surface, CircleShape)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.CameraAlt,
-                        contentDescription = "Change Profile Photo",
-                        modifier = Modifier.size((size.value * 0.2f).dp.coerceIn(12.dp, 16.dp))
-                    )
-                }
-            }
-        }
     }
 }
 

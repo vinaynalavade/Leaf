@@ -7,7 +7,7 @@ import android.content.Intent
 
 /**
  * Financial Overview AppWidget Provider.
- * Displays live Current Balance, Monthly Income, Monthly Expenses, and direct action triggers.
+ * Displays live Current Balance, Monthly Income, Monthly Expenses, privacy toggle, and direct action triggers.
  */
 class ExpenseTrackerWidgetProvider : AppWidgetProvider() {
 
@@ -17,8 +17,13 @@ class ExpenseTrackerWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == WidgetUpdateManager.ACTION_WIDGET_REFRESH) {
-            WidgetUpdateManager.refreshAllWidgets(context)
+        when (intent.action) {
+            WidgetUpdateManager.ACTION_WIDGET_REFRESH -> {
+                WidgetUpdateManager.refreshAllWidgets(context)
+            }
+            WidgetUpdateManager.ACTION_TOGGLE_BALANCE_VISIBILITY -> {
+                WidgetUpdateManager.toggleBalanceVisibility(context)
+            }
         }
     }
 

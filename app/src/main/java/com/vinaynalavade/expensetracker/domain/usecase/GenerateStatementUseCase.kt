@@ -14,6 +14,7 @@ import java.util.Locale
 
 /**
  * UseCase to compile a comprehensive financial statement with running balance calculations.
+ * Orders transactions in professional bank-statement format (newest first).
  */
 class GenerateStatementUseCase(
     private val transactionRepository: TransactionRepository,
@@ -50,28 +51,15 @@ class GenerateStatementUseCase(
 
         val openingBalance = baseOpeningBalance + pastIncome - pastExpense
 
-        // Sort ascending chronologically for running balance ledger
+        // Sort ascending chronologically to compute running balance accurately
         val sortedAscending = periodTransactions.sortedBy { it.timestamp }
 
         var runningBalance = openingBalance
         var totalIncome = Amount.ZERO
         var totalExpense = Amount.ZERO
 
-        val ledgerItems = mutableListOf<StatementLedgerItem>()
+        val transactionItems = mutableListOf<StatementLedgerItem>()
         val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-
-        // Add Initial Opening Balance row
-        ledgerItems.add(
-            StatementLedgerItem(
-                dateEpoch = startEpoch,
-                dateString = if (startEpoch <= 0L) "Account Start" else dateFormatter.format(Date(startEpoch)),
-                description = "Opening Balance",
-                categoryName = "—",
-                type = null,
-                amount = null,
-                runningBalance = openingBalance
-            )
-        )
 
         for (tx in sortedAscending) {
             if (tx.type == TransactionType.INCOME) {
@@ -82,7 +70,7 @@ class GenerateStatementUseCase(
                 totalExpense += tx.amount
             }
 
-            ledgerItems.add(
+            transactionItems.add(
                 StatementLedgerItem(
                     dateEpoch = tx.timestamp,
                     dateString = dateFormatter.format(Date(tx.timestamp)),
@@ -96,6 +84,22 @@ class GenerateStatementUseCase(
         }
 
         val closingBalance = openingBalance + totalIncome - totalExpense
+
+        // Professional bank statement order: Newest transactions first, followed by Opening Balance row
+        val ledgerItems = mutableListOf<StatementLedgerItem>()
+        ledgerItems.addAll(transactionItems.reversed())
+
+        ledgerItems.add(
+            StatementLedgerItem(
+                dateEpoch = startEpoch,
+                dateString = if (startEpoch <= 0L) "Account Start" else dateFormatter.format(Date(startEpoch)),
+                description = "Opening Balance",
+                categoryName = "—",
+                type = null,
+                amount = null,
+                runningBalance = openingBalance
+            )
+        )
 
         return StatementReport(
             periodTitle = periodTitle,
