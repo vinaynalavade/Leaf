@@ -1,12 +1,12 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,15 +22,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.presentation.settings.components.ProfileAvatar
-import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.LocalDate
 import java.time.LocalTime
@@ -38,7 +35,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
- * Luxury personalized greeting header for the Dashboard featuring user avatar, time-aware greeting, and subtle Leaf brand badge.
+ * Luxury personalized greeting header for the Dashboard featuring user avatar, time-aware greeting, and prominent top-right Settings action.
  */
 @Composable
 fun GreetingHeader(
@@ -97,60 +94,30 @@ fun GreetingHeader(
 
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Luxury Leaf Pill Badge
-            Surface(
-                shape = PillShape,
-                color = MaterialTheme.colorScheme.surface,
-                border = androidx.compose.foundation.BorderStroke(
-                    width = 0.75.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
-                ),
-                shadowElevation = 1.dp
+        // Premium Native Material 3 Profile / Settings Action
+        if (onAvatarClick != null) {
+            Box(
+                modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_leaf_logo),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            // Premium Native Material 3 Profile / Settings Button
-            if (onAvatarClick != null) {
                 Surface(
                     onClick = onAvatarClick,
-                    shape = androidx.compose.foundation.shape.CircleShape,
+                    shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.70f),
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    border = androidx.compose.foundation.BorderStroke(
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    border = BorderStroke(
                         width = 0.75.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.40f)
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.50f)
                     ),
                     shadowElevation = 1.dp,
-                    modifier = Modifier.size(36.dp)
+                    modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        androidx.compose.material3.Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.Settings,
+                        Icon(
+                            imageVector = Icons.Default.Settings,
                             contentDescription = stringResource(R.string.nav_settings),
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            modifier = Modifier.size(22.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
