@@ -38,6 +38,7 @@ import com.vinaynalavade.expensetracker.presentation.dashboard.components.Catego
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardBudgetCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardSplitCard
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardToolsCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.GreetingHeader
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.MonthlyOverviewCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.QuickActionsSection
@@ -151,6 +152,14 @@ fun DashboardScreen(
                         onAddIncomeClick = onNavigateToAddIncome,
                         onViewTransactionsClick = onNavigateToTransactions,
                         onViewCategoriesClick = onNavigateToCategories
+                    )
+                }
+
+                // Compact Financial Tools Shortcut
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    DashboardToolsCard(
+                        onClick = onNavigateToTools
                     )
                 }
 

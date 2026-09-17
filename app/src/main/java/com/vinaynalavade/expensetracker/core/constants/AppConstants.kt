@@ -11,7 +11,7 @@ object AppConstants {
     const val APP_NAME = "Leaf"
     const val APP_DESCRIPTOR = "Expense Tracker"
     const val APP_CREATOR = "Vinay Nalavade"
-    const val APP_VERSION = "1.0.9"
+    const val APP_VERSION = "1.0.10"
     const val CREATOR_BRANDING = "Crafted with 💚 in India"
     const val CATEGORY_SAVINGS_AND_GOALS = "Savings & Goals"
 }
