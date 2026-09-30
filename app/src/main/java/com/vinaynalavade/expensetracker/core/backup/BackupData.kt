@@ -16,12 +16,33 @@ data class BackupData(
     val savingsGoalContributions: List<BackupSavingsGoalContribution> = emptyList(),
     val splitGroups: List<BackupSplitGroup> = emptyList(),
     val splitExpenses: List<BackupSplitExpense> = emptyList(),
-    val splitParticipants: List<BackupSplitParticipant> = emptyList()
+    val splitParticipants: List<BackupSplitParticipant> = emptyList(),
+    val reminders: List<BackupReminder> = emptyList()
 ) {
     companion object {
         const val CURRENT_VERSION = 2
     }
 }
+
+data class BackupReminder(
+    val id: Long,
+    val title: String,
+    val description: String? = null,
+    val amountSubunits: Long,
+    val type: String,
+    val dueDate: Long,
+    val recurrence: String,
+    val configuredDayOfMonth: Int = 1,
+    val reminderOffsetDays: Int = 1,
+    val additionalOffsets: String? = null,
+    val notificationHour: Int = 9,
+    val notificationMinute: Int = 0,
+    val isEnabled: Boolean = true,
+    val isPaid: Boolean = false,
+    val lastPaidDate: Long? = null,
+    val createdAt: Long = System.currentTimeMillis(),
+    val updatedAt: Long = System.currentTimeMillis()
+)
 
 data class BackupCategory(
     val id: Long,

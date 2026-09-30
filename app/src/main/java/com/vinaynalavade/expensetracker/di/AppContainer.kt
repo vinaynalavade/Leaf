@@ -141,6 +141,16 @@ interface AppContainer {
     val saveSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveSplitGroupUseCase
     val deleteSplitGroupUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteSplitGroupUseCase
     val getGroupNetBalancesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase
+
+    val reminderRepository: com.vinaynalavade.expensetracker.domain.repository.ReminderRepository
+    val reminderScheduler: com.vinaynalavade.expensetracker.core.notification.ReminderScheduler
+    val getRemindersUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetRemindersUseCase
+    val getReminderByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetReminderByIdUseCase
+    val saveReminderUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveReminderUseCase
+    val deleteReminderUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteReminderUseCase
+    val markReminderPaidUseCase: com.vinaynalavade.expensetracker.domain.usecase.MarkReminderPaidUseCase
+    val toggleReminderEnabledUseCase: com.vinaynalavade.expensetracker.domain.usecase.ToggleReminderEnabledUseCase
+    val getUpcomingPaymentsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetUpcomingPaymentsUseCase
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
@@ -441,7 +451,9 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     override val rescheduleAllRemindersUseCase: com.vinaynalavade.expensetracker.domain.usecase.RescheduleAllRemindersUseCase by lazy {
         com.vinaynalavade.expensetracker.domain.usecase.RescheduleAllRemindersUseCase(
             userPreferencesRepository,
-            dailyReminderScheduler
+            dailyReminderScheduler,
+            reminderRepository,
+            reminderScheduler
         )
     }
 
@@ -577,5 +589,45 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val getGroupNetBalancesUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase by lazy {
         com.vinaynalavade.expensetracker.domain.usecase.GetGroupNetBalancesUseCase(splitRepository)
+    }
+
+    override val reminderRepository: com.vinaynalavade.expensetracker.domain.repository.ReminderRepository by lazy {
+        com.vinaynalavade.expensetracker.data.repository.ReminderRepositoryImpl(
+            database.reminderDao(),
+            database.transactionDao(),
+            database.categoryDao()
+        )
+    }
+
+    override val reminderScheduler: com.vinaynalavade.expensetracker.core.notification.ReminderScheduler by lazy {
+        com.vinaynalavade.expensetracker.core.notification.AlarmReminderScheduler(context)
+    }
+
+    override val getRemindersUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetRemindersUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetRemindersUseCase(reminderRepository)
+    }
+
+    override val getReminderByIdUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetReminderByIdUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetReminderByIdUseCase(reminderRepository)
+    }
+
+    override val saveReminderUseCase: com.vinaynalavade.expensetracker.domain.usecase.SaveReminderUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.SaveReminderUseCase(reminderRepository, reminderScheduler)
+    }
+
+    override val deleteReminderUseCase: com.vinaynalavade.expensetracker.domain.usecase.DeleteReminderUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.DeleteReminderUseCase(reminderRepository, reminderScheduler)
+    }
+
+    override val markReminderPaidUseCase: com.vinaynalavade.expensetracker.domain.usecase.MarkReminderPaidUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.MarkReminderPaidUseCase(reminderRepository, reminderScheduler)
+    }
+
+    override val toggleReminderEnabledUseCase: com.vinaynalavade.expensetracker.domain.usecase.ToggleReminderEnabledUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.ToggleReminderEnabledUseCase(reminderRepository, reminderScheduler)
+    }
+
+    override val getUpcomingPaymentsUseCase: com.vinaynalavade.expensetracker.domain.usecase.GetUpcomingPaymentsUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.GetUpcomingPaymentsUseCase(reminderRepository, recurringTransactionRepository)
     }
 }

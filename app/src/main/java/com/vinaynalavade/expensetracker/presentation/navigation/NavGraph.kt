@@ -77,6 +77,8 @@ import com.vinaynalavade.expensetracker.presentation.tools.fd.FdCalculatorScreen
 import com.vinaynalavade.expensetracker.presentation.tools.rd.RdCalculatorScreen
 import com.vinaynalavade.expensetracker.presentation.tools.discount.DiscountCalculatorScreen
 import com.vinaynalavade.expensetracker.presentation.tools.gst.GstCalculatorScreen
+import com.vinaynalavade.expensetracker.presentation.reminders.RemindersScreen
+import com.vinaynalavade.expensetracker.presentation.reminders.RemindersViewModel
 
 private fun isPrimaryDestination(route: String?): Boolean {
     return route == Screen.Dashboard.route ||
@@ -86,7 +88,8 @@ private fun isPrimaryDestination(route: String?): Boolean {
         route == Screen.Planning.route ||
         route == Screen.Insights.route ||
         route == Screen.MonthlySummary.route ||
-        route == Screen.Settings.route
+        route == Screen.Settings.route ||
+        route == Screen.Reminders.route
 }
 
 @Composable
@@ -161,7 +164,8 @@ fun NavGraph(
                     container.getBudgetProgressUseCase,
                     container.getSavingsGoalsUseCase,
                     container.splitRepository,
-                    container.userPreferencesRepository
+                    container.userPreferencesRepository,
+                    container.getUpcomingPaymentsUseCase
                 )
             )
             val userPrefs by container.getUserPreferencesUseCase()
@@ -210,6 +214,9 @@ fun NavGraph(
                 },
                 onNavigateToTools = {
                     navController.navigate(Screen.Tools.route)
+                },
+                onNavigateToReminders = {
+                    navController.navigate(Screen.Reminders.route)
                 },
                 onNavigateToCategoryTransactions = { month, categoryName, type ->
                     navController.navigate(
@@ -273,7 +280,8 @@ fun NavGraph(
         composable(Screen.Calendar.route) {
             val viewModel: CalendarViewModel = viewModel(
                 factory = CalendarViewModel.Factory(
-                    container.getTransactionsUseCase
+                    container.getTransactionsUseCase,
+                    container.getUpcomingPaymentsUseCase
                 )
             )
             CalendarScreen(
@@ -281,6 +289,9 @@ fun NavGraph(
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToTransactionDetail = { id ->
                     navController.navigate(Screen.TransactionDetail.createRoute(id))
+                },
+                onNavigateToReminders = {
+                    navController.navigate(Screen.Reminders.route)
                 },
                 onOpenAddTransaction = onOpenQuickAdd
             )
@@ -394,7 +405,8 @@ fun NavGraph(
                 onNavigateToAppLockSetup = { navController.navigate(Screen.AppLockSetup.route) },
                 onNavigateToChangePin = { navController.navigate(Screen.ChangePin.route) },
                 onNavigateToTools = { navController.navigate(Screen.Tools.route) },
-                onNavigateToAbout = { navController.navigate(Screen.About.route) }
+                onNavigateToAbout = { navController.navigate(Screen.About.route) },
+                onNavigateToReminders = { navController.navigate(Screen.Reminders.route) }
             )
         }
 
@@ -697,7 +709,7 @@ fun NavGraph(
             )
         }
 
-        // Planning Module (v1.0.8)
+        // Planning Module (v1.0.8 & v1.1.0)
         composable(Screen.Planning.route) {
             val viewModel: PlanningViewModel = viewModel(
                 factory = PlanningViewModel.Factory(
@@ -711,7 +723,12 @@ fun NavGraph(
                     saveSavingsGoalContributionUseCase = container.saveSavingsGoalContributionUseCase,
                     deleteSavingsGoalContributionUseCase = container.deleteSavingsGoalContributionUseCase,
                     getCategoriesUseCase = container.getCategoriesUseCase,
-                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase,
+                    getRemindersUseCase = container.getRemindersUseCase,
+                    saveReminderUseCase = container.saveReminderUseCase,
+                    deleteReminderUseCase = container.deleteReminderUseCase,
+                    toggleReminderEnabledUseCase = container.toggleReminderEnabledUseCase,
+                    markReminderPaidUseCase = container.markReminderPaidUseCase
                 )
             )
             PlanningScreen(
@@ -719,6 +736,24 @@ fun NavGraph(
                 onNavigateToGoalDetail = { goalId ->
                     navController.navigate(Screen.GoalDetail.createRoute(goalId))
                 }
+            )
+        }
+
+        composable(Screen.Reminders.route) {
+            val viewModel: RemindersViewModel = viewModel(
+                factory = RemindersViewModel.Factory(
+                    getRemindersUseCase = container.getRemindersUseCase,
+                    getUpcomingPaymentsUseCase = container.getUpcomingPaymentsUseCase,
+                    saveReminderUseCase = container.saveReminderUseCase,
+                    deleteReminderUseCase = container.deleteReminderUseCase,
+                    markReminderPaidUseCase = container.markReminderPaidUseCase,
+                    toggleReminderEnabledUseCase = container.toggleReminderEnabledUseCase,
+                    getUserPreferencesUseCase = container.getUserPreferencesUseCase
+                )
+            )
+            RemindersScreen(
+                viewModel = viewModel,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 

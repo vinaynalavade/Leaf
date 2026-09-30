@@ -10,6 +10,7 @@ import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.data.local.dao.BudgetDao
 import com.vinaynalavade.expensetracker.data.local.dao.CategoryDao
 import com.vinaynalavade.expensetracker.data.local.dao.RecurringTransactionDao
+import com.vinaynalavade.expensetracker.data.local.dao.ReminderDao
 import com.vinaynalavade.expensetracker.data.local.dao.SavingsGoalDao
 import com.vinaynalavade.expensetracker.data.local.dao.SplitDao
 import com.vinaynalavade.expensetracker.data.local.dao.SplitGroupDao
@@ -17,6 +18,7 @@ import com.vinaynalavade.expensetracker.data.local.dao.TransactionDao
 import com.vinaynalavade.expensetracker.data.local.entity.BudgetEntity
 import com.vinaynalavade.expensetracker.data.local.entity.CategoryEntity
 import com.vinaynalavade.expensetracker.data.local.entity.RecurringTransactionEntity
+import com.vinaynalavade.expensetracker.data.local.entity.ReminderEntity
 import com.vinaynalavade.expensetracker.data.local.entity.SavingsGoalContributionEntity
 import com.vinaynalavade.expensetracker.data.local.entity.SavingsGoalEntity
 import com.vinaynalavade.expensetracker.data.local.entity.SplitExpenseEntity
@@ -34,9 +36,10 @@ import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
         SplitGroupEntity::class,
         BudgetEntity::class,
         SavingsGoalEntity::class,
-        SavingsGoalContributionEntity::class
+        SavingsGoalContributionEntity::class,
+        ReminderEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 abstract class ExpenseTrackerDatabase : RoomDatabase() {
@@ -48,6 +51,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
     abstract fun splitGroupDao(): SplitGroupDao
     abstract fun budgetDao(): BudgetDao
     abstract fun savingsGoalDao(): SavingsGoalDao
+    abstract fun reminderDao(): ReminderDao
 
     companion object {
         @Volatile
@@ -211,6 +215,35 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `reminders` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `title` TEXT NOT NULL,
+                        `description` TEXT,
+                        `amount_subunits` INTEGER NOT NULL,
+                        `type` TEXT NOT NULL,
+                        `due_date` INTEGER NOT NULL,
+                        `recurrence` TEXT NOT NULL,
+                        `configured_day_of_month` INTEGER NOT NULL DEFAULT 1,
+                        `reminder_offset_days` INTEGER NOT NULL DEFAULT 1,
+                        `additional_offsets` TEXT,
+                        `notification_hour` INTEGER NOT NULL DEFAULT 9,
+                        `notification_minute` INTEGER NOT NULL DEFAULT 0,
+                        `is_enabled` INTEGER NOT NULL DEFAULT 1,
+                        `is_paid` INTEGER NOT NULL DEFAULT 0,
+                        `last_paid_date` INTEGER,
+                        `created_at` INTEGER NOT NULL,
+                        `updated_at` INTEGER NOT NULL
+                    )
+                """)
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_reminders_due_date` ON `reminders` (`due_date`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_reminders_is_enabled` ON `reminders` (`is_enabled`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_reminders_type` ON `reminders` (`type`)")
+            }
+        }
+
         fun getInstance(context: Context): ExpenseTrackerDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -218,7 +251,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                     ExpenseTrackerDatabase::class.java,
                     AppConstants.DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                     .addCallback(DatabaseCallback())
                     .build()
                 INSTANCE = instance

@@ -6,6 +6,7 @@ import com.vinaynalavade.expensetracker.core.backup.BackupCategory
 import com.vinaynalavade.expensetracker.core.backup.BackupData
 import com.vinaynalavade.expensetracker.core.backup.BackupPreferences
 import com.vinaynalavade.expensetracker.core.backup.BackupRecurringTransaction
+import com.vinaynalavade.expensetracker.core.backup.BackupReminder
 import com.vinaynalavade.expensetracker.core.backup.BackupSavingsGoal
 import com.vinaynalavade.expensetracker.core.backup.BackupSavingsGoalContribution
 import com.vinaynalavade.expensetracker.core.backup.BackupSplitExpense
@@ -214,6 +215,29 @@ class BackupRepositoryImpl(
                 savingsGoalNotificationsEnabled = prefs?.savingsGoalNotificationsEnabled ?: false
             )
 
+            val remindersList = database.reminderDao().getAllReminders().firstOrNull() ?: emptyList()
+            val backupReminders = remindersList.map { r ->
+                BackupReminder(
+                    id = r.id,
+                    title = r.title,
+                    description = r.description,
+                    amountSubunits = r.amountSubunits,
+                    type = r.type,
+                    dueDate = r.dueDate,
+                    recurrence = r.recurrence,
+                    configuredDayOfMonth = r.configuredDayOfMonth,
+                    reminderOffsetDays = r.reminderOffsetDays,
+                    additionalOffsets = r.additionalOffsets,
+                    notificationHour = r.notificationHour,
+                    notificationMinute = r.notificationMinute,
+                    isEnabled = r.isEnabled,
+                    isPaid = r.isPaid,
+                    lastPaidDate = r.lastPaidDate,
+                    createdAt = r.createdAt,
+                    updatedAt = r.updatedAt
+                )
+            }
+
             val now = System.currentTimeMillis()
             val backupData = BackupData(
                 backupVersion = BackupData.CURRENT_VERSION,
@@ -228,7 +252,8 @@ class BackupRepositoryImpl(
                 savingsGoalContributions = backupContributions,
                 splitGroups = backupSplitGroups,
                 splitExpenses = backupSplitExpenses,
-                splitParticipants = backupSplitParticipants
+                splitParticipants = backupSplitParticipants,
+                reminders = backupReminders
             )
 
             userPreferencesRepository.setLastBackupTimestamp(now)
@@ -452,6 +477,28 @@ class BackupRepositoryImpl(
                 )
             }
 
+            val reminderEntities = backupData.reminders.map { r ->
+                com.vinaynalavade.expensetracker.data.local.entity.ReminderEntity(
+                    id = r.id,
+                    title = r.title,
+                    description = r.description,
+                    amountSubunits = r.amountSubunits,
+                    type = r.type,
+                    dueDate = r.dueDate,
+                    recurrence = r.recurrence,
+                    configuredDayOfMonth = r.configuredDayOfMonth,
+                    reminderOffsetDays = r.reminderOffsetDays,
+                    additionalOffsets = r.additionalOffsets,
+                    notificationHour = r.notificationHour,
+                    notificationMinute = r.notificationMinute,
+                    isEnabled = r.isEnabled,
+                    isPaid = r.isPaid,
+                    lastPaidDate = r.lastPaidDate,
+                    createdAt = r.createdAt,
+                    updatedAt = r.updatedAt
+                )
+            }
+
             // Execute in an atomic database transaction
             database.withTransaction {
                 // Delete children and dependent tables first
@@ -462,6 +509,7 @@ class BackupRepositoryImpl(
                 database.splitDao().deleteAllSplitExpenses()
                 database.splitGroupDao().deleteAllGroups()
                 database.recurringTransactionDao().deleteAllRecurringTransactions()
+                database.reminderDao().deleteAllReminders()
                 database.transactionDao().deleteAllTransactions()
                 database.categoryDao().deleteAllCategories()
 
@@ -469,6 +517,7 @@ class BackupRepositoryImpl(
                 database.categoryDao().insertOrUpdateCategories(categoryEntities)
                 database.transactionDao().insertTransactions(transactionEntities)
                 database.recurringTransactionDao().insertRecurringTransactions(recurringEntities)
+                database.reminderDao().insertReminders(reminderEntities)
                 database.splitGroupDao().insertGroups(splitGroupEntities)
                 database.splitDao().insertExpenses(splitExpenseEntities)
                 database.splitDao().insertParticipants(splitParticipantEntities)

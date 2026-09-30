@@ -185,6 +185,31 @@ object JsonBackupParser {
             sb.append("      \"settlementTransactionId\": ").append(sp.settlementTransactionId ?: "null").append("\n")
             sb.append("    }").append(if (index < backup.splitParticipants.size - 1) "," else "").append("\n")
         }
+        sb.append("  ],\n")
+
+        // Reminders
+        sb.append("  \"reminders\": [\n")
+        backup.reminders.forEachIndexed { index, r ->
+            sb.append("    {\n")
+            sb.append("      \"id\": ").append(r.id).append(",\n")
+            sb.append("      \"title\": \"").append(escape(r.title)).append("\",\n")
+            sb.append("      \"description\": ").append(if (r.description != null) "\"${escape(r.description)}\"" else "null").append(",\n")
+            sb.append("      \"amountSubunits\": ").append(r.amountSubunits).append(",\n")
+            sb.append("      \"type\": \"").append(escape(r.type)).append("\",\n")
+            sb.append("      \"dueDate\": ").append(r.dueDate).append(",\n")
+            sb.append("      \"recurrence\": \"").append(escape(r.recurrence)).append("\",\n")
+            sb.append("      \"configuredDayOfMonth\": ").append(r.configuredDayOfMonth).append(",\n")
+            sb.append("      \"reminderOffsetDays\": ").append(r.reminderOffsetDays).append(",\n")
+            sb.append("      \"additionalOffsets\": ").append(if (r.additionalOffsets != null) "\"${escape(r.additionalOffsets)}\"" else "null").append(",\n")
+            sb.append("      \"notificationHour\": ").append(r.notificationHour).append(",\n")
+            sb.append("      \"notificationMinute\": ").append(r.notificationMinute).append(",\n")
+            sb.append("      \"isEnabled\": ").append(r.isEnabled).append(",\n")
+            sb.append("      \"isPaid\": ").append(r.isPaid).append(",\n")
+            sb.append("      \"lastPaidDate\": ").append(r.lastPaidDate ?: "null").append(",\n")
+            sb.append("      \"createdAt\": ").append(r.createdAt).append(",\n")
+            sb.append("      \"updatedAt\": ").append(r.updatedAt).append("\n")
+            sb.append("    }").append(if (index < backup.reminders.size - 1) "," else "").append("\n")
+        }
         sb.append("  ]\n")
 
         sb.append("}")
@@ -461,6 +486,49 @@ object JsonBackupParser {
             )
         }
 
+        // Parse Reminders
+        val remindersArray = root.getArray("reminders") ?: emptyList()
+        val reminders = remindersArray.mapNotNull { item ->
+            val obj = item as? JsonObject ?: return@mapNotNull null
+            val id = obj.getLong("id") ?: return@mapNotNull null
+            val title = obj.getString("title") ?: return@mapNotNull null
+            val description = obj.getString("description")
+            val amountSubunits = obj.getLong("amountSubunits") ?: return@mapNotNull null
+            val type = obj.getString("type") ?: "LOAN_EMI"
+            val dueDate = obj.getLong("dueDate") ?: return@mapNotNull null
+            val recurrence = obj.getString("recurrence") ?: "MONTHLY"
+            val configuredDayOfMonth = obj.getInt("configuredDayOfMonth") ?: 1
+            val reminderOffsetDays = obj.getInt("reminderOffsetDays") ?: 1
+            val additionalOffsets = obj.getString("additionalOffsets")
+            val notificationHour = obj.getInt("notificationHour") ?: 9
+            val notificationMinute = obj.getInt("notificationMinute") ?: 0
+            val isEnabled = obj.getBoolean("isEnabled") ?: true
+            val isPaid = obj.getBoolean("isPaid") ?: false
+            val lastPaidDate = obj.getLong("lastPaidDate")
+            val rCreatedAt = obj.getLong("createdAt") ?: System.currentTimeMillis()
+            val rUpdatedAt = obj.getLong("updatedAt") ?: System.currentTimeMillis()
+
+            BackupReminder(
+                id = id,
+                title = title,
+                description = description,
+                amountSubunits = amountSubunits,
+                type = type,
+                dueDate = dueDate,
+                recurrence = recurrence,
+                configuredDayOfMonth = configuredDayOfMonth,
+                reminderOffsetDays = reminderOffsetDays,
+                additionalOffsets = additionalOffsets,
+                notificationHour = notificationHour,
+                notificationMinute = notificationMinute,
+                isEnabled = isEnabled,
+                isPaid = isPaid,
+                lastPaidDate = lastPaidDate,
+                createdAt = rCreatedAt,
+                updatedAt = rUpdatedAt
+            )
+        }
+
         return BackupData(
             backupVersion = backupVersion,
             appVersion = appVersion,
@@ -474,7 +542,8 @@ object JsonBackupParser {
             savingsGoalContributions = savingsGoalContributions,
             splitGroups = splitGroups,
             splitExpenses = splitExpenses,
-            splitParticipants = splitParticipants
+            splitParticipants = splitParticipants,
+            reminders = reminders
         )
     }
 

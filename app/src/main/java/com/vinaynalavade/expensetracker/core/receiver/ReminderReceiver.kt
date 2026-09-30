@@ -66,6 +66,50 @@ class ReminderReceiver : BroadcastReceiver() {
                             container.dailyReminderScheduler.scheduleFinancialChecks()
                         }
                     }
+
+                    NotificationHelper.ACTION_REMINDER_ALERT -> {
+                        val reminderId = intent.getLongExtra(NotificationHelper.EXTRA_REMINDER_ID, -1L)
+                        val offset = intent.getIntExtra(NotificationHelper.EXTRA_REMINDER_OFFSET, 0)
+                        if (reminderId > 0) {
+                            val reminder = container.reminderRepository.getReminderByIdSuspend(reminderId)
+                            val prefs = container.getUserPreferencesUseCase().firstOrNull()
+                            if (reminder != null && reminder.isEnabled && !reminder.isPaid) {
+                                val isTypeAllowed = when (reminder.type) {
+                                    com.vinaynalavade.expensetracker.domain.model.ReminderType.LOAN_EMI -> prefs?.emiRemindersEnabled ?: true
+                                    com.vinaynalavade.expensetracker.domain.model.ReminderType.BILL -> prefs?.billRemindersEnabled ?: true
+                                    com.vinaynalavade.expensetracker.domain.model.ReminderType.CREDIT_CARD -> prefs?.creditCardRemindersEnabled ?: true
+                                    else -> true
+                                }
+                                if (prefs?.notificationsMasterEnabled != false && isTypeAllowed) {
+                                    val currency = prefs?.currency ?: com.vinaynalavade.expensetracker.core.model.Currency.DEFAULT
+                                    com.vinaynalavade.expensetracker.core.notification.ReminderNotificationManager.showReminderNotification(
+                                        context = context,
+                                        reminder = reminder,
+                                        offsetDays = offset,
+                                        currency = currency
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    NotificationHelper.ACTION_REMINDER_MARK_PAID -> {
+                        val reminderId = intent.getLongExtra(NotificationHelper.EXTRA_REMINDER_ID, -1L)
+                        if (reminderId > 0) {
+                            container.markReminderPaidUseCase(reminderId, recordTransaction = false)
+                            val notificationId = NotificationHelper.NOTIFICATION_ID_REMINDER_BASE + (reminderId % 1000).toInt()
+                            androidx.core.app.NotificationManagerCompat.from(context).cancel(notificationId)
+                        }
+                    }
+
+                    NotificationHelper.ACTION_REMINDER_SNOOZE -> {
+                        val reminderId = intent.getLongExtra(NotificationHelper.EXTRA_REMINDER_ID, -1L)
+                        if (reminderId > 0) {
+                            container.reminderScheduler.snoozeReminder(reminderId)
+                            val notificationId = NotificationHelper.NOTIFICATION_ID_REMINDER_BASE + (reminderId % 1000).toInt()
+                            androidx.core.app.NotificationManagerCompat.from(context).cancel(notificationId)
+                        }
+                    }
                 }
             } catch (_: Exception) {
                 // Fail silently without crashing

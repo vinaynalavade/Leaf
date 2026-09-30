@@ -51,6 +51,7 @@ import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.CloudUpload
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Fingerprint
@@ -160,6 +161,7 @@ fun SettingsScreen(
     onNavigateToChangePin: () -> Unit = {},
     onNavigateToTools: () -> Unit = {},
     onNavigateToAbout: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -185,6 +187,9 @@ fun SettingsScreen(
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showEditProfileDialog by remember { mutableStateOf(false) }
     var showProfilePhotoOptionsDialog by remember { mutableStateOf(false) }
+    var showDefaultOffsetDialog by remember { mutableStateOf(false) }
+    var showDefaultTimePickerDialog by remember { mutableStateOf(false) }
+    var showWhatsNewDialog by remember { mutableStateOf(false) }
     var pendingCropImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -261,8 +266,8 @@ fun SettingsScreen(
                 onDisconnectGoogleClick = { showDisconnectGoogleDialog = true }
             )
 
-            // 2. Preferences Section
-            SettingsSectionContainer(title = "PREFERENCES") {
+            // 1. Personalization Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_personalization)) {
                 ThemeSelectionSection(
                     currentThemeMode = userPreferences.themeMode,
                     onThemeModeSelected = { viewModel.onThemeModeSelected(it) }
@@ -270,9 +275,31 @@ fun SettingsScreen(
 
                 SettingsDivider()
 
+                val currentLanguage = AppLanguage.fromCode(userPreferences.appLanguage)
+                SettingsNavigationTile(
+                    icon = Icons.Default.Translate,
+                    title = stringResource(R.string.settings_language_title),
+                    valueBadge = currentLanguage.nativeName,
+                    onClick = { showLanguageDialog = true }
+                )
+
+                SettingsDivider()
+
+                SettingsSwitchTile(
+                    icon = Icons.Default.VisibilityOff,
+                    title = stringResource(R.string.settings_balance_visibility_title),
+                    subtitle = if (userPreferences.isBalanceVisible) stringResource(R.string.settings_balance_visible)
+                    else stringResource(R.string.settings_balance_hidden),
+                    checked = userPreferences.isBalanceVisible,
+                    onCheckedChange = { viewModel.toggleBalanceVisibility() }
+                )
+            }
+
+            // 2. Finance Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_finance)) {
                 SettingsNavigationTile(
                     icon = Icons.Default.AccountBalance,
-                    title = "Default Currency",
+                    title = stringResource(R.string.settings_currency_title),
                     valueBadge = "${userPreferences.currency.symbol} ${userPreferences.currency.code}",
                     onClick = { showCurrencyDialog = true }
                 )
@@ -280,8 +307,33 @@ fun SettingsScreen(
                 SettingsDivider()
 
                 SettingsNavigationTile(
+                    icon = Icons.Default.Payments,
+                    title = stringResource(R.string.settings_opening_balance_title),
+                    valueBadge = userPreferences.openingBalance.format(userPreferences.currency),
+                    onClick = { showOpeningBalanceDialog = true }
+                )
+
+                SettingsDivider()
+
+                val budgetLimitBadge = if (userPreferences.monthlyBudgetLimitSubunits > 0L) {
+                    userPreferences.monthlyBudgetLimit.format(userPreferences.currency)
+                } else {
+                    stringResource(R.string.settings_monthly_budget_not_set)
+                }
+
+                SettingsNavigationTile(
+                    icon = Icons.Default.PieChart,
+                    title = stringResource(R.string.settings_monthly_budget_title),
+                    valueBadge = budgetLimitBadge,
+                    onClick = { showBudgetLimitDialog = true }
+                )
+
+                SettingsDivider()
+
+                SettingsNavigationTile(
                     icon = Icons.Default.Category,
-                    title = "Manage Categories",
+                    title = stringResource(R.string.settings_categories_title),
+                    subtitle = stringResource(R.string.settings_categories_subtitle),
                     onClick = onNavigateToCategories
                 )
 
@@ -304,28 +356,168 @@ fun SettingsScreen(
                 SettingsDivider()
 
                 SettingsNavigationTile(
-                    icon = Icons.Default.AccountBalance,
-                    title = "Starting Balance",
-                    valueBadge = userPreferences.openingBalance.format(userPreferences.currency),
-                    onClick = { showOpeningBalanceDialog = true }
-                )
-
-                SettingsDivider()
-
-                val currentLanguage = AppLanguage.fromCode(userPreferences.appLanguage)
-                SettingsNavigationTile(
-                    icon = Icons.Default.Translate,
-                    title = stringResource(R.string.settings_language),
-                    valueBadge = currentLanguage.nativeName,
-                    onClick = { showLanguageDialog = true }
+                    icon = Icons.AutoMirrored.Filled.ReceiptLong,
+                    title = stringResource(R.string.settings_recurring_title),
+                    subtitle = stringResource(R.string.settings_recurring_subtitle),
+                    onClick = onNavigateToRecurring
                 )
             }
 
-            // 3. Security & Privacy Section
-            SettingsSectionContainer(title = "SECURITY & PRIVACY") {
+            // 3. Notifications & Reminders Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_notifications)) {
+                SettingsSwitchTile(
+                    icon = Icons.Default.Notifications,
+                    title = stringResource(R.string.settings_notifications_master_title),
+                    subtitle = stringResource(R.string.settings_notifications_master_desc),
+                    checked = userPreferences.notificationsMasterEnabled,
+                    onCheckedChange = { isChecked ->
+                        if (isChecked) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            } else {
+                                viewModel.onNotificationsMasterToggled(true)
+                            }
+                        } else {
+                            viewModel.onNotificationsMasterToggled(false)
+                        }
+                    }
+                )
+
+                AnimatedVisibility(
+                    visible = userPreferences.notificationsMasterEnabled,
+                    enter = expandVertically() + fadeIn(),
+                    exit = shrinkVertically() + fadeOut()
+                ) {
+                    Column {
+                        SettingsDivider()
+
+                        // Loan & EMI Reminders
+                        SettingsSwitchTile(
+                            icon = Icons.Default.AccountBalance,
+                            title = stringResource(R.string.settings_notif_loan_emi_title),
+                            subtitle = stringResource(R.string.settings_notif_loan_emi_desc),
+                            checked = userPreferences.emiRemindersEnabled,
+                            onCheckedChange = { viewModel.onLoanRemindersToggled(it) }
+                        )
+
+                        SettingsDivider()
+
+                        // Bill & Utility Reminders
+                        SettingsSwitchTile(
+                            icon = Icons.AutoMirrored.Filled.ReceiptLong,
+                            title = stringResource(R.string.settings_notif_bill_title),
+                            subtitle = stringResource(R.string.settings_notif_bill_desc),
+                            checked = userPreferences.billRemindersEnabled,
+                            onCheckedChange = { viewModel.onBillRemindersToggled(it) }
+                        )
+
+                        SettingsDivider()
+
+                        // Credit Card Reminders
+                        SettingsSwitchTile(
+                            icon = Icons.Default.CreditCard,
+                            title = stringResource(R.string.settings_notif_credit_card_title),
+                            subtitle = stringResource(R.string.settings_notif_credit_card_desc),
+                            checked = userPreferences.creditCardRemindersEnabled,
+                            onCheckedChange = { viewModel.onCreditCardRemindersToggled(it) }
+                        )
+
+                        SettingsDivider()
+
+                        // Daily Expense Reminder
+                        SettingsSwitchTile(
+                            icon = Icons.Default.Schedule,
+                            title = stringResource(R.string.settings_notif_daily_reminder_title),
+                            checked = userPreferences.dailyReminderEnabled,
+                            onCheckedChange = { viewModel.onDailyReminderToggled(it) }
+                        )
+
+                        if (userPreferences.dailyReminderEnabled) {
+                            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+                            val formattedTime = remember(userPreferences.dailyReminderHour, userPreferences.dailyReminderMinute) {
+                                LocalTime.of(userPreferences.dailyReminderHour, userPreferences.dailyReminderMinute).format(timeFormatter)
+                            }
+
+                            SettingsNavigationTile(
+                                icon = Icons.Default.Schedule,
+                                title = stringResource(R.string.settings_reminder_time_title),
+                                valueBadge = formattedTime,
+                                onClick = { showTimePickerDialog = true }
+                            )
+                        }
+
+                        SettingsDivider()
+
+                        // Budget Alerts
+                        SettingsSwitchTile(
+                            icon = Icons.Default.PieChart,
+                            title = stringResource(R.string.settings_notif_budget_alerts_title),
+                            checked = userPreferences.budgetAlertsEnabled,
+                            onCheckedChange = { viewModel.onBudgetAlertsToggled(it) }
+                        )
+
+                        SettingsDivider()
+
+                        // Savings Goal Milestones
+                        SettingsSwitchTile(
+                            icon = Icons.Default.Flag,
+                            title = stringResource(R.string.settings_notif_savings_goals_title),
+                            checked = userPreferences.savingsGoalNotificationsEnabled,
+                            onCheckedChange = { viewModel.onSavingsGoalNotificationsToggled(it) }
+                        )
+
+                        SettingsDivider()
+
+                        // Default Reminder Offset
+                        val defaultOffsetBadge = when (userPreferences.defaultReminderOffsetDays) {
+                            0 -> stringResource(R.string.reminder_offset_on_due_date)
+                            1 -> stringResource(R.string.reminder_offset_1_day)
+                            2 -> stringResource(R.string.reminder_offset_2_days)
+                            3 -> stringResource(R.string.reminder_offset_3_days)
+                            5 -> stringResource(R.string.reminder_offset_5_days)
+                            7 -> stringResource(R.string.reminder_offset_7_days)
+                            else -> "${userPreferences.defaultReminderOffsetDays} days before"
+                        }
+                        SettingsNavigationTile(
+                            icon = Icons.Default.Timer,
+                            title = stringResource(R.string.settings_notif_default_offset_title),
+                            valueBadge = defaultOffsetBadge,
+                            onClick = { showDefaultOffsetDialog = true }
+                        )
+
+                        SettingsDivider()
+
+                        // Default Notification Time
+                        val formattedDefaultTime = String.format("%02d:%02d", userPreferences.defaultReminderHour, userPreferences.defaultReminderMinute)
+                        SettingsNavigationTile(
+                            icon = Icons.Default.Schedule,
+                            title = stringResource(R.string.settings_notif_default_time_title),
+                            valueBadge = formattedDefaultTime,
+                            onClick = { showDefaultTimePickerDialog = true }
+                        )
+
+                        SettingsDivider()
+
+                        // Manage Reminders
+                        SettingsNavigationTile(
+                            icon = Icons.Default.Notifications,
+                            title = stringResource(R.string.reminders_title),
+                            subtitle = "View and configure all payment obligations",
+                            onClick = onNavigateToReminders
+                        )
+                    }
+                }
+            }
+
+            // 4. Security & Privacy Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_security)) {
                 SettingsSwitchTile(
                     icon = Icons.Default.Lock,
                     title = stringResource(R.string.settings_app_lock_title),
+                    subtitle = if (userPreferences.appLockEnabled) stringResource(R.string.settings_enabled)
+                    else stringResource(R.string.settings_disabled),
                     checked = userPreferences.appLockEnabled,
                     onCheckedChange = { isChecked ->
                         if (isChecked) {
@@ -347,7 +539,7 @@ fun SettingsScreen(
                         if (isBiometricAvailable) {
                             SettingsNavigationTile(
                                 icon = Icons.Default.Fingerprint,
-                                title = stringResource(R.string.settings_unlock_method_title),
+                                title = stringResource(R.string.settings_biometric_title),
                                 valueBadge = if (userPreferences.biometricEnabled) "Biometric + PIN" else "PIN Only",
                                 onClick = { showUnlockMethodDialog = true }
                             )
@@ -381,7 +573,8 @@ fun SettingsScreen(
 
                         SettingsSwitchTile(
                             icon = Icons.Default.VisibilityOff,
-                            title = stringResource(R.string.settings_hide_recents_title),
+                            title = stringResource(R.string.settings_privacy_recents_title),
+                            subtitle = stringResource(R.string.settings_privacy_recents_desc),
                             checked = userPreferences.hideContentInRecents,
                             onCheckedChange = { viewModel.onHideContentInRecentsToggled(it) }
                         )
@@ -389,135 +582,17 @@ fun SettingsScreen(
                 }
             }
 
-            // 4. Notifications & Reminders Section
-            SettingsSectionContainer(title = "NOTIFICATIONS") {
-                SettingsSwitchTile(
-                    icon = Icons.Default.Notifications,
-                    title = stringResource(R.string.settings_notifications_master_title),
-                    checked = userPreferences.notificationsMasterEnabled,
-                    onCheckedChange = { isChecked ->
-                        if (isChecked) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            } else {
-                                viewModel.onNotificationsMasterToggled(true)
-                            }
-                        } else {
-                            viewModel.onNotificationsMasterToggled(false)
-                        }
-                    }
-                )
-
-                AnimatedVisibility(
-                    visible = userPreferences.notificationsMasterEnabled,
-                    enter = expandVertically() + fadeIn(),
-                    exit = shrinkVertically() + fadeOut()
-                ) {
-                    Column {
-                        SettingsDivider()
-
-                        // Daily Reminder
-                        SettingsSwitchTile(
-                            icon = Icons.Default.Schedule,
-                            title = stringResource(R.string.settings_daily_reminder_title),
-                            checked = userPreferences.dailyReminderEnabled,
-                            onCheckedChange = { viewModel.onDailyReminderToggled(it) }
-                        )
-
-                        if (userPreferences.dailyReminderEnabled) {
-                            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
-                            val formattedTime = remember(userPreferences.dailyReminderHour, userPreferences.dailyReminderMinute) {
-                                LocalTime.of(userPreferences.dailyReminderHour, userPreferences.dailyReminderMinute).format(timeFormatter)
-                            }
-
-                            SettingsNavigationTile(
-                                icon = Icons.Default.Schedule,
-                                title = stringResource(R.string.settings_reminder_time_title),
-                                valueBadge = formattedTime,
-                                onClick = { showTimePickerDialog = true }
-                            )
-                        }
-
-                        SettingsDivider()
-
-                        // Budget Alerts
-                        SettingsSwitchTile(
-                            icon = Icons.Default.PieChart,
-                            title = stringResource(R.string.settings_budget_alerts_title),
-                            checked = userPreferences.budgetAlertsEnabled,
-                            onCheckedChange = { viewModel.onBudgetAlertsToggled(it) }
-                        )
-
-                        if (userPreferences.budgetAlertsEnabled) {
-                            val budgetLimitBadge = if (userPreferences.monthlyBudgetLimitSubunits > 0L) {
-                                userPreferences.monthlyBudgetLimit.format(userPreferences.currency)
-                            } else {
-                                "Not Set"
-                            }
-
-                            SettingsNavigationTile(
-                                icon = Icons.Default.PieChart,
-                                title = stringResource(R.string.settings_budget_limit_title),
-                                valueBadge = budgetLimitBadge,
-                                onClick = { showBudgetLimitDialog = true }
-                            )
-                        }
-
-                        SettingsDivider()
-
-                        // Bill & Payment Reminders
-                        SettingsSwitchTile(
-                            icon = Icons.AutoMirrored.Filled.ReceiptLong,
-                            title = stringResource(R.string.settings_recurring_reminders_title),
-                            checked = userPreferences.recurringRemindersEnabled,
-                            onCheckedChange = { viewModel.onRecurringRemindersToggled(it) }
-                        )
-
-                        if (userPreferences.recurringRemindersEnabled) {
-                            val advanceLabel = RecurringReminderAdvance.fromDays(userPreferences.recurringReminderAdvanceDays).label
-
-                            SettingsNavigationTile(
-                                icon = Icons.AutoMirrored.Filled.ReceiptLong,
-                                title = stringResource(R.string.settings_recurring_advance_title),
-                                valueBadge = advanceLabel,
-                                onClick = { showRecurringAdvanceDialog = true }
-                            )
-                        }
-
-                        SettingsDivider()
-
-                        // Savings Goal Milestones
-                        SettingsSwitchTile(
-                            icon = Icons.Default.Flag,
-                            title = stringResource(R.string.settings_savings_goals_title),
-                            checked = userPreferences.savingsGoalNotificationsEnabled,
-                            onCheckedChange = { viewModel.onSavingsGoalNotificationsToggled(it) }
-                        )
-                    }
-                }
-            }
-
-            // 5. Data & Management Section
-            SettingsSectionContainer(title = "DATA & MANAGEMENT") {
-                // Automatic Backup Toggle
-                SettingsSwitchTile(
-                    icon = Icons.Default.CloudSync,
-                    title = stringResource(R.string.settings_auto_backup_title),
-                    checked = userPreferences.automaticBackupEnabled,
-                    onCheckedChange = { enabled ->
-                        if (enabled && googleBackupState !is GoogleBackupState.Connected) {
-                            googleSignInLauncher.launch(viewModel.getGoogleSignInIntent())
-                        } else {
-                            viewModel.onAutomaticBackupToggled(enabled)
-                        }
-                    }
+            // 5. Data & Tools Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_data)) {
+                SettingsNavigationTile(
+                    icon = Icons.Default.Sync,
+                    title = stringResource(R.string.settings_local_backup_title),
+                    subtitle = stringResource(R.string.settings_local_backup_desc),
+                    onClick = onNavigateToBackup
                 )
 
                 SettingsDivider()
 
-                // Backup Status & Management
                 val lastTimestamp = (googleBackupState as? GoogleBackupState.Connected)?.lastBackupTimestamp
                     ?: userPreferences.lastDismissedRestoreBackupTimestamp
                 val statusText = when {
@@ -536,9 +611,10 @@ fun SettingsScreen(
                 }
 
                 SettingsNavigationTile(
-                    icon = Icons.Default.Sync,
-                    title = "Backup & Restore",
+                    icon = Icons.Default.CloudSync,
+                    title = stringResource(R.string.settings_google_backup_title),
                     subtitle = statusText,
+                    valueBadge = if (googleBackupState is GoogleBackupState.Connected) "Connected" else "Not Connected",
                     onClick = onNavigateToBackup
                 )
 
@@ -546,34 +622,38 @@ fun SettingsScreen(
 
                 SettingsNavigationTile(
                     icon = Icons.Default.Description,
-                    title = "Export & Reports",
+                    title = stringResource(R.string.settings_statements_title),
+                    subtitle = stringResource(R.string.settings_statements_subtitle),
                     onClick = onNavigateToStatements
                 )
 
                 SettingsDivider()
 
                 SettingsNavigationTile(
-                    icon = Icons.AutoMirrored.Filled.ReceiptLong,
-                    title = "Recurring & EMIs",
-                    onClick = onNavigateToRecurring
+                    icon = Icons.Default.Calculate,
+                    title = stringResource(R.string.settings_tools_title),
+                    subtitle = stringResource(R.string.settings_tools_subtitle),
+                    onClick = onNavigateToTools
+                )
+            }
+
+            // 6. About Leaf Section
+            SettingsSectionContainer(title = stringResource(R.string.settings_section_about)) {
+                SettingsNavigationTile(
+                    icon = Icons.Default.Info,
+                    title = stringResource(R.string.settings_about_leaf_title),
+                    subtitle = "Privacy-focused & offline-first personal finance",
+                    valueBadge = "v${BuildConfig.VERSION_NAME}",
+                    onClick = onNavigateToAbout
                 )
 
                 SettingsDivider()
 
                 SettingsNavigationTile(
-                    icon = Icons.Default.Calculate,
-                    title = stringResource(R.string.tools_title),
-                    onClick = onNavigateToTools
-                )
-            }
-
-            // 6. About Section
-            SettingsSectionContainer(title = "ABOUT") {
-                SettingsNavigationTile(
-                    icon = Icons.Default.Info,
-                    title = "About Leaf",
-                    valueBadge = "v${BuildConfig.VERSION_NAME}",
-                    onClick = onNavigateToAbout
+                    icon = Icons.Default.Flag,
+                    title = stringResource(R.string.settings_whats_new_title),
+                    subtitle = stringResource(R.string.settings_whats_new_desc),
+                    onClick = { showWhatsNewDialog = true }
                 )
             }
 
@@ -795,7 +875,34 @@ fun SettingsScreen(
         )
     }
 
+    if (showDefaultOffsetDialog) {
+        DefaultReminderOffsetDialog(
+            currentOffsetDays = userPreferences.defaultReminderOffsetDays,
+            onOffsetSelected = { offset ->
+                viewModel.onDefaultReminderOffsetSelected(offset)
+                showDefaultOffsetDialog = false
+            },
+            onDismiss = { showDefaultOffsetDialog = false }
+        )
+    }
 
+    if (showDefaultTimePickerDialog) {
+        ReminderTimePickerDialog(
+            initialHour = userPreferences.defaultReminderHour,
+            initialMinute = userPreferences.defaultReminderMinute,
+            onTimeSelected = { hour, minute ->
+                viewModel.onDefaultReminderTimeSelected(hour, minute)
+                showDefaultTimePickerDialog = false
+            },
+            onDismiss = { showDefaultTimePickerDialog = false }
+        )
+    }
+
+    if (showWhatsNewDialog) {
+        WhatsNewDialog(
+            onDismiss = { showWhatsNewDialog = false }
+        )
+    }
 }
 
 
@@ -1402,3 +1509,171 @@ private fun DefaultSourceSettingRow(
         }
     }
 }
+
+@Composable
+private fun DefaultReminderOffsetDialog(
+    currentOffsetDays: Int,
+    onOffsetSelected: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val offsets = listOf(
+        0 to stringResource(R.string.reminder_offset_on_due_date),
+        1 to stringResource(R.string.reminder_offset_1_day),
+        2 to stringResource(R.string.reminder_offset_2_days),
+        3 to stringResource(R.string.reminder_offset_3_days),
+        5 to stringResource(R.string.reminder_offset_5_days),
+        7 to stringResource(R.string.reminder_offset_7_days)
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false
+        ),
+        modifier = Modifier
+            .fillMaxWidth(0.92f)
+            .widthIn(max = 420.dp),
+        title = {
+            Text(
+                text = stringResource(R.string.settings_notif_default_offset_title),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                offsets.forEach { (days, label) ->
+                    val isSelected = currentOffsetDays == days
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable {
+                                onOffsetSelected(days)
+                                onDismiss()
+                            }
+                            .padding(vertical = 12.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = if (isSelected) Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
+                            contentDescription = null,
+                            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
+private fun WhatsNewDialog(
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false
+        ),
+        modifier = Modifier
+            .fillMaxWidth(0.92f)
+            .widthIn(max = 480.dp),
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(32.dp)
+            )
+        },
+        title = {
+            Text(
+                text = "What's New in Leaf v1.1.0",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                WhatsNewItem(
+                    title = "Payment & Loan Reminders",
+                    description = "Set one-time or recurring reminders for Loans, EMIs, Bills, Credit Cards, and Subscriptions. Custom alert timing and multi-day offsets."
+                )
+                WhatsNewItem(
+                    title = "Upcoming Payments",
+                    description = "Stay on top of upcoming cash flows right on your Dashboard and Planning tabs, with 1-tap 'Mark Paid' to record payments."
+                )
+                WhatsNewItem(
+                    title = "Financial Payment Calendar",
+                    description = "Visualize all scheduled dues and reminders alongside your daily expense history on an interactive calendar."
+                )
+                WhatsNewItem(
+                    title = "Settings 2.0 Control Center",
+                    description = "Redesigned information architecture with clear sections, instant status badges, and 48dp+ accessibility targets."
+                )
+                WhatsNewItem(
+                    title = "Offline & Reboot Reliability",
+                    description = "All reminders persist locally and automatically restore upon device reboot with zero battery drain or telemetry."
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Got It", fontWeight = FontWeight.Bold)
+            }
+        }
+    )
+}
+
+@Composable
+private fun WhatsNewItem(
+    title: String,
+    description: String
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+

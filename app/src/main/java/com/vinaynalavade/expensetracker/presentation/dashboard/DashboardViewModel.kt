@@ -15,6 +15,8 @@ import com.vinaynalavade.expensetracker.domain.usecase.GetBudgetProgressUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetCategoryAnalysisUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetFinancialSummaryUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase
+import com.vinaynalavade.expensetracker.domain.model.UpcomingPaymentItem
+import com.vinaynalavade.expensetracker.domain.usecase.GetUpcomingPaymentsUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.YearMonth
@@ -34,6 +37,7 @@ data class DashboardUiState(
     val featuredBudget: BudgetProgress? = null,
     val topActiveGoal: SavingsGoal? = null,
     val unsettledSplits: List<SplitExpense> = emptyList(),
+    val upcomingPayments: List<UpcomingPaymentItem> = emptyList(),
     val isBalanceVisible: Boolean = true,
     val isLoading: Boolean = false,
     val error: String? = null
@@ -46,7 +50,8 @@ class DashboardViewModel(
     getBudgetProgressUseCase: GetBudgetProgressUseCase,
     getSavingsGoalsUseCase: GetSavingsGoalsUseCase,
     splitRepository: SplitRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val userPreferencesRepository: UserPreferencesRepository,
+    getUpcomingPaymentsUseCase: GetUpcomingPaymentsUseCase? = null
 ) : ViewModel() {
 
     private val _selectedMonth = MutableStateFlow(YearMonth.now())
@@ -61,14 +66,20 @@ class DashboardViewModel(
     ) { month, type ->
         month to type
     }.flatMapLatest { (month, type) ->
-        val dashboardDataFlow = combine(
+        val upcomingFlow = getUpcomingPaymentsUseCase?.invoke(daysAhead = 14) ?: flowOf(emptyList())
+
+        val baseDataFlow = combine(
             getFinancialSummaryUseCase(),
             getCategoryAnalysisUseCase(month, type),
             getBudgetProgressUseCase(month),
             getSavingsGoalsUseCase.getActiveGoals(),
             splitRepository.getAllSplitExpenses()
         ) { summary, analysis, budgets, goals, splits ->
-            DashboardData(summary, analysis, budgets, goals, splits)
+            DashboardData(summary, analysis, budgets, goals, splits, emptyList())
+        }
+
+        val dashboardDataFlow = combine(baseDataFlow, upcomingFlow) { base, upcoming ->
+            base.copy(upcoming = upcoming)
         }
 
         combine(
@@ -94,6 +105,7 @@ class DashboardViewModel(
                 featuredBudget = featuredBudget,
                 topActiveGoal = topGoal,
                 unsettledSplits = unsettledSplits,
+                upcomingPayments = data.upcoming,
                 isBalanceVisible = prefs.isBalanceVisible,
                 isLoading = false
             )
@@ -135,7 +147,8 @@ class DashboardViewModel(
         private val getBudgetProgressUseCase: GetBudgetProgressUseCase,
         private val getSavingsGoalsUseCase: GetSavingsGoalsUseCase,
         private val splitRepository: SplitRepository,
-        private val userPreferencesRepository: UserPreferencesRepository
+        private val userPreferencesRepository: UserPreferencesRepository,
+        private val getUpcomingPaymentsUseCase: GetUpcomingPaymentsUseCase? = null
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -145,7 +158,8 @@ class DashboardViewModel(
                 getBudgetProgressUseCase,
                 getSavingsGoalsUseCase,
                 splitRepository,
-                userPreferencesRepository
+                userPreferencesRepository,
+                getUpcomingPaymentsUseCase
             ) as T
         }
     }
@@ -156,6 +170,7 @@ private data class DashboardData(
     val analysis: CategoryAnalysisResult,
     val budgets: List<BudgetProgress>,
     val goals: List<SavingsGoal>,
-    val splits: List<SplitExpense>
+    val splits: List<SplitExpense>,
+    val upcoming: List<UpcomingPaymentItem>
 )
 

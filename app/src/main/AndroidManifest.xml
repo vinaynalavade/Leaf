@@ -57,6 +57,9 @@
                 <action android:name="com.vinaynalavade.expensetracker.ACTION_DAILY_REMINDER" />
                 <action android:name="com.vinaynalavade.expensetracker.ACTION_CHECK_FINANCIAL_REMINDERS" />
                 <action android:name="com.vinaynalavade.expensetracker.ACTION_EMI_REMINDER" />
+                <action android:name="com.vinaynalavade.expensetracker.ACTION_REMINDER_ALERT" />
+                <action android:name="com.vinaynalavade.expensetracker.ACTION_REMINDER_MARK_PAID" />
+                <action android:name="com.vinaynalavade.expensetracker.ACTION_REMINDER_SNOOZE" />
             </intent-filter>
         </receiver>
 

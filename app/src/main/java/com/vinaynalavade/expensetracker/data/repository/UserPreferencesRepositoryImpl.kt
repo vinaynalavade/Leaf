@@ -79,6 +79,42 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
+    override suspend fun setBillReminders(enabled: Boolean): AppResult<Unit> {
+        return try {
+            dataStore.setBillReminders(enabled)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set Bill reminders.", e))
+        }
+    }
+
+    override suspend fun setCreditCardReminders(enabled: Boolean): AppResult<Unit> {
+        return try {
+            dataStore.setCreditCardReminders(enabled)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set Credit Card reminders.", e))
+        }
+    }
+
+    override suspend fun setDefaultReminderOffsetDays(days: Int): AppResult<Unit> {
+        return try {
+            dataStore.setDefaultReminderOffsetDays(days)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set default reminder offset.", e))
+        }
+    }
+
+    override suspend fun setDefaultReminderTime(hour: Int, minute: Int): AppResult<Unit> {
+        return try {
+            dataStore.setDefaultReminderTime(hour, minute)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set default reminder time.", e))
+        }
+    }
+
     override fun getLastBackupTimestamp(): Flow<Long?> {
         return dataStore.lastBackupTimestampFlow
     }

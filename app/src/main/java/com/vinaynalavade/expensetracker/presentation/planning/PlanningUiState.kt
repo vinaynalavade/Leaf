@@ -7,7 +7,8 @@ import com.vinaynalavade.expensetracker.domain.model.SavingsGoal
 
 enum class PlanningTab {
     BUDGETS,
-    SAVINGS
+    SAVINGS,
+    REMINDERS
 }
 
 data class PlanningUiState(
@@ -20,6 +21,7 @@ data class PlanningUiState(
     val savingsGoals: List<SavingsGoal> = emptyList(),
     val activeSavingsGoals: List<SavingsGoal> = emptyList(),
     val archivedSavingsGoals: List<SavingsGoal> = emptyList(),
+    val reminders: List<com.vinaynalavade.expensetracker.domain.model.Reminder> = emptyList(),
     val categories: List<Category> = emptyList(),
     val currency: Currency = Currency.DEFAULT,
     val isLoading: Boolean = true,
