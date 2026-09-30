@@ -36,6 +36,11 @@ class UserPreferencesDataStore(private val context: Context) {
         val DAILY_REMINDER_HOUR = intPreferencesKey("pref_daily_reminder_hour")
         val DAILY_REMINDER_MINUTE = intPreferencesKey("pref_daily_reminder_minute")
         val EMI_REMINDERS_ENABLED = booleanPreferencesKey("pref_emi_reminders_enabled")
+        val BILL_REMINDERS_ENABLED = booleanPreferencesKey("pref_bill_reminders_enabled")
+        val CREDIT_CARD_REMINDERS_ENABLED = booleanPreferencesKey("pref_credit_card_reminders_enabled")
+        val DEFAULT_REMINDER_OFFSET_DAYS = intPreferencesKey("pref_default_reminder_offset_days")
+        val DEFAULT_REMINDER_HOUR = intPreferencesKey("pref_default_reminder_hour")
+        val DEFAULT_REMINDER_MINUTE = intPreferencesKey("pref_default_reminder_minute")
         val LAST_BACKUP_TIMESTAMP = longPreferencesKey("pref_last_backup_timestamp")
         val GOOGLE_CONNECTED_EMAIL = stringPreferencesKey("pref_google_connected_email")
         val GOOGLE_CONNECTED_NAME = stringPreferencesKey("pref_google_connected_name")
@@ -116,6 +121,11 @@ class UserPreferencesDataStore(private val context: Context) {
             val dailyReminderHour = preferences[PreferencesKeys.DAILY_REMINDER_HOUR] ?: 21
             val dailyReminderMinute = preferences[PreferencesKeys.DAILY_REMINDER_MINUTE] ?: 0
             val emiRemindersEnabled = preferences[PreferencesKeys.EMI_REMINDERS_ENABLED] ?: true
+            val billRemindersEnabled = preferences[PreferencesKeys.BILL_REMINDERS_ENABLED] ?: true
+            val creditCardRemindersEnabled = preferences[PreferencesKeys.CREDIT_CARD_REMINDERS_ENABLED] ?: true
+            val defaultReminderOffsetDays = preferences[PreferencesKeys.DEFAULT_REMINDER_OFFSET_DAYS] ?: 1
+            val defaultReminderHour = preferences[PreferencesKeys.DEFAULT_REMINDER_HOUR] ?: 9
+            val defaultReminderMinute = preferences[PreferencesKeys.DEFAULT_REMINDER_MINUTE] ?: 0
             val appLockEnabled = preferences[PreferencesKeys.APP_LOCK_ENABLED] ?: false
             val biometricEnabled = preferences[PreferencesKeys.BIOMETRIC_ENABLED] ?: false
             val autoLockDurationSeconds = preferences[PreferencesKeys.AUTO_LOCK_DURATION_SECONDS] ?: 0L
@@ -150,6 +160,11 @@ class UserPreferencesDataStore(private val context: Context) {
                 dailyReminderHour = dailyReminderHour,
                 dailyReminderMinute = dailyReminderMinute,
                 emiRemindersEnabled = emiRemindersEnabled,
+                billRemindersEnabled = billRemindersEnabled,
+                creditCardRemindersEnabled = creditCardRemindersEnabled,
+                defaultReminderOffsetDays = defaultReminderOffsetDays,
+                defaultReminderHour = defaultReminderHour,
+                defaultReminderMinute = defaultReminderMinute,
                 appLockEnabled = appLockEnabled,
                 biometricEnabled = biometricEnabled,
                 autoLockDurationSeconds = autoLockDurationSeconds,
@@ -215,6 +230,31 @@ class UserPreferencesDataStore(private val context: Context) {
     suspend fun setEmiReminders(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.EMI_REMINDERS_ENABLED] = enabled
+        }
+    }
+
+    suspend fun setBillReminders(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.BILL_REMINDERS_ENABLED] = enabled
+        }
+    }
+
+    suspend fun setCreditCardReminders(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CREDIT_CARD_REMINDERS_ENABLED] = enabled
+        }
+    }
+
+    suspend fun setDefaultReminderOffsetDays(days: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DEFAULT_REMINDER_OFFSET_DAYS] = days
+        }
+    }
+
+    suspend fun setDefaultReminderTime(hour: Int, minute: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DEFAULT_REMINDER_HOUR] = hour
+            preferences[PreferencesKeys.DEFAULT_REMINDER_MINUTE] = minute
         }
     }
 

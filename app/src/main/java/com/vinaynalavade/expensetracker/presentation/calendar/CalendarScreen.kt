@@ -67,6 +67,7 @@ fun CalendarScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTransactionDetail: (Long) -> Unit,
     onOpenAddTransaction: () -> Unit,
+    onNavigateToReminders: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -203,8 +204,10 @@ fun CalendarScreen(
                     expense = uiState.selectedDayExpense,
                     netChange = uiState.selectedDayNetChange,
                     transactions = uiState.selectedDayTransactions,
+                    scheduledPayments = uiState.selectedDayScheduledPayments,
                     onTransactionClick = onNavigateToTransactionDetail,
-                    onAddTransaction = onOpenAddTransaction
+                    onAddTransaction = onOpenAddTransaction,
+                    onNavigateToReminders = onNavigateToReminders
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.xxl))
@@ -253,6 +256,7 @@ private fun CalendarMonthGrid(
                             isToday = isToday,
                             hasIncome = summary?.hasIncome == true,
                             hasExpense = summary?.hasExpense == true,
+                            hasScheduledPayments = summary?.hasScheduledPayments == true,
                             onClick = { onDateSelected(date) },
                             modifier = Modifier.weight(1f)
                         )
@@ -273,6 +277,7 @@ private fun CalendarDayCell(
     isToday: Boolean,
     hasIncome: Boolean,
     hasExpense: Boolean,
+    hasScheduledPayments: Boolean = false,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -315,7 +320,7 @@ private fun CalendarDayCell(
             )
 
             // Subtle indicator dots row
-            if (hasIncome || hasExpense) {
+            if (hasIncome || hasExpense || hasScheduledPayments) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -343,6 +348,17 @@ private fun CalendarDayCell(
                                 )
                         )
                     }
+                    if (hasScheduledPayments) {
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    if (isSelected) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
+                                    else Color(0xFFF59E0B) // Amber reminder dot
+                                )
+                        )
+                    }
                 }
             }
         }
@@ -356,8 +372,10 @@ private fun SelectedDayDetailsSection(
     expense: Amount,
     netChange: Amount,
     transactions: List<Transaction>,
+    scheduledPayments: List<com.vinaynalavade.expensetracker.domain.model.UpcomingPaymentItem> = emptyList(),
     onTransactionClick: (Long) -> Unit,
-    onAddTransaction: () -> Unit
+    onAddTransaction: () -> Unit,
+    onNavigateToReminders: () -> Unit = {}
 ) {
     val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.getDefault())
     val today = LocalDate.now()
@@ -445,6 +463,58 @@ private fun SelectedDayDetailsSection(
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = netColor
+                    )
+                }
+            }
+        }
+    }
+
+    if (scheduledPayments.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+        Text(
+            text = "SCHEDULED PAYMENTS & REMINDERS (${scheduledPayments.size})",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+
+        scheduledPayments.forEach { payment ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .clickable { onNavigateToReminders() },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = payment.title,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = payment.type.name.replace("_", " "),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Text(
+                        text = payment.amount.format(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

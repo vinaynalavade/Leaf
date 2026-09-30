@@ -25,6 +25,14 @@ interface UserPreferencesRepository {
     suspend fun setDailyReminder(enabled: Boolean, hour: Int, minute: Int): AppResult<Unit>
 
     suspend fun setEmiReminders(enabled: Boolean): AppResult<Unit>
+ 
+    suspend fun setBillReminders(enabled: Boolean): AppResult<Unit>
+ 
+    suspend fun setCreditCardReminders(enabled: Boolean): AppResult<Unit>
+ 
+    suspend fun setDefaultReminderOffsetDays(days: Int): AppResult<Unit>
+ 
+    suspend fun setDefaultReminderTime(hour: Int, minute: Int): AppResult<Unit>
 
     fun getLastBackupTimestamp(): Flow<Long?>
 

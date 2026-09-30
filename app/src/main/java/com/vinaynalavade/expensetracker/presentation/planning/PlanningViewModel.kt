@@ -18,6 +18,12 @@ import com.vinaynalavade.expensetracker.domain.usecase.SaveBudgetUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalContributionUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.SaveSavingsGoalUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.SetSavingsGoalArchivedUseCase
+import com.vinaynalavade.expensetracker.domain.model.Reminder
+import com.vinaynalavade.expensetracker.domain.usecase.DeleteReminderUseCase
+import com.vinaynalavade.expensetracker.domain.usecase.GetRemindersUseCase
+import com.vinaynalavade.expensetracker.domain.usecase.MarkReminderPaidUseCase
+import com.vinaynalavade.expensetracker.domain.usecase.SaveReminderUseCase
+import com.vinaynalavade.expensetracker.domain.usecase.ToggleReminderEnabledUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +47,12 @@ class PlanningViewModel(
     private val saveSavingsGoalContributionUseCase: SaveSavingsGoalContributionUseCase,
     private val deleteSavingsGoalContributionUseCase: DeleteSavingsGoalContributionUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getUserPreferencesUseCase: GetUserPreferencesUseCase
+    private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
+    private val getRemindersUseCase: GetRemindersUseCase,
+    private val saveReminderUseCase: SaveReminderUseCase,
+    private val deleteReminderUseCase: DeleteReminderUseCase,
+    private val toggleReminderEnabledUseCase: ToggleReminderEnabledUseCase,
+    private val markReminderPaidUseCase: MarkReminderPaidUseCase
 ) : ViewModel() {
 
     private val _selectedYearMonth = MutableStateFlow(YearMonth.now())
@@ -58,8 +69,9 @@ class PlanningViewModel(
                 getBudgetProgressUseCase(ym),
                 getSavingsGoalsUseCase.getAllGoals(),
                 getCategoriesUseCase(),
-                getUserPreferencesUseCase()
-            ) { budgetProgressList, savingsGoals, categories, userPrefs ->
+                getUserPreferencesUseCase(),
+                getRemindersUseCase()
+            ) { budgetProgressList, savingsGoals, categories, userPrefs, reminders ->
                 val overall = budgetProgressList.find { it.budget.categoryId == null }
                 val categoryBudgets = budgetProgressList.filter { it.budget.categoryId != null }
                 val activeGoals = savingsGoals.filter { !it.isArchived }
@@ -75,6 +87,7 @@ class PlanningViewModel(
                         savingsGoals = savingsGoals,
                         activeSavingsGoals = activeGoals,
                         archivedSavingsGoals = archivedGoals,
+                        reminders = reminders,
                         categories = categories,
                         currency = userPrefs.currency,
                         isLoading = false
@@ -82,6 +95,46 @@ class PlanningViewModel(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun saveReminder(reminder: Reminder) {
+        viewModelScope.launch {
+            try {
+                saveReminderUseCase(reminder)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    fun deleteReminder(id: Long) {
+        viewModelScope.launch {
+            try {
+                deleteReminderUseCase(id)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    fun toggleReminder(id: Long, enabled: Boolean) {
+        viewModelScope.launch {
+            try {
+                toggleReminderEnabledUseCase(id, enabled)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    fun markReminderPaid(id: Long, recordTransaction: Boolean) {
+        viewModelScope.launch {
+            try {
+                markReminderPaidUseCase(id, recordTransaction)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
     }
 
     fun previousMonth() {
@@ -189,7 +242,12 @@ class PlanningViewModel(
         private val saveSavingsGoalContributionUseCase: SaveSavingsGoalContributionUseCase,
         private val deleteSavingsGoalContributionUseCase: DeleteSavingsGoalContributionUseCase,
         private val getCategoriesUseCase: GetCategoriesUseCase,
-        private val getUserPreferencesUseCase: GetUserPreferencesUseCase
+        private val getUserPreferencesUseCase: GetUserPreferencesUseCase,
+        private val getRemindersUseCase: GetRemindersUseCase,
+        private val saveReminderUseCase: SaveReminderUseCase,
+        private val deleteReminderUseCase: DeleteReminderUseCase,
+        private val toggleReminderEnabledUseCase: ToggleReminderEnabledUseCase,
+        private val markReminderPaidUseCase: MarkReminderPaidUseCase
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -204,7 +262,12 @@ class PlanningViewModel(
                 saveSavingsGoalContributionUseCase,
                 deleteSavingsGoalContributionUseCase,
                 getCategoriesUseCase,
-                getUserPreferencesUseCase
+                getUserPreferencesUseCase,
+                getRemindersUseCase,
+                saveReminderUseCase,
+                deleteReminderUseCase,
+                toggleReminderEnabledUseCase,
+                markReminderPaidUseCase
             ) as T
         }
     }

@@ -381,6 +381,39 @@ class SettingsViewModel(
         }
     }
 
+    fun onLoanRemindersToggled(enabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setEmiReminders(enabled)
+            rescheduleAllRemindersUseCase()
+        }
+    }
+
+    fun onBillRemindersToggled(enabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setBillReminders(enabled)
+            rescheduleAllRemindersUseCase()
+        }
+    }
+
+    fun onCreditCardRemindersToggled(enabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setCreditCardReminders(enabled)
+            rescheduleAllRemindersUseCase()
+        }
+    }
+
+    fun onDefaultReminderOffsetSelected(days: Int) {
+        viewModelScope.launch {
+            userPreferencesRepository.setDefaultReminderOffsetDays(days)
+        }
+    }
+
+    fun onDefaultReminderTimeSelected(hour: Int, minute: Int) {
+        viewModelScope.launch {
+            userPreferencesRepository.setDefaultReminderTime(hour, minute)
+        }
+    }
+
     fun onLanguageSelected(languageCode: String) {
         viewModelScope.launch {
             userPreferencesRepository.setAppLanguage(languageCode)
@@ -432,6 +465,13 @@ class SettingsViewModel(
     fun onDefaultExpenseSourceSelected(source: PaymentMethod) {
         viewModelScope.launch {
             userPreferencesRepository.setDefaultExpenseSource(source)
+        }
+    }
+
+    fun toggleBalanceVisibility() {
+        viewModelScope.launch {
+            val current = userPreferences.value.isBalanceVisible
+            userPreferencesRepository.setBalanceVisible(!current)
         }
     }
 

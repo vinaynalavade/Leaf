@@ -39,6 +39,7 @@ import com.vinaynalavade.expensetracker.presentation.dashboard.components.Dashbo
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardSplitCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardToolsCard
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardUpcomingPaymentsCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.GreetingHeader
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.MonthlyOverviewCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.QuickActionsSection
@@ -63,6 +64,7 @@ fun DashboardScreen(
     onNavigateToGoalDetail: (Long) -> Unit = {},
     onNavigateToSplit: () -> Unit = {},
     onNavigateToTools: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {},
     onNavigateToCategoryTransactions: (YearMonth, String, TransactionType) -> Unit = { _, _, _ -> },
     onProfileClick: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
@@ -118,6 +120,16 @@ fun DashboardScreen(
                         budgetProgress = uiState.featuredBudget,
                         currency = currency,
                         onClick = onNavigateToPlanning
+                    )
+                }
+
+                // Compact Upcoming Payments & Obligations Card
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    DashboardUpcomingPaymentsCard(
+                        upcomingPayments = uiState.upcomingPayments,
+                        currency = currency,
+                        onViewAllClick = onNavigateToReminders
                     )
                 }
 

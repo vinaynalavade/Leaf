@@ -30,17 +30,24 @@ object NotificationHelper {
     const val NOTIFICATION_ID_BUDGET_BASE = 2000
     const val NOTIFICATION_ID_RECURRING_BASE = 3000
     const val NOTIFICATION_ID_GOAL_BASE = 4000
+    const val NOTIFICATION_ID_REMINDER_BASE = 5000
 
     const val ACTION_DAILY_REMINDER = "com.vinaynalavade.expensetracker.ACTION_DAILY_REMINDER"
     const val ACTION_CHECK_FINANCIAL_REMINDERS = "com.vinaynalavade.expensetracker.ACTION_CHECK_FINANCIAL_REMINDERS"
     const val ACTION_EMI_REMINDER = "com.vinaynalavade.expensetracker.ACTION_EMI_REMINDER"
+    const val ACTION_REMINDER_ALERT = "com.vinaynalavade.expensetracker.ACTION_REMINDER_ALERT"
+    const val ACTION_REMINDER_MARK_PAID = "com.vinaynalavade.expensetracker.ACTION_REMINDER_MARK_PAID"
+    const val ACTION_REMINDER_SNOOZE = "com.vinaynalavade.expensetracker.ACTION_REMINDER_SNOOZE"
 
+    const val EXTRA_REMINDER_ID = "extra_reminder_id"
+    const val EXTRA_REMINDER_OFFSET = "extra_reminder_offset"
     const val EXTRA_START_ROUTE = "extra_start_route"
     const val ROUTE_ADD_EXPENSE = "add_expense"
     const val ROUTE_ADD_INCOME = "add_income"
     const val ROUTE_TRANSACTIONS = "transactions"
     const val ROUTE_RECURRING = "recurring_transactions"
     const val ROUTE_DASHBOARD = "dashboard"
+    const val ROUTE_PLANNING = "planning"
 
     fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

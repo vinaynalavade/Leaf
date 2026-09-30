@@ -193,7 +193,9 @@ class ProcessFinancialRemindersUseCase(
 
 class RescheduleAllRemindersUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val dailyReminderScheduler: DailyReminderScheduler
+    private val dailyReminderScheduler: DailyReminderScheduler,
+    private val reminderRepository: com.vinaynalavade.expensetracker.domain.repository.ReminderRepository? = null,
+    private val reminderScheduler: com.vinaynalavade.expensetracker.core.notification.ReminderScheduler? = null
 ) {
     suspend operator fun invoke(): AppResult<Unit> {
         return try {
@@ -203,6 +205,17 @@ class RescheduleAllRemindersUseCase(
             } else {
                 dailyReminderScheduler.cancel()
             }
+
+            // Restore / reconcile scheduled payment reminders (e.g. after reboot or time change)
+            if (reminderRepository != null && reminderScheduler != null) {
+                val activeReminders = reminderRepository.getActiveReminders().firstOrNull() ?: emptyList()
+                if (prefs != null && prefs.notificationsMasterEnabled) {
+                    reminderScheduler.rescheduleAll(activeReminders)
+                } else {
+                    activeReminders.forEach { reminderScheduler.cancelReminder(it) }
+                }
+            }
+
             AppResult.Success(Unit)
         } catch (e: Exception) {
             AppResult.Error(com.vinaynalavade.expensetracker.core.result.AppError.PreferencesError("Failed to reschedule reminders.", e))

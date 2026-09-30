@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.domain.model.Budget
+import com.vinaynalavade.expensetracker.domain.model.Reminder
 import com.vinaynalavade.expensetracker.domain.model.SavingsGoal
 import com.vinaynalavade.expensetracker.presentation.components.EmptyStateView
 import com.vinaynalavade.expensetracker.presentation.components.LoadingView
@@ -55,6 +56,8 @@ import com.vinaynalavade.expensetracker.presentation.planning.components.BudgetC
 import com.vinaynalavade.expensetracker.presentation.planning.components.CreateEditBudgetDialog
 import com.vinaynalavade.expensetracker.presentation.planning.components.CreateEditGoalDialog
 import com.vinaynalavade.expensetracker.presentation.planning.components.SavingsGoalCard
+import com.vinaynalavade.expensetracker.presentation.reminders.AddEditReminderDialog
+import com.vinaynalavade.expensetracker.presentation.reminders.components.ReminderCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +76,11 @@ fun PlanningScreen(
     var editingGoal by remember { mutableStateOf<SavingsGoal?>(null) }
     var goalToDelete by remember { mutableStateOf<Long?>(null) }
     var goalForContribution by remember { mutableStateOf<SavingsGoal?>(null) }
+
+    var showReminderDialog by remember { mutableStateOf(false) }
+    var editingReminder by remember { mutableStateOf<Reminder?>(null) }
+    var reminderToDelete by remember { mutableStateOf<Reminder?>(null) }
+    var reminderToMarkPaid by remember { mutableStateOf<Reminder?>(null) }
 
     var showArchivedGoalsOnly by remember { mutableStateOf(false) }
 
@@ -94,12 +102,19 @@ fun PlanningScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    if (uiState.selectedTab == PlanningTab.BUDGETS) {
-                        editingBudget = null
-                        showBudgetDialog = true
-                    } else {
-                        editingGoal = null
-                        showGoalDialog = true
+                    when (uiState.selectedTab) {
+                        PlanningTab.BUDGETS -> {
+                            editingBudget = null
+                            showBudgetDialog = true
+                        }
+                        PlanningTab.SAVINGS -> {
+                            editingGoal = null
+                            showGoalDialog = true
+                        }
+                        PlanningTab.REMINDERS -> {
+                            editingReminder = null
+                            showReminderDialog = true
+                        }
                     }
                 },
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -108,10 +123,10 @@ fun PlanningScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = if (uiState.selectedTab == PlanningTab.BUDGETS) {
-                        stringResource(R.string.budget_add_button)
-                    } else {
-                        stringResource(R.string.goal_add_button)
+                    contentDescription = when (uiState.selectedTab) {
+                        PlanningTab.BUDGETS -> stringResource(R.string.budget_add_button)
+                        PlanningTab.SAVINGS -> stringResource(R.string.goal_add_button)
+                        PlanningTab.REMINDERS -> stringResource(R.string.reminders_add)
                     }
                 )
             }
@@ -145,6 +160,16 @@ fun PlanningScreen(
                         Text(
                             text = stringResource(R.string.planning_tab_savings),
                             fontWeight = if (uiState.selectedTab == PlanningTab.SAVINGS) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
+                )
+                Tab(
+                    selected = uiState.selectedTab == PlanningTab.REMINDERS,
+                    onClick = { viewModel.selectTab(PlanningTab.REMINDERS) },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.planning_tab_reminders),
+                            fontWeight = if (uiState.selectedTab == PlanningTab.REMINDERS) FontWeight.Bold else FontWeight.Normal
                         )
                     }
                 )
@@ -219,7 +244,7 @@ fun PlanningScreen(
                         }
                     }
                 }
-            } else {
+            } else if (uiState.selectedTab == PlanningTab.SAVINGS) {
                 // Savings Goals Tab
                 val displayGoals = if (showArchivedGoalsOnly) uiState.archivedSavingsGoals else uiState.activeSavingsGoals
 
@@ -285,6 +310,45 @@ fun PlanningScreen(
                             item {
                                 Spacer(modifier = Modifier.height(72.dp))
                             }
+                        }
+                    }
+                }
+            } else if (uiState.selectedTab == PlanningTab.REMINDERS) {
+                // Reminders Tab
+                if (uiState.reminders.isEmpty()) {
+                    EmptyStateView(
+                        title = stringResource(R.string.reminder_empty_title),
+                        description = stringResource(R.string.reminder_empty_desc),
+                        onActionClick = {
+                            editingReminder = null
+                            showReminderDialog = true
+                        },
+                        actionLabel = stringResource(R.string.reminders_add)
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(uiState.reminders, key = { it.id }) { reminder ->
+                            ReminderCard(
+                                reminder = reminder,
+                                currency = uiState.currency,
+                                onEdit = {
+                                    editingReminder = reminder
+                                    showReminderDialog = true
+                                },
+                                onDelete = { reminderToDelete = reminder },
+                                onToggleEnabled = { isEnabled ->
+                                    viewModel.toggleReminder(reminder.id, isEnabled)
+                                },
+                                onMarkPaid = { reminderToMarkPaid = reminder }
+                            )
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(72.dp))
                         }
                     }
                 }
@@ -412,6 +476,76 @@ fun PlanningScreen(
             onSave = { amount, note, deductFromAccount ->
                 viewModel.addContribution(goal.id, amount, note, deductFromAccount)
                 goalForContribution = null
+            }
+        )
+    }
+
+    if (showReminderDialog) {
+        AddEditReminderDialog(
+            initialReminder = editingReminder,
+            currency = uiState.currency,
+            onDismiss = {
+                showReminderDialog = false
+                editingReminder = null
+            },
+            onSave = { savedReminder ->
+                viewModel.saveReminder(savedReminder)
+                showReminderDialog = false
+                editingReminder = null
+            }
+        )
+    }
+
+    reminderToDelete?.let { reminder ->
+        AlertDialog(
+            onDismissRequest = { reminderToDelete = null },
+            title = { Text(stringResource(R.string.reminder_delete_title)) },
+            text = { Text(stringResource(R.string.reminder_delete_msg, reminder.title)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteReminder(reminder.id)
+                        reminderToDelete = null
+                    }
+                ) {
+                    Text(
+                        stringResource(R.string.btn_delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { reminderToDelete = null }) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
+    }
+
+    reminderToMarkPaid?.let { reminder ->
+        AlertDialog(
+            onDismissRequest = { reminderToMarkPaid = null },
+            title = { Text(stringResource(R.string.reminder_mark_paid_confirm_title)) },
+            text = { Text(stringResource(R.string.reminder_mark_paid_confirm_msg)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.markReminderPaid(reminder.id, recordTransaction = true)
+                        reminderToMarkPaid = null
+                    }
+                ) {
+                    Text(stringResource(R.string.reminder_mark_paid_record_tx), fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.markReminderPaid(reminder.id, recordTransaction = false)
+                        reminderToMarkPaid = null
+                    }
+                ) {
+                    Text(stringResource(R.string.reminder_mark_paid_only))
+                }
             }
         )
     }

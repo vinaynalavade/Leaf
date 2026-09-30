@@ -76,4 +76,5 @@ sealed class Screen(
     data object BackupRestore : Screen("backup_restore")
     data object AppLockSetup : Screen("app_lock_setup")
     data object ChangePin : Screen("change_pin")
+    data object Reminders : Screen("reminders", R.string.reminders_title)
 }
