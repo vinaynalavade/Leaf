@@ -248,10 +248,10 @@ class FinancialNotificationsTest {
         assertEquals("recurring_transactions", NotificationHelper.ROUTE_RECURRING)
         assertEquals("dashboard", NotificationHelper.ROUTE_DASHBOARD)
 
-        assertEquals("channel_daily_reminders", NotificationHelper.CHANNEL_DAILY_REMINDER)
-        assertEquals("channel_budget_alerts", NotificationHelper.CHANNEL_BUDGET_ALERTS)
-        assertEquals("channel_payment_reminders", NotificationHelper.CHANNEL_PAYMENT_REMINDERS)
-        assertEquals("channel_savings_goals", NotificationHelper.CHANNEL_SAVINGS_GOALS)
+        assertEquals("channel_daily_reminders_v2", NotificationHelper.CHANNEL_DAILY_REMINDER)
+        assertEquals("channel_budget_alerts_v2", NotificationHelper.CHANNEL_BUDGET_ALERTS)
+        assertEquals("channel_payment_reminders_v2", NotificationHelper.CHANNEL_PAYMENT_REMINDERS)
+        assertEquals("channel_savings_goals_v2", NotificationHelper.CHANNEL_SAVINGS_GOALS)
     }
 
     // --- Fake Test Implementations ---

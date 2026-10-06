@@ -20,11 +20,11 @@ import com.vinaynalavade.expensetracker.domain.model.NotificationChannelType
  */
 object NotificationHelper {
 
-    const val CHANNEL_DAILY_REMINDER = "channel_daily_reminders"
-    const val CHANNEL_BUDGET_ALERTS = "channel_budget_alerts"
-    const val CHANNEL_PAYMENT_REMINDERS = "channel_payment_reminders"
-    const val CHANNEL_SAVINGS_GOALS = "channel_savings_goals"
-    const val CHANNEL_FINANCIAL_INSIGHTS = "channel_financial_insights"
+    const val CHANNEL_DAILY_REMINDER = "channel_daily_reminders_v2"
+    const val CHANNEL_BUDGET_ALERTS = "channel_budget_alerts_v2"
+    const val CHANNEL_PAYMENT_REMINDERS = "channel_payment_reminders_v2"
+    const val CHANNEL_SAVINGS_GOALS = "channel_savings_goals_v2"
+    const val CHANNEL_FINANCIAL_INSIGHTS = "channel_financial_insights_v2"
 
     const val NOTIFICATION_ID_DAILY = 1001
     const val NOTIFICATION_ID_BUDGET_BASE = 2000
@@ -53,8 +53,13 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            // Remove legacy channel without custom sound if present
+            // Clean up legacy & v1 channels without the refined Leaf chime
             notificationManager.deleteNotificationChannel("channel_daily_reminder")
+            notificationManager.deleteNotificationChannel("channel_daily_reminders")
+            notificationManager.deleteNotificationChannel("channel_budget_alerts")
+            notificationManager.deleteNotificationChannel("channel_payment_reminders")
+            notificationManager.deleteNotificationChannel("channel_savings_goals")
+            notificationManager.deleteNotificationChannel("channel_financial_insights")
 
             val soundUri = android.net.Uri.parse("android.resource://${context.packageName}/${R.raw.leaf_chime}")
             val audioAttributes = android.media.AudioAttributes.Builder()
@@ -132,7 +137,7 @@ object NotificationHelper {
         val content = context.getString(R.string.reminder_daily_content)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_DAILY_REMINDER)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_leaf)
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
@@ -140,7 +145,7 @@ object NotificationHelper {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .addAction(
-                R.drawable.ic_launcher_foreground,
+                R.drawable.ic_stat_leaf,
                 "Add Expense",
                 pendingIntent
             )
@@ -188,7 +193,7 @@ object NotificationHelper {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_BUDGET_ALERTS)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_leaf)
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
@@ -196,7 +201,7 @@ object NotificationHelper {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .addAction(
-                R.drawable.ic_launcher_foreground,
+                R.drawable.ic_stat_leaf,
                 "View Transactions",
                 pendingIntent
             )
@@ -237,7 +242,7 @@ object NotificationHelper {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_PAYMENT_REMINDERS)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_leaf)
             .setContentTitle("Payment Reminder")
             .setContentText(reminderText)
             .setStyle(NotificationCompat.BigTextStyle().bigText(reminderText))
@@ -245,7 +250,7 @@ object NotificationHelper {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .addAction(
-                R.drawable.ic_launcher_foreground,
+                R.drawable.ic_stat_leaf,
                 "View Recurring",
                 pendingIntent
             )
@@ -285,7 +290,7 @@ object NotificationHelper {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_SAVINGS_GOALS)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_leaf)
             .setContentTitle("Goal Milestone Achieved")
             .setContentText(milestoneText)
             .setStyle(NotificationCompat.BigTextStyle().bigText(milestoneText))

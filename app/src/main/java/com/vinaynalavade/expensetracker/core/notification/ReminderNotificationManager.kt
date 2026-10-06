@@ -81,7 +81,7 @@ object ReminderNotificationManager {
         val notificationId = NotificationHelper.NOTIFICATION_ID_REMINDER_BASE + (reminder.id % 1000).toInt()
 
         val notification = NotificationCompat.Builder(context, NotificationHelper.CHANNEL_PAYMENT_REMINDERS)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_leaf)
             .setContentTitle(title)
             .setContentText("${reminder.title} of $formattedAmount $dueText.")
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
@@ -89,12 +89,12 @@ object ReminderNotificationManager {
             .setContentIntent(openPendingIntent)
             .setAutoCancel(true)
             .addAction(
-                R.drawable.ic_launcher_foreground,
+                R.drawable.ic_stat_leaf,
                 "Mark Paid",
                 markPaidPendingIntent
             )
             .addAction(
-                R.drawable.ic_launcher_foreground,
+                R.drawable.ic_stat_leaf,
                 "Snooze",
                 snoozePendingIntent
             )
