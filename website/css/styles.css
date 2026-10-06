@@ -644,12 +644,32 @@ a:hover {
   font-size: 0.68rem;
   font-weight: 700;
   color: var(--text-primary);
-  opacity: 0.85;
+  opacity: 0.88;
+}
+
+.mockup-status-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .mockup-status-time {
   font-family: var(--font-sans);
   letter-spacing: -0.01em;
+}
+
+.mockup-status-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  opacity: 0.95;
+}
+
+.mockup-status-glyph svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
 }
 
 .mockup-status-icons {
@@ -1183,18 +1203,25 @@ a:hover {
   background: #d97706;
 }
 
-/* --- Mockup Bottom Navigation (5-Tab Bar) --- */
+/* --- Mockup Floating Capsule Navigation Dock (v1.1.1 Signature) --- */
 .mockup-bottom-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--bg-surface);
-  border-top: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.35rem 0.15rem;
-  margin-top: 0.25rem;
-  width: 100%;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 28px;
+  padding: 0.35rem 0.35rem;
+  margin: 0.35rem 0.25rem 0;
+  box-shadow:
+    0 10px 24px -4px rgba(15, 23, 42, 0.12),
+    0 2px 6px -1px rgba(15, 23, 42, 0.06);
+  width: calc(100% - 0.5rem);
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
 .mockup-nav-tab {
@@ -1202,21 +1229,22 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   color: var(--text-muted);
   font-weight: 600;
-  padding: 3px 4px;
-  border-radius: var(--radius-xs);
+  padding: 4px 2px;
+  border-radius: 18px;
   flex: 1;
   min-width: 0;
   text-align: center;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .mockup-nav-tab.active {
   color: var(--primary);
-  background: var(--primary-light);
+  background: rgba(2, 129, 102, 0.12);
   font-weight: 700;
+  box-shadow: 0 1px 3px rgba(2, 129, 102, 0.08);
 }
 
 .mockup-nav-tab svg {
@@ -1224,6 +1252,177 @@ a:hover {
   height: 15px;
   fill: currentColor;
   flex-shrink: 0;
+}
+
+/* --- Leaf v1.1.1 Showcase Components --- */
+.dock-showcase-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dock-preview-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(2, 129, 102, 0.2);
+  border-radius: 32px;
+  padding: 0.5rem 0.75rem;
+  box-shadow:
+    0 12px 28px -6px rgba(2, 129, 102, 0.15),
+    0 4px 12px -2px rgba(15, 23, 42, 0.08);
+}
+
+.dock-preview-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.dock-preview-item.active {
+  background: rgba(2, 129, 102, 0.12);
+  color: var(--primary);
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(2, 129, 102, 0.1);
+}
+
+.dock-preview-item svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.dock-feature-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dock-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.dock-badge.primary {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary-border);
+}
+
+/* Audio Chime Preview Card */
+.audio-chime-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.audio-chime-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.audio-waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 36px;
+  padding: 0 0.5rem;
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
+.waveform-bar {
+  width: 3.5px;
+  background: var(--primary);
+  border-radius: 2px;
+  opacity: 0.8;
+  animation: wavePulse 1.8s ease-in-out infinite alternate;
+}
+
+.waveform-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+.waveform-bar:nth-child(3) { height: 28px; animation-delay: 0.2s; }
+.waveform-bar:nth-child(4) { height: 22px; animation-delay: 0.3s; }
+.waveform-bar:nth-child(5) { height: 32px; animation-delay: 0.4s; }
+.waveform-bar:nth-child(6) { height: 18px; animation-delay: 0.5s; }
+.waveform-bar:nth-child(7) { height: 26px; animation-delay: 0.6s; }
+.waveform-bar:nth-child(8) { height: 14px; animation-delay: 0.7s; }
+.waveform-bar:nth-child(9) { height: 20px; animation-delay: 0.8s; }
+.waveform-bar:nth-child(10) { height: 12px; animation-delay: 0.9s; }
+
+@keyframes wavePulse {
+  0% { transform: scaleY(0.4); opacity: 0.5; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Status Bar Monochrome Vector Preview Card */
+.vector-preview-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.status-bar-demo {
+  border-radius: var(--radius-xs);
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-bar-demo.dark {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.status-bar-demo.light {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid var(--border-subtle);
+}
+
+.status-bar-demo-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-bar-demo-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
 }
 
 /* --- Planning & Budgets Mockup Styles --- */

@@ -29,27 +29,27 @@ enum class RecurringReminderAdvance(val days: Int, val label: String) {
 
 enum class NotificationChannelType(val channelId: String, val channelName: String, val description: String) {
     DAILY_REMINDER(
-        "channel_daily_reminders",
+        "channel_daily_reminders_v2",
         "Daily Expense Reminders",
         "Gentle daily reminder to record your financial transactions"
     ),
     BUDGET_ALERTS(
-        "channel_budget_alerts",
+        "channel_budget_alerts_v2",
         "Budget & Spending Alerts",
         "Alerts when reaching or exceeding monthly spending budgets"
     ),
     PAYMENT_REMINDERS(
-        "channel_payment_reminders",
+        "channel_payment_reminders_v2",
         "Bill & Payment Reminders",
         "Due date alerts for upcoming recurring transactions, subscriptions, and EMIs"
     ),
     SAVINGS_GOALS(
-        "channel_savings_goals",
+        "channel_savings_goals_v2",
         "Savings & Goal Milestones",
         "Updates on savings progress and goal completion"
     ),
     FINANCIAL_INSIGHTS(
-        "channel_financial_insights",
+        "channel_financial_insights_v2",
         "Financial Insights & Summary",
         "Periodic financial summaries and monthly budget insights"
     )

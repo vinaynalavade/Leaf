@@ -29,7 +29,7 @@ class V110RemindersAndSettingsTest {
     // ==========================================
     @Test
     fun testVersionContract() {
-        assertEquals("1.1.0", AppConstants.APP_VERSION)
+        assertEquals("1.1.1", AppConstants.APP_VERSION)
         assertEquals("reminders", Screen.Reminders.route)
     }
 

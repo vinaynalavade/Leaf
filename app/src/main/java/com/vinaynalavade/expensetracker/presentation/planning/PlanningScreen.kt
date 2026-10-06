@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -119,7 +123,10 @@ fun PlanningScreen(
                 },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = CircleShape
+                shape = CircleShape,
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+                    .padding(bottom = 86.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -192,7 +199,12 @@ fun PlanningScreen(
                 } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        contentPadding = PaddingValues(
+                            start = 20.dp,
+                            end = 20.dp,
+                            top = 16.dp,
+                            bottom = 110.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                        ),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         uiState.overallBudget?.let { overall ->
@@ -289,7 +301,12 @@ fun PlanningScreen(
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                            contentPadding = PaddingValues(
+                                start = 20.dp,
+                                end = 20.dp,
+                                top = 8.dp,
+                                bottom = 110.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                            ),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             items(displayGoals, key = { it.id }) { goal ->
@@ -305,10 +322,6 @@ fun PlanningScreen(
                                     onArchiveToggle = { viewModel.setGoalArchived(goal.id, !goal.isArchived) },
                                     onDelete = { goalToDelete = goal.id }
                                 )
-                            }
-
-                            item {
-                                Spacer(modifier = Modifier.height(72.dp))
                             }
                         }
                     }
@@ -328,7 +341,12 @@ fun PlanningScreen(
                 } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        contentPadding = PaddingValues(
+                            start = 20.dp,
+                            end = 20.dp,
+                            top = 16.dp,
+                            bottom = 110.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                        ),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(uiState.reminders, key = { it.id }) { reminder ->

@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -317,6 +318,7 @@ fun MainAppScaffold(
                 )
             }
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
         NavGraph(
@@ -350,9 +352,7 @@ fun MainAppScaffold(
                     }
                 }
             },
-            modifier = Modifier.padding(
-                bottom = innerPadding.calculateBottomPadding()
-            )
+            modifier = Modifier.fillMaxSize()
         )
 
         if (showQuickAddSheet) {
