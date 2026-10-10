@@ -363,7 +363,44 @@ class AppUpdateSystemTest {
     }
 
     @Test
-    fun testReleaseWithoutVersionCode_ReturnsUserFriendlyError() {
+    fun testParseRealWorldLeafV112Release_SucceedsWithoutExplicitVersionCodeInBody() {
+        val service = GitHubReleaseService()
+
+        val rawJson = """
+        {
+          "tag_name": "v1.1.2",
+          "name": "Leaf v1.1.2",
+          "html_url": "https://github.com/vinaynalavade/Leaf/releases/tag/v1.1.2",
+          "published_at": "2026-10-10T09:14:46Z",
+          "body": "# Leaf v1.1.2 — Split 2.0\r\n\r\n**A smarter way to share what you actually spent.**\r\n\r\nLeaf v1.1.2 introduces **Split 2.0** — a more thoughtful, transparent, and practical approach to managing shared expenses.",
+          "assets": [
+            {
+              "name": "Leaf_v1.1.2.apk",
+              "content_type": "application/vnd.android.package-archive",
+              "size": 4568560,
+              "digest": "sha256:3c9adee97e6f089e80a7422abf6bbeee51c7d52427b695e32225fa83f7f262e2",
+              "browser_download_url": "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk"
+            }
+          ]
+        }
+        """.trimIndent()
+
+        val parsed = SimpleJsonParser.parse(rawJson) as SimpleJsonParser.JsonObject
+        val result = runBlocking { service.parseGitHubRelease(parsed) }
+
+        assertTrue("Expected parsing to succeed for v1.1.2", result is AppResult.Success)
+        val info = (result as AppResult.Success).data
+
+        assertEquals("1.1.2", info.latestVersionName)
+        assertEquals(0L, info.latestVersionCode)
+        assertEquals("Leaf_v1.1.2.apk", info.apkFileName)
+        assertEquals("https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk", info.apkDownloadUrl)
+        assertEquals(4568560L, info.apkSizeBytes)
+        assertEquals("3c9adee97e6f089e80a7422abf6bbeee51c7d52427b695e32225fa83f7f262e2", info.expectedSha256)
+    }
+
+    @Test
+    fun testParseReleaseWithoutVersionCodeInBody_SucceedsUsingTagName() {
         val service = GitHubReleaseService()
 
         val rawJson = """
@@ -379,9 +416,215 @@ class AppUpdateSystemTest {
         val releaseObj = SimpleJsonParser.parse(rawJson) as SimpleJsonParser.JsonObject
         val result = runBlocking { service.parseGitHubRelease(releaseObj) }
 
+        assertTrue("Release with tag_name v1.0.5 should succeed even without versionCode in body", result is AppResult.Success)
+        val info = (result as AppResult.Success).data
+        assertEquals("1.0.5", info.latestVersionName)
+        assertEquals(0L, info.latestVersionCode)
+        assertEquals("Leaf_v1.0.5.apk", info.apkFileName)
+    }
+
+    @Test
+    fun testReleaseWithoutVersionMetadata_ReturnsUserFriendlyError() {
+        val service = GitHubReleaseService()
+
+        val rawJson = """
+        {
+          "tag_name": "",
+          "name": "Untitled release",
+          "body": "No version information in this body",
+          "assets": [
+            {"name": "Leaf.apk", "browser_download_url": "https://example.com/apk", "size": 1000}
+          ]
+        }
+        """.trimIndent()
+
+        val releaseObj = SimpleJsonParser.parse(rawJson) as SimpleJsonParser.JsonObject
+        val result = runBlocking { service.parseGitHubRelease(releaseObj) }
+
         assertTrue(result is AppResult.Error)
         val error = (result as AppResult.Error).error
         assertEquals("Unable to check for updates right now. The latest release is missing version metadata.", error.userMessage)
+    }
+
+    @Test
+    fun testUpdateCheck_V112Installed_AgainstV112Remote_ReportsUpToDate() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.2",
+                latestVersionCode = 0L,
+                apkFileName = "Leaf_v1.1.2.apk",
+                apkDownloadUrl = "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk",
+                apkSizeBytes = 4568560L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 14L, localVersionName = "1.1.2") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.2 == remote 1.1.2 must report UpToDate", checkResult is UpdateCheckResult.UpToDate)
+        assertEquals("1.1.2", (checkResult as UpdateCheckResult.UpToDate).currentVersionName)
+        assertEquals(14L, checkResult.currentVersionCode)
+    }
+
+    @Test
+    fun testUpdateCheck_V111Installed_AgainstV112Remote_ReportsUpdateAvailable() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.2",
+                latestVersionCode = 0L,
+                apkFileName = "Leaf_v1.1.2.apk",
+                apkDownloadUrl = "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk",
+                apkSizeBytes = 4568560L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 13L, localVersionName = "1.1.1") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.1 < remote 1.1.2 must report UpdateAvailable", checkResult is UpdateCheckResult.UpdateAvailable)
+        val available = checkResult as UpdateCheckResult.UpdateAvailable
+        assertEquals("1.1.2", available.releaseInfo.latestVersionName)
+        assertEquals("1.1.1", available.currentVersionName)
+    }
+
+    @Test
+    fun testUpdateCheck_V112Installed_AgainstFutureV113WithoutCode_ReportsUpdateAvailable() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.3",
+                latestVersionCode = 0L,
+                apkFileName = "Leaf_v1.1.3.apk",
+                apkDownloadUrl = "https://example.com/Leaf_v1.1.3.apk",
+                apkSizeBytes = 4600000L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 14L, localVersionName = "1.1.2") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.2 < remote 1.1.3 must report UpdateAvailable", checkResult is UpdateCheckResult.UpdateAvailable)
+        val available = checkResult as UpdateCheckResult.UpdateAvailable
+        assertEquals("1.1.3", available.releaseInfo.latestVersionName)
+    }
+
+    @Test
+    fun testUpdateCheck_V112Installed_AgainstFutureV113WithCode_ReportsUpdateAvailable() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.3",
+                latestVersionCode = 15L,
+                apkFileName = "Leaf_v1.1.3.apk",
+                apkDownloadUrl = "https://example.com/Leaf_v1.1.3.apk",
+                apkSizeBytes = 4600000L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 14L, localVersionName = "1.1.2") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Remote code 15 > local code 14 must report UpdateAvailable", checkResult is UpdateCheckResult.UpdateAvailable)
+    }
+
+    @Test
+    fun testUpdateCheck_V111Installed_AgainstV113Remote_ReportsUpdateAvailable() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.3",
+                latestVersionCode = 15L,
+                apkFileName = "Leaf_v1.1.3.apk",
+                apkDownloadUrl = "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk",
+                apkSizeBytes = 4584944L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 13L, localVersionName = "1.1.1") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.1 < remote 1.1.3 must report UpdateAvailable", checkResult is UpdateCheckResult.UpdateAvailable)
+        val available = checkResult as UpdateCheckResult.UpdateAvailable
+        assertEquals("1.1.3", available.releaseInfo.latestVersionName)
+    }
+
+    @Test
+    fun testUpdateCheck_V113Installed_AgainstV113Remote_ReportsUpToDate() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.3",
+                latestVersionCode = 15L,
+                apkFileName = "Leaf_v1.1.3.apk",
+                apkDownloadUrl = "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk",
+                apkSizeBytes = 4584944L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 15L, localVersionName = "1.1.3") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.3 == remote 1.1.3 must report UpToDate", checkResult is UpdateCheckResult.UpToDate)
+        assertEquals("1.1.3", (checkResult as UpdateCheckResult.UpToDate).currentVersionName)
+        assertEquals(15L, checkResult.currentVersionCode)
+    }
+
+    @Test
+    fun testUpdateCheck_V113Installed_AgainstV113RemoteWithoutCode_ReportsUpToDate() {
+        val fakeRepo = createFakeRepository(
+            RemoteReleaseInfo(
+                latestVersionName = "1.1.3",
+                latestVersionCode = 0L,
+                apkFileName = "Leaf_v1.1.3.apk",
+                apkDownloadUrl = "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk",
+                apkSizeBytes = 4584944L
+            )
+        )
+        val useCase = CheckForUpdateUseCase(fakeRepo)
+
+        val result = runBlocking { useCase(localVersionCode = 15L, localVersionName = "1.1.3") }
+        assertTrue(result is AppResult.Success)
+
+        val checkResult = (result as AppResult.Success).data
+        assertTrue("Installed 1.1.3 == remote 1.1.3 (semantic tag only) must report UpToDate", checkResult is UpdateCheckResult.UpToDate)
+    }
+
+    @Test
+    fun testLiveGitHubReleaseFetch_ResolvesV112Successfully() {
+        val service = GitHubReleaseService()
+        val result = runBlocking { service.fetchLatestRelease() }
+        if (result is AppResult.Success) {
+            val info = result.data
+            assertEquals("1.1.2", info.latestVersionName)
+            assertEquals("Leaf_v1.1.2.apk", info.apkFileName)
+            assertTrue(info.apkDownloadUrl.contains("v1.1.2/Leaf_v1.1.2.apk"))
+            assertTrue(info.apkSizeBytes > 0L)
+        } else {
+            // Graceful error on offline/rate-limit
+            assertTrue((result as AppResult.Error).error.userMessage.isNotBlank())
+        }
+    }
+
+    @Test
+    fun testCompareSemanticVersions() {
+        assertEquals(0, CheckForUpdateUseCase.compareSemanticVersions("1.1.2", "1.1.2"))
+        assertEquals(0, CheckForUpdateUseCase.compareSemanticVersions("v1.1.2", "1.1.2"))
+        assertEquals(0, CheckForUpdateUseCase.compareSemanticVersions("1.1.2-release", "1.1.2"))
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("1.1.3", "1.1.2") > 0)
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("1.2.0", "1.1.2") > 0)
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("2.0.0", "1.1.2") > 0)
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("1.1.1", "1.1.2") < 0)
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("1.0.10", "1.0.9") > 0)
+        assertTrue(CheckForUpdateUseCase.compareSemanticVersions("1.1.0", "1.0.10") > 0)
+        assertEquals(0, CheckForUpdateUseCase.compareSemanticVersions("1.1", "1.1.0"))
     }
 
     private fun createFakeRepository(remoteInfo: RemoteReleaseInfo): com.vinaynalavade.expensetracker.domain.repository.UpdateRepository {
@@ -412,7 +655,8 @@ class AppUpdateSystemTest {
             override suspend fun verifyDownloadedApk(
                 apkFile: File,
                 expectedSha256: String?,
-                expectedVersionCode: Long
+                expectedVersionCode: Long,
+                expectedVersionName: String?
             ): AppResult<Unit> {
                 return AppResult.Success(Unit)
             }

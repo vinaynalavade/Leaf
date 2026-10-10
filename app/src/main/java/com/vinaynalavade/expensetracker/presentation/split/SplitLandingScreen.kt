@@ -60,7 +60,14 @@ import com.vinaynalavade.expensetracker.presentation.split.components.GroupCard
 import com.vinaynalavade.expensetracker.presentation.split.components.NetBalanceSummaryBanner
 import com.vinaynalavade.expensetracker.presentation.split.components.SplitExpenseCard
 
-@OptIn(ExperimentalMaterial3Api::class)
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import com.vinaynalavade.expensetracker.presentation.components.DevelopersBillDialog
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun SplitLandingScreen(
     viewModel: SplitLandingViewModel,
@@ -74,6 +81,11 @@ fun SplitLandingScreen(
     var editingGroup by remember { mutableStateOf<SplitGroup?>(null) }
     var groupToDelete by remember { mutableStateOf<Long?>(null) }
 
+    // Easter Egg #5: The Developer's Bill
+    var showDevelopersBillDialog by remember { mutableStateOf(false) }
+    var titleTapCount by remember { mutableIntStateOf(0) }
+    var lastTitleTapTime by remember { mutableLongStateOf(0L) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -81,7 +93,28 @@ fun SplitLandingScreen(
                     Text(
                         text = stringResource(R.string.split_title),
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.combinedClickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                val now = System.currentTimeMillis()
+                                if (now - lastTitleTapTime > 2500L) {
+                                    titleTapCount = 1
+                                } else {
+                                    titleTapCount++
+                                }
+                                lastTitleTapTime = now
+
+                                if (titleTapCount >= 5) {
+                                    titleTapCount = 0
+                                    showDevelopersBillDialog = true
+                                }
+                            },
+                            onLongClick = {
+                                showDevelopersBillDialog = true
+                            }
+                        )
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -323,6 +356,12 @@ fun SplitLandingScreen(
                     Text(stringResource(R.string.cancel))
                 }
             }
+        )
+    }
+
+    if (showDevelopersBillDialog) {
+        DevelopersBillDialog(
+            onDismiss = { showDevelopersBillDialog = false }
         )
     }
 }

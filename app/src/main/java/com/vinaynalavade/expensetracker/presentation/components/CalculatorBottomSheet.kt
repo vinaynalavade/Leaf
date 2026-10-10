@@ -22,6 +22,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -54,9 +61,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vinaynalavade.expensetracker.R
+import com.vinaynalavade.expensetracker.core.easteregg.EasterEggEngine
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.domain.usecase.CalculatorEvaluationResult
 import com.vinaynalavade.expensetracker.domain.usecase.EvaluateCalculatorExpressionUseCase
+import com.vinaynalavade.expensetracker.presentation.theme.BrandGreen
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.LocalCurrency
@@ -83,6 +92,10 @@ fun CalculatorBottomSheet(
         mutableStateOf(
             if (initialAmount.isNotBlank() && initialAmount != "0") initialAmount else ""
         )
+    }
+
+    var activeEasterEgg by remember {
+        mutableStateOf<EasterEggEngine.CalculatorEasterEgg?>(null)
     }
 
     val evaluationResult = remember(expression) {
@@ -168,6 +181,41 @@ fun CalculatorBottomSheet(
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+
+            // Celebratory Easter Egg Banner
+            AnimatedVisibility(
+                visible = activeEasterEgg != null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = BrandGreen.copy(alpha = 0.12f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = MaterialTheme.spacing.sm)
+                        .border(1.dp, BrandGreen.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AutoAwesome,
+                            contentDescription = null,
+                            tint = BrandGreen,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = activeEasterEgg?.message ?: "",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
 
             // 1. Expression Display Card
             Card(
@@ -346,6 +394,8 @@ fun CalculatorBottomSheet(
                         text = "=",
                         onClick = {
                             if (evaluationResult is CalculatorEvaluationResult.Success) {
+                                val egg = EasterEggEngine.detectCalculatorEasterEgg(expression, evaluationResult.formattedAmount)
+                                activeEasterEgg = egg
                                 expression = evaluationResult.formattedAmount
                             }
                         },

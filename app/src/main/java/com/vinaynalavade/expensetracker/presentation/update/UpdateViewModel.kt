@@ -146,7 +146,8 @@ class UpdateViewModel(
         when (val verifyResult = downloadAndVerifyUpdateUseCase.verifyApk(
             apkFile = apkFile,
             expectedSha256 = expectedSha256,
-            expectedVersionCode = releaseInfo.latestVersionCode
+            expectedVersionCode = releaseInfo.latestVersionCode,
+            expectedVersionName = releaseInfo.latestVersionName
         )) {
             is AppResult.Success -> {
                 if (packageInstallerHelper.canRequestPackageInstalls()) {

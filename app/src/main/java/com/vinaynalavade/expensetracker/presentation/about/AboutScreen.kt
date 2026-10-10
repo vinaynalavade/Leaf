@@ -78,6 +78,25 @@ import com.vinaynalavade.expensetracker.domain.model.UpdateUiState
 import com.vinaynalavade.expensetracker.presentation.update.UpdateDialog
 import com.vinaynalavade.expensetracker.presentation.update.UpdateViewModel
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import com.vinaynalavade.expensetracker.core.easteregg.EasterEggEngine
+import com.vinaynalavade.expensetracker.presentation.components.FounderSignatureDialog
+import com.vinaynalavade.expensetracker.presentation.components.HiddenLeafDialog
+import com.vinaynalavade.expensetracker.presentation.components.LeafBloomOverlay
+import com.vinaynalavade.expensetracker.presentation.components.PhilosophyDialog
+
 private enum class AboutDialogType {
     PRIVACY_SECURITY_DETAILS,
     PRIVACY_POLICY,
@@ -87,7 +106,7 @@ private enum class AboutDialogType {
 
 private const val GITHUB_REPOSITORY_URL = "https://github.com/vinaynalavade/Leaf"
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AboutScreen(
     onNavigateBack: () -> Unit,
@@ -96,6 +115,22 @@ fun AboutScreen(
 ) {
     val context = LocalContext.current
     var activeDialog by remember { mutableStateOf<AboutDialogType?>(null) }
+    var showHiddenLeafDialog by remember { mutableStateOf(false) }
+    var showPhilosophyDialog by remember { mutableStateOf(false) }
+    var showFounderDialog by remember { mutableStateOf(false) }
+    var showKonamiBloom by remember { mutableStateOf(false) }
+
+    var logoTapCount by remember { mutableIntStateOf(0) }
+    var lastLogoTapTime by remember { mutableLongStateOf(0L) }
+    val logoRotation = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+
+    var devTapCount by remember { mutableIntStateOf(0) }
+    var lastDevTapTime by remember { mutableLongStateOf(0L) }
+
+    var dragDeltaX by remember { mutableFloatStateOf(0f) }
+    var dragDeltaY by remember { mutableFloatStateOf(0f) }
+    val konamiTracker = remember { EasterEggEngine.KonamiSequenceTracker() }
 
     fun openGitHub() {
         try {
@@ -108,33 +143,34 @@ fun AboutScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "About Leaf",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_back)
+    Box(modifier = modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "About Leaf",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
                         )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.cd_back)
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.onBackground
+                    )
                 )
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.background,
-        modifier = modifier.fillMaxSize()
-    ) { innerPadding ->
+            },
+            containerColor = MaterialTheme.colorScheme.background,
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -235,7 +271,32 @@ fun AboutScreen(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
                         shape = CardShape
-                    ),
+                    )
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = {
+                                dragDeltaX = 0f
+                                dragDeltaY = 0f
+                            },
+                            onDragEnd = {
+                                val threshold = 40f
+                                val dir = when {
+                                    dragDeltaY < -threshold && kotlin.math.abs(dragDeltaY) > kotlin.math.abs(dragDeltaX) -> EasterEggEngine.SwipeDirection.UP
+                                    dragDeltaY > threshold && kotlin.math.abs(dragDeltaY) > kotlin.math.abs(dragDeltaX) -> EasterEggEngine.SwipeDirection.DOWN
+                                    dragDeltaX < -threshold && kotlin.math.abs(dragDeltaX) > kotlin.math.abs(dragDeltaY) -> EasterEggEngine.SwipeDirection.LEFT
+                                    dragDeltaX > threshold && kotlin.math.abs(dragDeltaX) > kotlin.math.abs(dragDeltaY) -> EasterEggEngine.SwipeDirection.RIGHT
+                                    else -> null
+                                }
+                                if (dir != null && konamiTracker.onSwipe(dir)) {
+                                    showKonamiBloom = true
+                                }
+                            },
+                            onDrag = { _, dragAmount ->
+                                dragDeltaX += dragAmount.x
+                                dragDeltaY += dragAmount.y
+                            }
+                        )
+                    },
                 shape = CardShape,
                 color = MaterialTheme.colorScheme.surface
             ) {
@@ -246,10 +307,39 @@ fun AboutScreen(
                     Surface(
                         modifier = Modifier
                             .size(76.dp)
+                            .graphicsLayer(rotationZ = logoRotation.value)
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
                                 shape = RoundedCornerShape(18.dp)
+                            )
+                            .combinedClickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    val now = System.currentTimeMillis()
+                                    if (now - lastLogoTapTime > 2500L) {
+                                        logoTapCount = 1
+                                    } else {
+                                        logoTapCount++
+                                    }
+                                    lastLogoTapTime = now
+
+                                    if (logoTapCount == 7) {
+                                        logoTapCount = 0
+                                        coroutineScope.launch {
+                                            logoRotation.animateTo(
+                                                targetValue = 360f,
+                                                animationSpec = tween(650, easing = FastOutSlowInEasing)
+                                            )
+                                            logoRotation.snapTo(0f)
+                                            showHiddenLeafDialog = true
+                                        }
+                                    }
+                                },
+                                onLongClick = {
+                                    showPhilosophyDialog = true
+                                }
                             ),
                         shape = RoundedCornerShape(18.dp),
                         color = MaterialTheme.colorScheme.surface,
@@ -371,10 +461,46 @@ fun AboutScreen(
                 icon = Icons.Default.Person,
                 title = "Credits"
             ) {
-                AboutInfoRow(
-                    label = "Developer",
-                    value = "Developed by Vinay Nalavade"
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            val now = System.currentTimeMillis()
+                            if (now - lastDevTapTime > 2500L) {
+                                devTapCount = 1
+                            } else {
+                                devTapCount++
+                            }
+                            lastDevTapTime = now
+
+                            if (devTapCount >= 3) {
+                                devTapCount = 0
+                                showFounderDialog = true
+                            }
+                        }
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Developer",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(0.35f)
+                    )
+                    Text(
+                        text = "Developed by Vinay Nalavade",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(0.65f)
+                    )
+                }
                 AboutDivider()
                 AboutInfoRow(
                     label = "Copyright & License",
@@ -559,6 +685,22 @@ fun AboutScreen(
 
     if (updateViewModel != null) {
         UpdateDialog(viewModel = updateViewModel)
+    }
+
+    if (showHiddenLeafDialog) {
+        HiddenLeafDialog(onDismiss = { showHiddenLeafDialog = false })
+    }
+    if (showPhilosophyDialog) {
+        PhilosophyDialog(onDismiss = { showPhilosophyDialog = false })
+    }
+    if (showFounderDialog) {
+        FounderSignatureDialog(onDismiss = { showFounderDialog = false })
+    }
+
+    LeafBloomOverlay(
+        isVisible = showKonamiBloom,
+        onDismiss = { showKonamiBloom = false }
+    )
     }
 }
 

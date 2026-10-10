@@ -92,6 +92,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.core.contact.ContactPickerHelper
+import com.vinaynalavade.expensetracker.core.easteregg.EasterEggEngine
 import com.vinaynalavade.expensetracker.domain.model.Category
 import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SplitItem
@@ -1254,13 +1255,49 @@ private fun Step3SplitMethod(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
 
                 // Calculated Participant Shares Summary with Base + Item Breakdown
+                val isPerfectBalance = remember(uiState.calculatedParticipants) {
+                    EasterEggEngine.isPerfectSplit(uiState.calculatedParticipants.map { it.amount.subunits })
+                }
+
                 Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)) {
-                    Text(
-                        text = "Live Calculated Shares (${uiState.participants.size})",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Live Calculated Shares (${uiState.participants.size})",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        if (isPerfectBalance) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(12.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = EasterEggEngine.MSG_PERFECT_SPLIT,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.height(2.dp))
 
                     val itemizedCalc = uiState.itemizedCalculation
