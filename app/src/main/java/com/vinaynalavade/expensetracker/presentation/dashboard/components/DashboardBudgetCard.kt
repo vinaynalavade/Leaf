@@ -44,6 +44,9 @@ import com.vinaynalavade.expensetracker.presentation.components.AmountDisplay
 import com.vinaynalavade.expensetracker.presentation.components.CategoryIcon
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
+import androidx.compose.foundation.BorderStroke
+import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+
 @Composable
 fun DashboardBudgetCard(
     budgetProgress: BudgetProgress?,
@@ -58,7 +61,11 @@ fun DashboardBudgetCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 0.75.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -79,7 +86,7 @@ fun DashboardBudgetCard(
                         modifier = Modifier
                             .size(42.dp)
                             .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -117,10 +124,10 @@ fun DashboardBudgetCard(
         } else {
             // Active budget progress
             val statusColor = when (budgetProgress.status) {
-                BudgetStatus.ON_TRACK -> Color(0xFF10B981)
-                BudgetStatus.APPROACHING_LIMIT -> Color(0xFFF59E0B)
-                BudgetStatus.LIMIT_REACHED -> Color(0xFFF97316)
-                BudgetStatus.OVER_BUDGET -> Color(0xFFEF4444)
+                BudgetStatus.ON_TRACK -> MaterialTheme.financialColors.income
+                BudgetStatus.APPROACHING_LIMIT -> MaterialTheme.financialColors.warning
+                BudgetStatus.LIMIT_REACHED -> MaterialTheme.financialColors.warning
+                BudgetStatus.OVER_BUDGET -> MaterialTheme.financialColors.expense
             }
 
             val progressFraction = (budgetProgress.percentageUsed / 100.0).toFloat().coerceIn(0f, 1f)

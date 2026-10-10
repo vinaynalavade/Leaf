@@ -17,6 +17,7 @@ import com.vinaynalavade.expensetracker.domain.usecase.GetCategoryAnalysisUseCas
 import com.vinaynalavade.expensetracker.domain.usecase.GetFinancialSummaryUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetSavingsGoalsUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetTransactionsUseCase
+import com.vinaynalavade.expensetracker.presentation.dashboard.DashboardUiState
 import com.vinaynalavade.expensetracker.presentation.dashboard.DashboardViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -104,6 +105,42 @@ class DashboardCategoryAnalysisTest {
         // 4. Return to Current Month
         viewModel.onCurrentMonth()
         assertEquals(currentYearMonth, viewModel.selectedMonth.value)
+    }
+
+    @Test
+    fun testDashboardViewModelRecentTransactions() = runBlocking {
+        val now = LocalDate.now()
+        val todayEpoch = DateTimeUtils.getStartOfDayEpoch(now)
+        val foodCat = Category(1L, "Food", "restaurant", "#F59E0B", TransactionType.EXPENSE)
+        val tx1 = Transaction(
+            id = 101L,
+            amount = Amount(15000L),
+            type = TransactionType.EXPENSE,
+            category = foodCat,
+            paymentMethod = PaymentMethod.ACCOUNT,
+            timestamp = todayEpoch
+        )
+        val fakeTxRepo = FakeTransactionRepository(listOf(tx1))
+        val fakePrefsRepo = FakePrefsRepository(UserPreferences())
+        val fakeBudgetRepo = FakeBudgetRepository()
+        val fakeGoalsRepo = FakeSavingsGoalRepository()
+        val fakeSplitRepo = FakeSplitRepository()
+
+        val getFinancialSummaryUseCase = GetFinancialSummaryUseCase(fakeTxRepo, fakePrefsRepo)
+        val getCategoryAnalysisUseCase = GetCategoryAnalysisUseCase(fakeTxRepo)
+        val getBudgetProgressUseCase = GetBudgetProgressUseCase(fakeBudgetRepo, fakeTxRepo)
+        val getSavingsGoalsUseCase = GetSavingsGoalsUseCase(fakeGoalsRepo)
+        val getTransactionsUseCase = GetTransactionsUseCase(fakeTxRepo)
+
+        val recentList = getTransactionsUseCase.getRecent(4).first()
+        assertEquals(1, recentList.size)
+        assertEquals(101L, recentList.first().id)
+        assertEquals(15000L, recentList.first().amount.subunits)
+
+        val state = DashboardUiState(recentTransactions = recentList)
+        assertEquals(1, state.recentTransactions.size)
+        assertEquals(101L, state.recentTransactions.first().id)
+        assertEquals(15000L, state.recentTransactions.first().amount.subunits)
     }
 
     private class FakeSplitRepository : com.vinaynalavade.expensetracker.domain.repository.SplitRepository {

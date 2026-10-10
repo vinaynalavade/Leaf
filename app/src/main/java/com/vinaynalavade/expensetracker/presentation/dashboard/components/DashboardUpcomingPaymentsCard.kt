@@ -43,6 +43,9 @@ import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
+import androidx.compose.foundation.BorderStroke
+import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+
 @Composable
 fun DashboardUpcomingPaymentsCard(
     upcomingPayments: List<UpcomingPaymentItem>,
@@ -57,7 +60,11 @@ fun DashboardUpcomingPaymentsCard(
             .clickable { onViewAllClick() },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 0.75.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -129,7 +136,7 @@ fun DashboardUpcomingPaymentsCard(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = null,
-                        tint = BrandGreen,
+                        tint = MaterialTheme.financialColors.income,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -162,8 +169,8 @@ fun DashboardUpcomingPaymentsCard(
                         )
                         daysUntilDue == 0L -> Triple(
                             "Today",
-                            Color(0xFFFEF3C7),
-                            Color(0xFFB45309)
+                            MaterialTheme.financialColors.warningContainer,
+                            MaterialTheme.financialColors.warning
                         )
                         daysUntilDue == 1L -> Triple(
                             "Tomorrow",

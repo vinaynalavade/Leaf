@@ -189,7 +189,6 @@ fun SettingsScreen(
     var showProfilePhotoOptionsDialog by remember { mutableStateOf(false) }
     var showDefaultOffsetDialog by remember { mutableStateOf(false) }
     var showDefaultTimePickerDialog by remember { mutableStateOf(false) }
-    var showWhatsNewDialog by remember { mutableStateOf(false) }
     var pendingCropImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
@@ -646,15 +645,6 @@ fun SettingsScreen(
                     valueBadge = "v${BuildConfig.VERSION_NAME}",
                     onClick = onNavigateToAbout
                 )
-
-                SettingsDivider()
-
-                SettingsNavigationTile(
-                    icon = Icons.Default.Flag,
-                    title = stringResource(R.string.settings_whats_new_title),
-                    subtitle = stringResource(R.string.settings_whats_new_desc),
-                    onClick = { showWhatsNewDialog = true }
-                )
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
@@ -895,12 +885,6 @@ fun SettingsScreen(
                 showDefaultTimePickerDialog = false
             },
             onDismiss = { showDefaultTimePickerDialog = false }
-        )
-    }
-
-    if (showWhatsNewDialog) {
-        WhatsNewDialog(
-            onDismiss = { showWhatsNewDialog = false }
         )
     }
 }
@@ -1586,94 +1570,5 @@ private fun DefaultReminderOffsetDialog(
             }
         }
     )
-}
-
-@Composable
-private fun WhatsNewDialog(
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false
-        ),
-        modifier = Modifier
-            .fillMaxWidth(0.92f)
-            .widthIn(max = 480.dp),
-        icon = {
-            Icon(
-                imageVector = Icons.Default.Notifications,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        title = {
-            Text(
-                text = "What's New in Leaf v1.1.0",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
-        },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                WhatsNewItem(
-                    title = "Payment & Loan Reminders",
-                    description = "Set one-time or recurring reminders for Loans, EMIs, Bills, Credit Cards, and Subscriptions. Custom alert timing and multi-day offsets."
-                )
-                WhatsNewItem(
-                    title = "Upcoming Payments",
-                    description = "Stay on top of upcoming cash flows right on your Dashboard and Planning tabs, with 1-tap 'Mark Paid' to record payments."
-                )
-                WhatsNewItem(
-                    title = "Financial Payment Calendar",
-                    description = "Visualize all scheduled dues and reminders alongside your daily expense history on an interactive calendar."
-                )
-                WhatsNewItem(
-                    title = "Settings 2.0 Control Center",
-                    description = "Redesigned information architecture with clear sections, instant status badges, and 48dp+ accessibility targets."
-                )
-                WhatsNewItem(
-                    title = "Offline & Reboot Reliability",
-                    description = "All reminders persist locally and automatically restore upon device reboot with zero battery drain or telemetry."
-                )
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = onDismiss,
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Got It", fontWeight = FontWeight.Bold)
-            }
-        }
-    )
-}
-
-@Composable
-private fun WhatsNewItem(
-    title: String,
-    description: String
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
 }
 

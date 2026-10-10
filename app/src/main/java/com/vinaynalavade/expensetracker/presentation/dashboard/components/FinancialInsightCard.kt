@@ -41,6 +41,9 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.luminance
+
 /**
  * Monthly overview card on the dashboard showing this month's financial activity at a glance.
  * Redesigned with a luxury squircle surface, confident financial hierarchy, and clean semantic colors.
@@ -53,7 +56,7 @@ fun MonthlyOverviewCard(
     val currentMonth = YearMonth.now().format(
         DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())
     )
-    val isDark = isSystemInDarkTheme()
+    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
     val isPositive = summary.netChange.isPositive
     val isNegative = summary.netChange.isNegative
 
@@ -68,20 +71,22 @@ fun MonthlyOverviewCard(
         else -> Icons.AutoMirrored.Filled.TrendingUp
     }
 
+    val cardShape = RoundedCornerShape(20.dp)
+
     Card(
-        shape = CardShape,
+        shape = cardShape,
         colors = CardDefaults.cardColors(
-            containerColor = if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.screen)
-            .clip(CardShape)
+            .clip(cardShape)
             .border(
                 width = 0.75.dp,
-                color = if (isDark) Color(0xFF263242) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
-                shape = CardShape
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
+                shape = cardShape
             )
     ) {
         Column(

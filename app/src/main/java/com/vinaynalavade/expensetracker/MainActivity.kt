@@ -290,6 +290,19 @@ fun MainAppScaffold(
     // Snackbar Host State
     val snackbarHostState = remember { SnackbarHostState() }
 
+    // Stable navigation callback for bottom dock to prevent unnecessary recompositions
+    val onNavigateToRoute: (String) -> Unit = remember(navController) {
+        { route ->
+            navController.navigate(route) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) { data ->
@@ -306,15 +319,7 @@ fun MainAppScaffold(
             if (shouldShowBottomBar) {
                 AppBottomBar(
                     currentRoute = currentRoute,
-                    onNavigateToRoute = { route ->
-                        navController.navigate(route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
+                    onNavigateToRoute = onNavigateToRoute
                 )
             }
         },

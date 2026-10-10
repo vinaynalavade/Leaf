@@ -13,5 +13,5 @@ data class InsightsUiState(
     val selectedMonthsCount: Int = 6,
     val trendData: SpendingTrendData? = null,
     val currency: Currency = Currency.DEFAULT,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = false
 )

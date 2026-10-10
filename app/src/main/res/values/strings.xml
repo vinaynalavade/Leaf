@@ -297,6 +297,20 @@
     <string name="split_add_to_transactions_no">No, keep only in Split</string>
     <string name="split_settle_received_in">Received in</string>
     <string name="split_delete_confirm_linked_msg">This will remove this split expense and its settlement records. Any linked transactions in your transaction ledger will be preserved as financial history.</string>
+    <string name="split_add_from_contacts">Add from Contacts</string>
+    <string name="split_add_manually">Add Manually</string>
+    <string name="split_custom_mode_items">By Items</string>
+    <string name="split_custom_mode_direct">By Person</string>
+    <string name="split_add_item">+ Add Item</string>
+    <string name="split_item_name_hint">Item / Product (e.g. Starters, Room)</string>
+    <string name="split_item_amount_hint">Amount</string>
+    <string name="split_item_consumers_label">Who consumed this?</string>
+    <string name="split_shared_remaining_title">Shared / Remaining Bill</string>
+    <string name="split_shared_remaining_desc">Distribute the unallocated remaining bill among selected participants</string>
+    <string name="split_distribute_to_all">Split among all</string>
+    <string name="split_calculator_btn">Calculator</string>
+    <string name="split_custom_alloc_item">Custom per person</string>
+    <string name="split_equal_alloc_item">Equal between selected</string>
 
     <!-- v1.0.8 Release Modules -->
     <string name="nav_planning">Planning</string>

@@ -37,7 +37,7 @@ data class SplitLandingUiState(
     val totalToCollect: Amount = Amount.ZERO,
     val totalCollected: Amount = Amount.ZERO,
     val currency: Currency = Currency.DEFAULT,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = false
 )
 
 class SplitLandingViewModel(

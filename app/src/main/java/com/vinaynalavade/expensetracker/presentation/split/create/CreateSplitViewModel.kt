@@ -10,14 +10,18 @@ import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
 import com.vinaynalavade.expensetracker.domain.model.Category
+import com.vinaynalavade.expensetracker.domain.model.ItemizedSplitData
 import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.SettlementStatus
 import com.vinaynalavade.expensetracker.domain.model.SplitExpense
+import com.vinaynalavade.expensetracker.domain.model.SplitItem
 import com.vinaynalavade.expensetracker.domain.model.SplitMethod
 import com.vinaynalavade.expensetracker.domain.model.SplitParticipant
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.domain.split.CustomSplitValidation
+import com.vinaynalavade.expensetracker.domain.split.ItemizedSplitCalculationResult
 import com.vinaynalavade.expensetracker.domain.split.SplitCalculationEngine
+import com.vinaynalavade.expensetracker.domain.split.SplitItemJsonAdapter
 import com.vinaynalavade.expensetracker.domain.usecase.GetCategoriesUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.GetUserPreferencesUseCase
 import com.vinaynalavade.expensetracker.domain.usecase.SaveSplitExpenseUseCase
@@ -27,6 +31,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
+
+enum class CustomSplitSubMode {
+    ITEMIZED,
+    DIRECT
+}
 
 data class CreateSplitUiState(
     val title: String = "",
@@ -39,7 +49,12 @@ data class CreateSplitUiState(
     val availableGroups: List<com.vinaynalavade.expensetracker.domain.model.SplitGroup> = emptyList(),
     val paidBy: String = "Me",
     val participants: List<String> = listOf("Me"),
+    val participantPhoneNumbers: Map<String, String?> = emptyMap(),
     val splitMethod: SplitMethod = SplitMethod.EQUAL,
+    val customSplitSubMode: CustomSplitSubMode = CustomSplitSubMode.ITEMIZED,
+    val items: List<SplitItem> = emptyList(),
+    val sharedRemainingParticipants: List<String> = listOf("Me"),
+    val itemizedCalculation: ItemizedSplitCalculationResult? = null,
     val customSharesInput: Map<String, String> = emptyMap(),
     val calculatedParticipants: List<SplitParticipant> = emptyList(),
     val customValidation: CustomSplitValidation = CustomSplitValidation(
@@ -140,16 +155,38 @@ class CreateSplitViewModel(
         _uiState.update { it.copy(selectedCategory = category) }
     }
 
-    fun onAddParticipant(name: String) {
+    fun onAddParticipant(name: String, phoneNumber: String? = null) {
         val trimmed = name.trim()
         if (trimmed.isBlank()) return
         val currentList = _uiState.value.participants
         if (currentList.any { it.equals(trimmed, ignoreCase = true) }) {
-            _uiState.update { it.copy(validationError = "Participant already added.") }
+            // Update phone number if provided and not previously recorded
+            if (!phoneNumber.isNullOrBlank()) {
+                val updatedPhoneMap = _uiState.value.participantPhoneNumbers.toMutableMap()
+                val existingName = currentList.first { it.equals(trimmed, ignoreCase = true) }
+                updatedPhoneMap[existingName] = phoneNumber.trim()
+                _uiState.update { it.copy(participantPhoneNumbers = updatedPhoneMap) }
+            }
             return
         }
         val newList = currentList + trimmed
-        _uiState.update { it.copy(participants = newList, validationError = null) }
+        val updatedPhoneMap = _uiState.value.participantPhoneNumbers.toMutableMap()
+        if (!phoneNumber.isNullOrBlank()) {
+            updatedPhoneMap[trimmed] = phoneNumber.trim()
+        }
+
+        val currentShared = _uiState.value.sharedRemainingParticipants
+        val shouldAddToShared = currentShared.isEmpty() || currentShared.size >= currentList.size
+        val updatedShared = if (shouldAddToShared) currentShared + trimmed else currentShared
+
+        _uiState.update {
+            it.copy(
+                participants = newList,
+                participantPhoneNumbers = updatedPhoneMap,
+                sharedRemainingParticipants = updatedShared,
+                validationError = null
+            )
+        }
         recalculateShares()
     }
 
@@ -159,10 +196,25 @@ class CreateSplitViewModel(
         }
         val newList = _uiState.value.participants.filterNot { it.equals(name, ignoreCase = true) }
         val newCustomMap = _uiState.value.customSharesInput.filterKeys { !it.equals(name, ignoreCase = true) }
+        val newPhoneMap = _uiState.value.participantPhoneNumbers.filterKeys { !it.equals(name, ignoreCase = true) }
+        val newShared = _uiState.value.sharedRemainingParticipants.filterNot { it.equals(name, ignoreCase = true) }
+
+        // Remove participant from items safely
+        val updatedItems = _uiState.value.items.map { item ->
+            item.copy(
+                participantNames = item.participantNames.filterNot { it.equals(name, ignoreCase = true) },
+                customAllocations = item.customAllocations.filterKeys { !it.equals(name, ignoreCase = true) },
+                customAllocationInputs = item.customAllocationInputs.filterKeys { !it.equals(name, ignoreCase = true) }
+            )
+        }
+
         _uiState.update {
             it.copy(
                 participants = newList,
+                participantPhoneNumbers = newPhoneMap,
                 customSharesInput = newCustomMap,
+                items = updatedItems,
+                sharedRemainingParticipants = newShared,
                 validationError = null
             )
         }
@@ -170,9 +222,133 @@ class CreateSplitViewModel(
     }
 
     fun onSplitMethodChange(method: SplitMethod) {
-        _uiState.update { it.copy(splitMethod = method, validationError = null) }
+        val currentShared = _uiState.value.sharedRemainingParticipants
+        val updatedShared = if (currentShared.isEmpty()) _uiState.value.participants else currentShared
+        _uiState.update {
+            it.copy(
+                splitMethod = method,
+                sharedRemainingParticipants = updatedShared,
+                validationError = null
+            )
+        }
         recalculateShares()
     }
+
+    fun onCustomSplitSubModeChange(mode: CustomSplitSubMode) {
+        _uiState.update { it.copy(customSplitSubMode = mode, validationError = null) }
+        recalculateShares()
+    }
+
+    // --- Item-Based Custom Split Actions ---
+
+    fun onAddItem() {
+        val currentItems = _uiState.value.items
+        val nextIndex = currentItems.size + 1
+        val newItem = SplitItem(
+            id = UUID.randomUUID().toString(),
+            name = "Item $nextIndex",
+            amount = Amount.ZERO,
+            amountInput = "",
+            participantNames = _uiState.value.participants.take(1) // Defaults to current user
+        )
+        _uiState.update { it.copy(items = currentItems + newItem) }
+        recalculateShares()
+    }
+
+    fun onRemoveItem(itemId: String) {
+        val updated = _uiState.value.items.filterNot { it.id == itemId }
+        _uiState.update { it.copy(items = updated) }
+        recalculateShares()
+    }
+
+    fun onUpdateItemName(itemId: String, name: String) {
+        val updated = _uiState.value.items.map { item ->
+            if (item.id == itemId) item.copy(name = name) else item
+        }
+        _uiState.update { it.copy(items = updated) }
+    }
+
+    fun onUpdateItemAmount(itemId: String, amountStr: String) {
+        val clean = amountStr.filter { it.isDigit() || it == '.' }
+        val parsed = Amount.fromStringOrNull(clean, _uiState.value.currency) ?: Amount.ZERO
+        val updated = _uiState.value.items.map { item ->
+            if (item.id == itemId) item.copy(amount = parsed, amountInput = clean) else item
+        }
+        _uiState.update { it.copy(items = updated) }
+        recalculateShares()
+    }
+
+    fun onToggleItemConsumer(itemId: String, participantName: String) {
+        val updated = _uiState.value.items.map { item ->
+            if (item.id == itemId) {
+                val exists = item.participantNames.any { it.equals(participantName, ignoreCase = true) }
+                val newConsumers = if (exists) {
+                    item.participantNames.filterNot { it.equals(participantName, ignoreCase = true) }
+                } else {
+                    item.participantNames + participantName
+                }
+                val newAllocations = item.customAllocations.filterKeys { k ->
+                    newConsumers.any { it.equals(k, ignoreCase = true) }
+                }
+                val newInputs = item.customAllocationInputs.filterKeys { k ->
+                    newConsumers.any { it.equals(k, ignoreCase = true) }
+                }
+                item.copy(
+                    participantNames = newConsumers,
+                    customAllocations = newAllocations,
+                    customAllocationInputs = newInputs
+                )
+            } else item
+        }
+        _uiState.update { it.copy(items = updated) }
+        recalculateShares()
+    }
+
+    fun onToggleItemCustomAllocation(itemId: String, isCustom: Boolean) {
+        val updated = _uiState.value.items.map { item ->
+            if (item.id == itemId) item.copy(isCustomAllocation = isCustom) else item
+        }
+        _uiState.update { it.copy(items = updated) }
+        recalculateShares()
+    }
+
+    fun onUpdateItemCustomShare(itemId: String, participantName: String, amountStr: String) {
+        val clean = amountStr.filter { it.isDigit() || it == '.' }
+        val parsed = Amount.fromStringOrNull(clean, _uiState.value.currency) ?: Amount.ZERO
+        val updated = _uiState.value.items.map { item ->
+            if (item.id == itemId) {
+                val newAllocations = item.customAllocations.toMutableMap().apply { put(participantName, parsed) }
+                val newInputs = item.customAllocationInputs.toMutableMap().apply { put(participantName, clean) }
+                item.copy(customAllocations = newAllocations, customAllocationInputs = newInputs)
+            } else item
+        }
+        _uiState.update { it.copy(items = updated) }
+        recalculateShares()
+    }
+
+    fun onToggleSharedRemainingParticipant(participantName: String) {
+        val current = _uiState.value.sharedRemainingParticipants
+        val updated = if (current.any { it.equals(participantName, ignoreCase = true) }) {
+            current.filterNot { it.equals(participantName, ignoreCase = true) }
+        } else {
+            current + participantName
+        }
+        _uiState.update { it.copy(sharedRemainingParticipants = updated) }
+        recalculateShares()
+    }
+
+    fun onDistributeSharedRemainingToAll() {
+        val allParticipants = _uiState.value.participants
+        _uiState.update { it.copy(sharedRemainingParticipants = allParticipants) }
+        recalculateShares()
+    }
+
+    fun onClearSharedRemaining() {
+        _uiState.update { it.copy(sharedRemainingParticipants = emptyList()) }
+        recalculateShares()
+    }
+
+    // --- Direct Per-Person Custom Actions ---
 
     fun onCustomShareChange(name: String, amountStr: String) {
         val clean = amountStr.filter { it.isDigit() || it == '.' }
@@ -182,6 +358,8 @@ class CreateSplitViewModel(
         _uiState.update { it.copy(customSharesInput = updatedMap) }
         recalculateShares()
     }
+
+    // --- Live Recalculation Engine ---
 
     private fun recalculateShares() {
         val state = _uiState.value
@@ -194,7 +372,9 @@ class CreateSplitViewModel(
                 totalAmount = totalAmount,
                 participants = participants,
                 payerName = state.paidBy
-            )
+            ).map { p ->
+                p.copy(phoneNumber = state.participantPhoneNumbers[p.name])
+            }
             _uiState.update {
                 it.copy(
                     calculatedParticipants = calculated,
@@ -203,11 +383,43 @@ class CreateSplitViewModel(
                         allocatedAmount = totalAmount,
                         remainingAmount = Amount.ZERO,
                         overallocatedAmount = Amount.ZERO
-                    )
+                    ),
+                    itemizedCalculation = null
+                )
+            }
+        } else if (state.customSplitSubMode == CustomSplitSubMode.ITEMIZED) {
+            val itemizedResult = SplitCalculationEngine.calculateItemizedSplit(
+                totalBill = totalAmount,
+                participants = participants,
+                items = state.items,
+                sharedRemainingParticipants = state.sharedRemainingParticipants
+            )
+            val participantList = participants.map { name ->
+                val share = itemizedResult.participantShares[name] ?: Amount.ZERO
+                val isCurrentUser = name.equals("Me", ignoreCase = true) || name.equals(state.paidBy, ignoreCase = true)
+                SplitParticipant(
+                    name = name,
+                    isCurrentUser = isCurrentUser,
+                    amount = share,
+                    settlementStatus = SettlementStatus.PENDING,
+                    phoneNumber = state.participantPhoneNumbers[name]
+                )
+            }
+            _uiState.update {
+                it.copy(
+                    calculatedParticipants = participantList,
+                    customValidation = CustomSplitValidation(
+                        isValid = itemizedResult.isValid,
+                        allocatedAmount = itemizedResult.totalAllocatedAmount,
+                        remainingAmount = itemizedResult.unallocatedRemainingAmount,
+                        overallocatedAmount = itemizedResult.overallocatedAmount,
+                        errorMessage = itemizedResult.errorMessage
+                    ),
+                    itemizedCalculation = itemizedResult
                 )
             }
         } else {
-            // Custom Split Mode
+            // Direct per-person custom mode
             var allocatedSubunits = 0L
             val participantList = participants.map { name ->
                 val input = state.customSharesInput[name] ?: ""
@@ -218,7 +430,8 @@ class CreateSplitViewModel(
                     name = name,
                     isCurrentUser = isCurrentUser,
                     amount = shareAmount,
-                    settlementStatus = SettlementStatus.PENDING
+                    settlementStatus = SettlementStatus.PENDING,
+                    phoneNumber = state.participantPhoneNumbers[name]
                 )
             }
 
@@ -226,7 +439,8 @@ class CreateSplitViewModel(
             _uiState.update {
                 it.copy(
                     calculatedParticipants = participantList,
-                    customValidation = validation
+                    customValidation = validation,
+                    itemizedCalculation = null
                 )
             }
         }
@@ -290,7 +504,9 @@ class CreateSplitViewModel(
             }
             3 -> {
                 if (state.splitMethod == SplitMethod.CUSTOM && !state.customValidation.isValid) {
-                    _uiState.update { it.copy(validationError = "Allocated shares must exactly equal total expense.") }
+                    val errorMsg = state.customValidation.errorMessage
+                        ?: "Allocated shares must exactly equal total bill."
+                    _uiState.update { it.copy(validationError = errorMsg) }
                     return false
                 }
                 _uiState.update { it.copy(currentStep = 4, validationError = null) }
@@ -321,7 +537,7 @@ class CreateSplitViewModel(
         }
 
         if (state.splitMethod == SplitMethod.CUSTOM && !state.customValidation.isValid) {
-            _uiState.update { it.copy(validationError = "Allocated shares must equal total amount.") }
+            _uiState.update { it.copy(validationError = state.customValidation.errorMessage ?: "Allocated shares must equal total amount.") }
             return
         }
 
@@ -331,6 +547,16 @@ class CreateSplitViewModel(
             val resolvedCategoryId = state.selectedCategory?.id
                 ?: state.availableCategories.firstOrNull()?.id
                 ?: 1L
+
+            val itemsJson = if (state.splitMethod == SplitMethod.CUSTOM && state.customSplitSubMode == CustomSplitSubMode.ITEMIZED) {
+                SplitItemJsonAdapter.toJson(
+                    ItemizedSplitData(
+                        items = state.items,
+                        sharedRemainingParticipantNames = state.sharedRemainingParticipants,
+                        isSharedRemainingDistributed = state.sharedRemainingParticipants.isNotEmpty()
+                    )
+                )
+            } else null
 
             val expense = SplitExpense(
                 title = state.title.trim(),
@@ -345,7 +571,8 @@ class CreateSplitViewModel(
                 paymentMethod = state.paymentMethod,
                 participants = state.calculatedParticipants,
                 createdAt = state.date,
-                updatedAt = System.currentTimeMillis()
+                updatedAt = System.currentTimeMillis(),
+                itemsJson = itemsJson
             )
 
             when (val result = saveSplitExpenseUseCase(expense)) {

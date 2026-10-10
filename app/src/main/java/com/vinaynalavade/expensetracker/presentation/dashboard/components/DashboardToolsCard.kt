@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.vinaynalavade.expensetracker.presentation.theme.InnerCardShape
+import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.SquircleIconShape
 import com.vinaynalavade.expensetracker.presentation.theme.pressScale
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
@@ -48,12 +48,12 @@ fun DashboardToolsCard(
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.screen)
             .pressScale(interactionSource = interactionSource)
-            .clip(InnerCardShape)
+            .clip(CardShape)
             .background(MaterialTheme.colorScheme.surface)
             .border(
                 width = 0.75.dp,
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
-                shape = InnerCardShape
+                shape = CardShape
             )
             .clickable(
                 interactionSource = interactionSource,

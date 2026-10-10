@@ -49,6 +49,9 @@ import com.vinaynalavade.expensetracker.presentation.theme.PureWhite
 import com.vinaynalavade.expensetracker.presentation.theme.SquircleIconShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
+import androidx.compose.ui.graphics.luminance
+import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+
 /**
  * Dominant, luxury Hero Balance Card inspired by modern fintech reference designs.
  * Features large 38sp financial typography, continuous 28dp squircle curvature,
@@ -61,7 +64,7 @@ fun BalanceHeroCard(
     onToggleBalanceVisibility: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val isDark = isSystemInDarkTheme()
+    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
     val heroGradient = if (isDark) HeroObsidianGradient else HeroEmeraldGradient
 
     Box(
@@ -71,14 +74,14 @@ fun BalanceHeroCard(
             .shadow(
                 elevation = if (isDark) 0.dp else 6.dp,
                 shape = HeroCardShape,
-                ambientColor = Color(0xFF025442).copy(alpha = 0.3f),
-                spotColor = Color(0xFF025442).copy(alpha = 0.4f)
+                ambientColor = if (isDark) Color(0x30000000) else Color(0xFF025442).copy(alpha = 0.25f),
+                spotColor = if (isDark) Color(0x60000000) else Color(0xFF025442).copy(alpha = 0.35f)
             )
             .clip(HeroCardShape)
             .background(heroGradient)
             .border(
                 width = 0.75.dp,
-                color = if (isDark) Color(0xFF263242) else Color.White.copy(alpha = 0.25f),
+                color = if (isDark) MaterialTheme.colorScheme.outline.copy(alpha = 0.45f) else Color.White.copy(alpha = 0.25f),
                 shape = HeroCardShape
             )
             .padding(all = 22.dp)
@@ -195,8 +198,9 @@ private fun HeroStatCapsule(
     modifier: Modifier = Modifier
 ) {
     val isIncome = type == TransactionType.INCOME
-    val iconBgColor = if (isIncome) Color(0xFF10B981).copy(alpha = 0.25f) else Color(0xFFF43F5E).copy(alpha = 0.25f)
-    val iconTint = if (isIncome) Color(0xFF34D399) else Color(0xFFFB7185)
+    val semanticColor = if (isIncome) MaterialTheme.financialColors.income else MaterialTheme.financialColors.expense
+    val iconBgColor = semanticColor.copy(alpha = 0.25f)
+    val iconTint = semanticColor
 
     Row(
         modifier = modifier

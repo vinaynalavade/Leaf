@@ -13,6 +13,23 @@
     <!-- In-App APK Update Installation Permission for Android 8.0+ -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- Optional Read Contacts for Split Participant Selection -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- Package Visibility Queries for WhatsApp Direct Reminders -->
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
     <application
         android:name=".ExpenseTrackerApp"
         android:allowBackup="true"

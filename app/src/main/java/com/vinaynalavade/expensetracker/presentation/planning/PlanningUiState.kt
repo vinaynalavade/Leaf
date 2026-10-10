@@ -24,6 +24,6 @@ data class PlanningUiState(
     val reminders: List<com.vinaynalavade.expensetracker.domain.model.Reminder> = emptyList(),
     val categories: List<Category> = emptyList(),
     val currency: Currency = Currency.DEFAULT,
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
