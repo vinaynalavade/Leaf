@@ -76,13 +76,13 @@ If GitHub API rate limits or offline conditions occur, the website falls back to
 const RELEASE_CONFIG = {
   owner: 'vinaynalavade',
   repo: 'Leaf',
-  defaultVersionName: '1.1.2',
-  defaultVersionCode: 14,
+  defaultVersionName: '1.1.3',
+  defaultVersionCode: 15,
   defaultReleaseDate: 'October 10, 2026',
   defaultApkSize: '4.4 MB',
-  defaultApkFileName: 'Leaf_v1.1.2.apk',
-  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk',
-  defaultSha256: '3c9adee97e6f089e80a7422abf6bbee51c7d52427b695e32225fa83f7f262e2',
+  defaultApkFileName: 'Leaf_v1.1.3.apk',
+  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk',
+  defaultSha256: '13220a715849d30f79e2c6b79e1bef4bb867550c64bee08d05a3b726601eec87',
   repoUrl: 'https://github.com/vinaynalavade/Leaf',
   releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
 };

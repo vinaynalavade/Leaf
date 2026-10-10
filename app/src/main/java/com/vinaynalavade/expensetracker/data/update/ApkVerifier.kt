@@ -49,7 +49,8 @@ class ApkVerifier(
     suspend fun verifyApk(
         apkFile: File,
         expectedSha256Raw: String?,
-        expectedVersionCode: Long
+        expectedVersionCode: Long,
+        expectedVersionName: String? = null
     ): AppResult<Unit> = withContext(Dispatchers.IO) {
         if (!apkFile.exists() || apkFile.length() <= 0L) {
             return@withContext AppResult.Error(
@@ -126,7 +127,7 @@ class ApkVerifier(
                 packageInfo.versionCode.toLong()
             }
 
-            if (archiveVersionCode != expectedVersionCode) {
+            if (expectedVersionCode > 0L && archiveVersionCode != expectedVersionCode) {
                 apkFile.delete()
                 return@withContext AppResult.Error(
                     AppError.UpdateError(
@@ -134,6 +135,20 @@ class ApkVerifier(
                         userMessage = "Security check failed: Package version mismatch."
                     )
                 )
+            }
+
+            if (!expectedVersionName.isNullOrBlank()) {
+                val cleanExpected = expectedVersionName.trim().removePrefix("v").removePrefix("V")
+                val cleanArchive = (packageInfo.versionName ?: "").trim().removePrefix("v").removePrefix("V")
+                if (cleanArchive.isNotBlank() && cleanArchive != cleanExpected) {
+                    apkFile.delete()
+                    return@withContext AppResult.Error(
+                        AppError.UpdateError(
+                            message = "APK versionName mismatch: release declares $expectedVersionName, but archive has ${packageInfo.versionName}.",
+                            userMessage = "Security check failed: Package version mismatch."
+                        )
+                    )
+                }
             }
         }
 

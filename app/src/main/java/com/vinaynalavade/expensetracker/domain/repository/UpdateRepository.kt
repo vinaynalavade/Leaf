@@ -29,7 +29,12 @@ interface UpdateRepository {
     /**
      * Verifies the SHA-256 hash (if available) and validates APK archive identity.
      */
-    suspend fun verifyDownloadedApk(apkFile: File, expectedSha256: String?, expectedVersionCode: Long): AppResult<Unit>
+    suspend fun verifyDownloadedApk(
+        apkFile: File,
+        expectedSha256: String?,
+        expectedVersionCode: Long,
+        expectedVersionName: String? = null
+    ): AppResult<Unit>
 
     /**
      * Resolves the app-private destination file path for a given release APK.

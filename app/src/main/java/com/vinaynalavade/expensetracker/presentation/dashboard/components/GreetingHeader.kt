@@ -128,20 +128,18 @@ fun GreetingHeader(
 
 private fun getContextualGreeting(displayName: String?): String {
     val hour = LocalTime.now().hour
-    val timeGreeting = when (hour) {
-        in 4..11 -> "Good morning"
-        in 12..16 -> "Good afternoon"
-        in 17..22 -> "Good evening"
-        else -> "Welcome back"
-    }
-
     val cleanName = displayName?.trim()?.takeIf { it.isNotBlank() }
     val firstName = cleanName?.split(Regex("\\s+"))?.firstOrNull()?.takeIf { it.isNotBlank() }
 
-    return if (firstName != null) {
-        "$timeGreeting, $firstName"
-    } else {
-        timeGreeting
+    return when {
+        com.vinaynalavade.expensetracker.core.easteregg.EasterEggEngine.isMidnight(hour) -> {
+            if (firstName != null) "Still keeping an eye on your money, $firstName?"
+            else "Still keeping an eye on your money?"
+        }
+        hour in 4..11 -> if (firstName != null) "Good morning, $firstName" else "Good morning"
+        hour in 12..16 -> if (firstName != null) "Good afternoon, $firstName" else "Good afternoon"
+        hour in 17..22 -> if (firstName != null) "Good evening, $firstName" else "Good evening"
+        else -> if (firstName != null) "Welcome back, $firstName" else "Welcome back"
     }
 }
 

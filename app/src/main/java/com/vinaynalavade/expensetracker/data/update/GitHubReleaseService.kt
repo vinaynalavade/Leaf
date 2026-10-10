@@ -111,15 +111,24 @@ class GitHubReleaseService(
         val body = releaseObj.getString("body") ?: ""
         val htmlUrl = releaseObj.getString("html_url") ?: "https://github.com/$owner/$repo/releases"
 
-        val versionName = rawTag.removePrefix("v").removePrefix("V").trim().ifBlank {
-            rawName.replace(Regex("(?i)(?:Leaf|KharchaFlow)\\s*v?"), "").trim().ifBlank { "1.0.0" }
+        val tagVersion = rawTag.removePrefix("v").removePrefix("V").trim()
+        val versionName = if (tagVersion.isNotBlank() && isValidVersionString(tagVersion)) {
+            tagVersion
+        } else {
+            val versionMatch = Regex("""\b\d+\.\d+(?:\.\d+)?\b""").find(rawName)
+            versionMatch?.value
+                ?: rawName.replace(Regex("(?i)(?:Leaf|KharchaFlow)\\s*v?"), "").trim().takeIf { isValidVersionString(it) }
+                ?: tagVersion.takeIf { isValidVersionString(it) }
+                ?: ""
         }
 
-        val versionCode = extractVersionCode(body, releaseObj)
-        if (versionCode <= 0L) {
+        val extractedCode = extractVersionCode(body, releaseObj)
+        val versionCode = if (extractedCode > 0L) extractedCode else 0L
+
+        if (versionCode <= 0L && versionName.isBlank()) {
             return AppResult.Error(
                 AppError.UpdateError(
-                    message = "Could not resolve remote versionCode from release metadata.",
+                    message = "Could not resolve remote version from release metadata.",
                     userMessage = "Unable to check for updates right now. The latest release is missing version metadata."
                 )
             )
@@ -203,6 +212,14 @@ class GitHubReleaseService(
         }
 
         return -1L
+    }
+
+    /**
+     * Checks if a string represents a valid semantic version number (e.g. "1.1.2", "v1.0.5").
+     */
+    fun isValidVersionString(version: String): Boolean {
+        val clean = version.trim().removePrefix("v").removePrefix("V")
+        return clean.isNotBlank() && Regex("""^\d+(\.\d+)*(?:-[a-zA-Z0-9.]+)?$""").matches(clean)
     }
 
     /**

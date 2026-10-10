@@ -63,9 +63,10 @@ class UpdateRepositoryImpl(
     override suspend fun verifyDownloadedApk(
         apkFile: File,
         expectedSha256: String?,
-        expectedVersionCode: Long
+        expectedVersionCode: Long,
+        expectedVersionName: String?
     ): AppResult<Unit> {
-        return apkVerifier.verifyApk(apkFile, expectedSha256, expectedVersionCode)
+        return apkVerifier.verifyApk(apkFile, expectedSha256, expectedVersionCode, expectedVersionName)
     }
 
     override fun getUpdateTargetFile(releaseInfo: RemoteReleaseInfo): File {

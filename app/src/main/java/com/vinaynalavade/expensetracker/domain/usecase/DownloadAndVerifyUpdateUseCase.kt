@@ -31,9 +31,10 @@ class DownloadAndVerifyUpdateUseCase(
     suspend fun verifyApk(
         apkFile: File,
         expectedSha256: String?,
-        expectedVersionCode: Long
+        expectedVersionCode: Long,
+        expectedVersionName: String? = null
     ): AppResult<Unit> {
-        return updateRepository.verifyDownloadedApk(apkFile, expectedSha256, expectedVersionCode)
+        return updateRepository.verifyDownloadedApk(apkFile, expectedSha256, expectedVersionCode, expectedVersionName)
     }
 
     fun getUpdateTargetFile(releaseInfo: RemoteReleaseInfo): File {
