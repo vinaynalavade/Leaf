@@ -292,6 +292,20 @@
     <string name="split_validation_name_required">कृपया खर्च का नाम दर्ज करें।</string>
     <string name="split_validation_amount_required">कृपया 0 से अधिक मान्य राशि दर्ज करें।</string>
     <string name="split_validation_mismatch">आवंटित हिस्से कुल खर्च से मेल नहीं खाते।</string>
+    <string name="split_add_from_contacts">कॉन्टैक्ट्स से जोड़ें</string>
+    <string name="split_add_manually">मैन्युअल जोड़ें</string>
+    <string name="split_custom_mode_items">आइटम अनुसार</string>
+    <string name="split_custom_mode_direct">व्यक्ति अनुसार</string>
+    <string name="split_add_item">+ आइटम जोड़ें</string>
+    <string name="split_item_name_hint">आइटम / उत्पाद (उदा. स्टार्टर्स)</string>
+    <string name="split_item_amount_hint">राशि</string>
+    <string name="split_item_consumers_label">यह किसने लिया?</string>
+    <string name="split_shared_remaining_title">साझा / शेष बिल</string>
+    <string name="split_shared_remaining_desc">अनआवंटित शेष बिल को चयनित लोगों में बांटें</string>
+    <string name="split_distribute_to_all">सभी में बांटें</string>
+    <string name="split_calculator_btn">कैलकुलेटर</string>
+    <string name="split_custom_alloc_item">व्यक्तिगत कस्टम</string>
+    <string name="split_equal_alloc_item">बराबर हिस्सा</string>
 
     <!-- v1.1.0 Reminders & Payment Planning -->
     <string name="reminders_title">भुगतान रिमाइंडर</string>

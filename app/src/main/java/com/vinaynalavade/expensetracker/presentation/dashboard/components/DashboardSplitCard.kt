@@ -41,6 +41,8 @@ import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
+import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+
 @Composable
 fun DashboardSplitCard(
     unsettledSplits: List<SplitExpense>,
@@ -57,6 +59,8 @@ fun DashboardSplitCard(
     val totalToPay = unsettledSplits
         .filter { !it.isPaidByMe }
         .fold(Amount.ZERO) { acc, split -> acc + split.toPayAmount }
+
+    val cardShape = RoundedCornerShape(20.dp)
 
     Column(
         modifier = modifier
@@ -116,14 +120,14 @@ fun DashboardSplitCard(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(CardShape)
+                .clip(cardShape)
                 .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
-                    shape = CardShape
+                    width = 0.75.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
+                    shape = cardShape
                 )
                 .clickable(onClick = onClick),
-            shape = CardShape,
+            shape = cardShape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
@@ -138,14 +142,14 @@ fun DashboardSplitCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFF10B981).copy(alpha = 0.1f))
+                                .background(MaterialTheme.financialColors.income.copy(alpha = 0.12f))
                                 .padding(10.dp)
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.CallReceived,
                                     contentDescription = null,
-                                    tint = Color(0xFF10B981),
+                                    tint = MaterialTheme.financialColors.income,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
@@ -153,14 +157,14 @@ fun DashboardSplitCard(
                                     Text(
                                         text = "To Collect",
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = Color(0xFF047857)
+                                        color = MaterialTheme.financialColors.income
                                     )
                                     AmountDisplay(
                                         amount = totalToCollect,
                                         currency = currency,
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
-                                        overrideColor = Color(0xFF047857)
+                                        overrideColor = MaterialTheme.financialColors.income
                                     )
                                 }
                             }
@@ -172,14 +176,14 @@ fun DashboardSplitCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFF59E0B).copy(alpha = 0.12f))
+                                .background(MaterialTheme.financialColors.warning.copy(alpha = 0.14f))
                                 .padding(10.dp)
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.CallMade,
                                     contentDescription = null,
-                                    tint = Color(0xFFD97706),
+                                    tint = MaterialTheme.financialColors.warning,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
@@ -187,14 +191,14 @@ fun DashboardSplitCard(
                                     Text(
                                         text = "To Pay",
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = Color(0xFFB45309)
+                                        color = MaterialTheme.financialColors.warning
                                     )
                                     AmountDisplay(
                                         amount = totalToPay,
                                         currency = currency,
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
-                                        overrideColor = Color(0xFFB45309)
+                                        overrideColor = MaterialTheme.financialColors.warning
                                     )
                                 }
                             }
@@ -255,7 +259,7 @@ fun DashboardSplitCard(
                         }
 
                         val displayAmount = if (split.isPaidByMe) split.toCollectAmount else split.toPayAmount
-                        val amountColor = if (split.isPaidByMe) Color(0xFF10B981) else Color(0xFFD97706)
+                        val amountColor = if (split.isPaidByMe) MaterialTheme.financialColors.income else MaterialTheme.financialColors.warning
                         AmountDisplay(
                             amount = displayAmount,
                             currency = currency,

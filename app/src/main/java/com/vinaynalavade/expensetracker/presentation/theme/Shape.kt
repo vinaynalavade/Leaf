@@ -17,8 +17,8 @@ val Shapes = Shapes(
 )
 
 val HeroCardShape = RoundedCornerShape(28.dp)
-val CardShape = RoundedCornerShape(24.dp)
-val InnerCardShape = RoundedCornerShape(16.dp)
+val CardShape = RoundedCornerShape(20.dp)
+val InnerCardShape = RoundedCornerShape(14.dp)
 val ButtonShape = RoundedCornerShape(16.dp)
 val InputShape = RoundedCornerShape(16.dp)
 val ChipShape = RoundedCornerShape(10.dp)

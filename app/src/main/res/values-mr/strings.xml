@@ -292,6 +292,20 @@
     <string name="split_validation_name_required">कृपया खर्चाचे नाव प्रविष्ट करा.</string>
     <string name="split_validation_amount_required">कृपया 0 पेक्षा जास्त वैध रक्कम प्रविष्ट करा.</string>
     <string name="split_validation_mismatch">विभागलेली रक्कम एकूण खर्चाशी जुळत नाही.</string>
+    <string name="split_add_from_contacts">संपर्कांमधून जोडा</string>
+    <string name="split_add_manually">मॅन्युअल जोडा</string>
+    <string name="split_custom_mode_items">वस्तूंनुसार</string>
+    <string name="split_custom_mode_direct">व्यक्तीनुसार</string>
+    <string name="split_add_item">+ वस्तू जोडा</string>
+    <string name="split_item_name_hint">वस्तू / उत्पादन (उदा. स्टार्टर्स)</string>
+    <string name="split_item_amount_hint">रक्कम</string>
+    <string name="split_item_consumers_label">हे कोणाचे आहे?</string>
+    <string name="split_shared_remaining_title">सामायिक / उर्वरित बिल</string>
+    <string name="split_shared_remaining_desc">न वाटलेले उर्वरित बिल निवडलेल्या लोकांमध्ये वाटा</string>
+    <string name="split_distribute_to_all">सर्वांमध्ये वाटा</string>
+    <string name="split_calculator_btn">कॅल्क्युलेटर</string>
+    <string name="split_custom_alloc_item">वैयक्तिक वाटणी</string>
+    <string name="split_equal_alloc_item">समान वाटणी</string>
 
     <!-- v1.1.0 Reminders & Payment Planning -->
     <string name="reminders_title">पेमेंट स्मरणपत्रे</string>

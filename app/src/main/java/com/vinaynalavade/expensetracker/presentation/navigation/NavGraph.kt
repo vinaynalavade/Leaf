@@ -165,7 +165,8 @@ fun NavGraph(
                     container.getSavingsGoalsUseCase,
                     container.splitRepository,
                     container.userPreferencesRepository,
-                    container.getUpcomingPaymentsUseCase
+                    container.getUpcomingPaymentsUseCase,
+                    container.getTransactionsUseCase
                 )
             )
             val userPrefs by container.getUserPreferencesUseCase()
@@ -225,6 +226,9 @@ fun NavGraph(
                             query = categoryName
                         )
                     )
+                },
+                onNavigateToTransactionDetail = { transactionId ->
+                    navController.navigate(Screen.TransactionDetail.createRoute(transactionId))
                 },
                 onProfileClick = {
                     navigateToPrimary(Screen.Settings.route)

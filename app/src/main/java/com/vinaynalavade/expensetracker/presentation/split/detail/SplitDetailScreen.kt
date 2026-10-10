@@ -369,7 +369,7 @@ fun SplitDetailScreen(
                                 onMarkPendingClick = {
                                     viewModel.onMarkPendingClick(participant)
                                 },
-                                onShareClick = if (!participant.isCurrentUser && !hasEqualShares) {
+                                onShareClick = if (!participant.isCurrentUser) {
                                     { viewModel.onShareWhatsApp(context = context, participant = participant, isConsolidated = false) }
                                 } else null
                             )

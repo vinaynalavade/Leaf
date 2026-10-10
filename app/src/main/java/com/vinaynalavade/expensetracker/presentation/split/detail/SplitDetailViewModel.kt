@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.share.WhatsAppShareHelper
 import com.vinaynalavade.expensetracker.core.storage.SplitQrStorageManager
@@ -116,33 +117,41 @@ class SplitDetailViewModel(
     ) {
         val expense = _uiState.value.splitExpense ?: return
         val currency = _uiState.value.currency
+        val qrUri = qrStorageManager.getShareableUri(expense.qrImagePath)
 
         val message = if (isConsolidated) {
             val nonPayerShare = expense.otherParticipants.firstOrNull()?.amount ?: expense.totalAmount
-            WhatsAppShareHelper.createShareMessage(
+            WhatsAppShareHelper.createConsolidatedMessage(
                 expenseTitle = expense.title,
-                participantName = null,
-                amount = nonPayerShare,
-                currency = currency,
-                isConsolidated = true
+                totalBill = expense.totalAmount,
+                shareEach = nonPayerShare,
+                hasQrCode = qrUri != null,
+                currency = currency
             )
         } else {
             val personName = participant?.name ?: ""
             val personAmount = participant?.amount ?: expense.totalAmount
-            WhatsAppShareHelper.createShareMessage(
+            val isSettled = participant?.isSettled == true
+            val paid = if (isSettled) personAmount else Amount.ZERO
+            val remaining = if (isSettled) Amount.ZERO else personAmount
+
+            WhatsAppShareHelper.createPersonalizedMessage(
                 expenseTitle = expense.title,
                 participantName = personName,
-                amount = personAmount,
-                currency = currency,
-                isConsolidated = false
+                totalBill = expense.totalAmount,
+                userShare = personAmount,
+                paidAmount = paid,
+                remainingAmount = remaining,
+                hasQrCode = qrUri != null,
+                currency = currency
             )
         }
 
-        val qrUri = qrStorageManager.getShareableUri(expense.qrImagePath)
         WhatsAppShareHelper.sharePaymentReminder(
             context = context,
             message = message,
-            qrImageUri = qrUri
+            qrImageUri = qrUri,
+            phoneNumber = participant?.phoneNumber
         )
     }
 

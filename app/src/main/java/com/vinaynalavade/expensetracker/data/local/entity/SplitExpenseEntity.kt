@@ -75,7 +75,10 @@ data class SplitExpenseEntity(
     val createdAt: Long = date,
 
     @ColumnInfo(name = "updated_at")
-    val updatedAt: Long = date
+    val updatedAt: Long = date,
+
+    @ColumnInfo(name = "items_json")
+    val itemsJson: String? = null
 ) {
     fun toDomainModel(category: Category?, participants: List<SplitParticipant>): SplitExpense {
         return SplitExpense(
@@ -94,7 +97,8 @@ data class SplitExpenseEntity(
             groupId = groupId,
             participants = participants,
             createdAt = createdAt,
-            updatedAt = updatedAt
+            updatedAt = updatedAt,
+            itemsJson = itemsJson
         )
     }
 
@@ -114,7 +118,8 @@ data class SplitExpenseEntity(
                 paymentMethod = splitExpense.paymentMethod.name,
                 groupId = splitExpense.groupId,
                 createdAt = splitExpense.createdAt,
-                updatedAt = splitExpense.updatedAt
+                updatedAt = splitExpense.updatedAt,
+                itemsJson = splitExpense.itemsJson
             )
         }
     }

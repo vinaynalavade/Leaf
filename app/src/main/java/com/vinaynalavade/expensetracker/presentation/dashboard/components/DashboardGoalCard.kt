@@ -40,6 +40,9 @@ import com.vinaynalavade.expensetracker.domain.model.SavingsGoal
 import com.vinaynalavade.expensetracker.presentation.components.AmountDisplay
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
+import androidx.compose.foundation.BorderStroke
+import com.vinaynalavade.expensetracker.presentation.theme.financialColors
+
 @Composable
 fun DashboardGoalCard(
     goal: SavingsGoal,
@@ -69,7 +72,11 @@ fun DashboardGoalCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 0.75.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -136,7 +143,7 @@ fun DashboardGoalCard(
                     .fillMaxWidth()
                     .height(7.dp)
                     .clip(CircleShape),
-                color = if (goal.isCompleted) Color(0xFF10B981) else goalColor,
+                color = if (goal.isCompleted) MaterialTheme.financialColors.income else goalColor,
                 trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
                 strokeCap = StrokeCap.Round
             )

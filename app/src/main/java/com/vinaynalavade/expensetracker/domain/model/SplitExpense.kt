@@ -24,7 +24,8 @@ data class SplitExpense(
     val groupId: Long? = null,
     val participants: List<SplitParticipant> = emptyList(),
     val createdAt: Long = date,
-    val updatedAt: Long = date
+    val updatedAt: Long = date,
+    val itemsJson: String? = null
 ) {
     /** True if the current user paid upfront for the split. */
     val isPaidByMe: Boolean

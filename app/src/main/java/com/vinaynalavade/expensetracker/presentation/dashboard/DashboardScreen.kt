@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.core.model.Currency
+import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.presentation.components.LoadingView
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.BalanceHeroCard
@@ -47,12 +48,14 @@ import com.vinaynalavade.expensetracker.presentation.dashboard.components.Dashbo
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.GreetingHeader
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.MonthlyOverviewCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.QuickActionsSection
+import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardRecentTransactionsSection
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 import java.time.YearMonth
 
 /**
  * Modern, luxury financial dashboard screen with streamlined hierarchy,
- * active splits insights, persistent balance visibility, and elegant branding footer.
+ * immediate quick actions, horizon commitments, recent activity preview,
+ * and elegant branding footer.
  */
 @Composable
 fun DashboardScreen(
@@ -70,6 +73,7 @@ fun DashboardScreen(
     onNavigateToTools: () -> Unit = {},
     onNavigateToReminders: () -> Unit = {},
     onNavigateToCategoryTransactions: (YearMonth, String, TransactionType) -> Unit = { _, _, _ -> },
+    onNavigateToTransactionDetail: (Long) -> Unit = {},
     onProfileClick: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
     modifier: Modifier = Modifier
@@ -95,7 +99,7 @@ fun DashboardScreen(
         },
         modifier = modifier
     ) { innerPadding ->
-        if (uiState.isLoading) {
+        if (uiState.isLoading && uiState.summary == FinancialSummary.EMPTY && uiState.categoryAnalysis == null) {
             LoadingView(modifier = Modifier.padding(innerPadding))
         } else {
             LazyColumn(
@@ -106,6 +110,7 @@ fun DashboardScreen(
                     bottom = 110.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
                 )
             ) {
+                // 1. Personalized Greeting Header
                 item {
                     GreetingHeader(
                         displayName = displayName,
@@ -114,6 +119,7 @@ fun DashboardScreen(
                     )
                 }
 
+                // 2. Primary Financial Hero Balance Card
                 item {
                     BalanceHeroCard(
                         summary = uiState.summary,
@@ -122,17 +128,18 @@ fun DashboardScreen(
                     )
                 }
 
-                // Deterministic Budget Card (Overall -> Highest spend category -> Set Monthly Budget prompt)
+                // 3. Quick Action Shortcuts (Directly underneath hero for optimal thumb reach)
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
-                    DashboardBudgetCard(
-                        budgetProgress = uiState.featuredBudget,
-                        currency = currency,
-                        onClick = onNavigateToPlanning
+                    QuickActionsSection(
+                        onAddExpenseClick = onNavigateToAddExpense,
+                        onAddIncomeClick = onNavigateToAddIncome,
+                        onViewTransactionsClick = onNavigateToTransactions,
+                        onViewCategoriesClick = onNavigateToCategories
                     )
                 }
 
-                // Compact Upcoming Payments & Obligations Card
+                // 4. Upcoming Payments & Obligations (Urgent Horizon)
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
                     DashboardUpcomingPaymentsCard(
@@ -142,7 +149,17 @@ fun DashboardScreen(
                     )
                 }
 
-                // Top Active Savings Goal Card (if any active goals exist)
+                // 5. Monthly Budget Progress Card
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    DashboardBudgetCard(
+                        budgetProgress = uiState.featuredBudget,
+                        currency = currency,
+                        onClick = onNavigateToPlanning
+                    )
+                }
+
+                // 6. Top Active Savings Goal Card (if any active goals exist)
                 uiState.topActiveGoal?.let { topGoal ->
                     item {
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
@@ -154,7 +171,7 @@ fun DashboardScreen(
                     }
                 }
 
-                // Active Splits Card (Handles both To Collect and To Pay unsettled splits)
+                // 7. Active Splits Card (Handles both To Collect and To Pay unsettled splits)
                 if (uiState.unsettledSplits.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
@@ -166,31 +183,26 @@ fun DashboardScreen(
                     }
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
-                    QuickActionsSection(
-                        onAddExpenseClick = onNavigateToAddExpense,
-                        onAddIncomeClick = onNavigateToAddIncome,
-                        onViewTransactionsClick = onNavigateToTransactions,
-                        onViewCategoriesClick = onNavigateToCategories
-                    )
-                }
-
-                // Compact Financial Tools Shortcut
+                // 8. Recent Activity Preview (Instant visibility of latest transactions)
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
-                    DashboardToolsCard(
-                        onClick = onNavigateToTools
+                    DashboardRecentTransactionsSection(
+                        transactions = uiState.recentTransactions,
+                        currency = currency,
+                        onViewAllClick = onNavigateToTransactions,
+                        onTransactionClick = onNavigateToTransactionDetail
                     )
                 }
 
+                // 9. Monthly Overview & Net Change Summary
                 item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
                     MonthlyOverviewCard(summary = uiState.summary)
                 }
 
+                // 10. Interactive Category Breakdown with Donut Chart
                 item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lg))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
                     CategoryAnalysisSection(
                         analysisResult = uiState.categoryAnalysis,
                         selectedMonth = uiState.selectedMonth,
@@ -205,9 +217,17 @@ fun DashboardScreen(
                     )
                 }
 
-                // Footer with exact branding phrase
+                // 11. Compact Financial Tools Shortcut
                 item {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xxl))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    DashboardToolsCard(
+                        onClick = onNavigateToTools
+                    )
+                }
+
+                // 12. Footer with official Leaf branding phrase
+                item {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

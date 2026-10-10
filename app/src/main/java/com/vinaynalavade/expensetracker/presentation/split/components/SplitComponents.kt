@@ -58,6 +58,11 @@ import com.vinaynalavade.expensetracker.presentation.components.PaymentMethodSel
 import com.vinaynalavade.expensetracker.presentation.theme.ButtonShape
 import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.DialogShape
+import com.vinaynalavade.expensetracker.presentation.theme.PillShape
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material3.HorizontalDivider
+import com.vinaynalavade.expensetracker.domain.split.ParticipantShareDetail
 import com.vinaynalavade.expensetracker.presentation.theme.IncomeEmerald
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
@@ -266,6 +271,13 @@ fun ParticipantShareRow(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
+                if (!participant.phoneNumber.isNullOrBlank()) {
+                    Text(
+                        text = participant.phoneNumber,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+                    )
+                }
                 Text(
                     text = participant.amount.format(currency),
                     style = MaterialTheme.typography.labelSmall,
@@ -290,6 +302,20 @@ fun ParticipantShareRow(
                 }
             } else {
                 if (isSettled) {
+                    if (onShareClick != null) {
+                        IconButton(
+                            onClick = onShareClick,
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "Share",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
                     Surface(
                         shape = PillShape,
                         color = IncomeEmerald.copy(alpha = 0.12f),
@@ -555,3 +581,246 @@ fun CustomSplitBalanceIndicator(
         }
     }
 }
+
+/**
+ * Prominent card establishing the foundation of Custom Split:
+ * Each participant starts with an equal baseline share of the total bill.
+ */
+@Composable
+fun BaseEqualShareCard(
+    totalBill: Amount,
+    participantCount: Int,
+    currency: Currency,
+    modifier: Modifier = Modifier
+) {
+    val count = participantCount.coerceAtLeast(1)
+    val perPersonSubunits = totalBill.subunits / count
+    val perPersonAmount = Amount(perPersonSubunits)
+
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = CardShape,
+        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
+    ) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Groups,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+                    Column {
+                        Text(
+                            text = "Base Equal Share",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "$participantCount participants starting equally",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                Surface(
+                    shape = PillShape,
+                    color = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Text(
+                        text = "${perPersonAmount.format(currency)} / person",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+
+            Text(
+                text = "Everyone participates in the base bill equally. Adding items below attributes specific item costs to consumers, with remaining unallocated amounts kept shared.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+/**
+ * Transparent breakdown card for a participant's calculation:
+ * Base / Shared Share + Item Responsibilities = Total Share.
+ */
+@Composable
+fun ParticipantCalculationBreakdownCard(
+    detail: ParticipantShareDetail,
+    isCurrentUser: Boolean,
+    currency: Currency,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = CardShape,
+        colors = CardDefaults.cardColors(
+            containerColor = if (isCurrentUser) {
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+            } else {
+                MaterialTheme.colorScheme.surface
+            }
+        ),
+        border = BorderStroke(
+            1.dp,
+            if (isCurrentUser) MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+            else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+        )
+    ) {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.md)) {
+            // Header Row: Avatar, Name & Final Total
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (isCurrentUser) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                else MaterialTheme.colorScheme.surfaceVariant
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = detail.participantName.take(1).uppercase(java.util.Locale.getDefault()),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+                    Text(
+                        text = if (isCurrentUser) "${detail.participantName} (You)" else detail.participantName,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (isCurrentUser) FontWeight.Bold else FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Text(
+                    text = detail.totalShare.format(currency),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = if (detail.totalShare.isPositive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+
+            // Line 1: Base / Shared Portion
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Base / Shared share",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = detail.sharedRemainingShare.format(currency),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            // Line 2+: Item Responsibilities
+            if (detail.itemBreakdown.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Item responsibility",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "+${detail.itemizedShare.format(currency)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                detail.itemBreakdown.forEach { (itemName, itemAmt) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 12.dp, top = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "• $itemName",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        )
+                        Text(
+                            text = "+${itemAmt.format(currency)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            } else {
+                Spacer(modifier = Modifier.height(2.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Item responsibility",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "₹0.00 (Base only)",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
