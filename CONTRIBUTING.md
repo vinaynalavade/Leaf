@@ -1,92 +1,125 @@
 # Contributing to Leaf
 
-Thank you for your interest in contributing to Leaf! We welcome contributions from the community to make Leaf the best open-source, privacy-first personal finance application for Android.
+Thank you for your interest in contributing to Leaf! We welcome contributions from the community to make Leaf the leading open-source, privacy-first personal finance platform for both Android and Apple iOS.
 
 Please take a moment to review this guide before submitting issues or pull requests.
 
 ---
 
-## 🛠️ Development Environment & Setup
+## 🛠️ Development Environments & Setup
 
-### Prerequisites
-- **Java Development Kit:** OpenJDK 17 or OpenJDK 21
+Leaf contains native applications for two mobile platforms:
+1. **Android** (Kotlin, Jetpack Compose, Room)
+2. **iOS** (Swift, SwiftUI, GRDB.swift)
+
+### Android Setup
+- **JDK:** OpenJDK 17 or OpenJDK 21
 - **Android Studio:** Android Studio Ladybug (2024.2.1) or newer
-- **Android SDK:** Android 15 (API level 35) SDK platform and build-tools installed
-- **Git:** Version 2.30 or higher
+- **Android SDK:** API Level 35 SDK Platform and Build-Tools installed
 
-### Getting Started
-1. **Fork & Clone:**
-   ```bash
-   git clone https://github.com/vinaynalavade/Leaf.git
-   cd Leaf
-   ```
+```powershell
+# Windows PowerShell
+.\gradlew.bat assembleDebug
+.\gradlew.bat testDebugUnitTest
 
-2. **Open in Android Studio:**
-   - Launch Android Studio.
-   - Select **Open** and choose the `Leaf` root folder.
-   - Allow Gradle to sync dependencies and generate KSP sources.
+# macOS / Linux
+./gradlew assembleDebug
+./gradlew testDebugUnitTest
+```
 
-3. **Building the Project:**
-   - Contributors **do not need** any production signing keys or release passwords.
-   - The default `debug` build type uses standard Android debug keys generated automatically on your machine.
-   ```bash
-   # Assemble Debug APK
-   ./gradlew assembleDebug
-   ```
+### iOS Setup
+- **Operating System:** macOS Sonoma (14.0+) or macOS Sequoia (15.0+)
+- **Xcode:** Xcode 15.4 or Xcode 16+
+- **Platform:** iOS 17.0+ deployment target
 
-4. **Running Unit Tests:**
-   ```bash
-   ./gradlew testDebugUnitTest
-   ```
+```bash
+# Open Xcode Project
+cd ios
+open Leaf.xcodeproj
+
+# Build via CLI
+xcodebuild -project Leaf.xcodeproj -scheme Leaf -destination 'platform=iOS Simulator,name=iPhone 16' build
+
+# Run Swift Unit Tests
+xcodebuild test -project Leaf.xcodeproj -scheme Leaf -destination 'platform=iOS Simulator,name=iPhone 16'
+
+# Alternative SPM CLI Tests
+cd ios
+swift test
+```
 
 ---
 
-## 📐 Architecture & Coding Guidelines
+## 📐 Architecture & Engineering Standards
 
-Leaf follows a strict **Clean 4-Layer Architecture** to keep business logic independent of UI and platform frameworks:
+Leaf enforces strict separation of concerns to keep business and mathematical logic independent of UI frameworks:
 
+### Android Clean 4-Layer Architecture
 ```text
 com.vinaynalavade.expensetracker
-├── core/           # Pure domain models (Amount, Currency), Result taxonomy, Utils
+├── core/           # Domain-agnostic models (Amount, Currency), Result taxonomy, Utils
 ├── data/           # Room Database, DAOs, Entities, DataStore, Repository implementations
 ├── domain/         # Pure Kotlin models, Repository interfaces, Use cases, Validators
 ├── presentation/   # Compose UI, ViewModels, Themes, Navigation, Widgets
-└── di/             # Manual DI Container (AppContainer)
+└── di/             # Manual Dependency Injection (AppContainer)
 ```
 
-### Key Principles:
-- **Precision Monetary Values:** Never use floating-point types (`Float` / `Double`) for money. Always use `Amount` (which wraps integer subunit `Long`).
-- **Offline-First:** Leaf is 100% offline. Do not introduce proprietary servers, analytics, or third-party telemetry.
-- **Compose UI Standards:** Keep Composables stateless where possible, hoist state to ViewModels, and utilize Material 3 theme tokens (`MaterialTheme.spacing`, `MaterialTheme.colorScheme`).
-- **Database & DataStore:** Room migrations must be written explicitly for any schema alterations. DataStore preferences must maintain backward compatibility.
-- **Kotlin Style:** Follow official Kotlin coding conventions (`camelCase` for functions/variables, `PascalCase` for classes/composables).
+### iOS Native Swift Architecture
+```text
+ios/Leaf/
+├── App/            # Entry point (LeafApp.swift) and AppContainer dependency graph
+└── Core/
+    ├── Domain/     # Pure Swift models (Amount, Currency, Transaction), Use cases, Protocols
+    ├── Data/       # GRDB.swift SQLite Database, Migrations, Seeds, Repository implementations
+    ├── Presentation/ # SwiftUI Views, ViewModels (@Observable), Theme, Navigation
+    ├── Services/   # Local authentication, Keychain vault, PDF generator, Backup engine
+    └── Widgets/    # Shared WidgetKit models and App Intents
+```
+
+---
+
+## 🪙 Core Mathematical & Data Contracts
+
+All contributions across Android and iOS must strictly adhere to the following contracts:
+
+1. **Subunit Financial Arithmetic:**
+   - Never use floating-point types (`Float` / `Double`) to represent or calculate monetary currency.
+   - All monetary figures must use `Amount` wrapping a signed 64-bit integer (`Long` on Android, `Int64` on iOS) representing currency subunits (paise, cents, yen).
+2. **Offline-First Principle:**
+   - Leaf operates 100% locally. Do not introduce proprietary servers, remote analytics, third-party trackers, or crash-reporting SDKs.
+3. **Database Schema Parity (Schema v10):**
+   - Both platforms implement identical SQLite table schemas, indexes, and foreign key cascades.
+   - Any database schema changes must be accompanied by explicit forward migrations and tests on both platforms.
+4. **Universal Backup Serialization (JSON v2):**
+   - Backup files (`leaf_backup.json`) follow a flat JSON envelope format with camelCase keys (`categories`, `transactions`, `recurringTransactions`, `budgets`, etc.).
+   - Compatibility must be maintained to ensure a backup generated on Android can be seamlessly restored on iOS, and vice versa.
 
 ---
 
 ## 🔀 Submitting Pull Requests
 
-1. **Create a Feature Branch:**
+1. **Create a Topic Branch:**
    ```bash
    git checkout -b feature/your-feature-name
    # or
    git checkout -b fix/issue-description
    ```
 2. **Commit Guidelines:**
-   - Write clear, meaningful commit messages (e.g. `feat: add export statement filter by category`, `fix: prevent duplicate category naming`).
-3. **Verify Before Pushing:**
-   - Ensure the project compiles cleanly without warnings or errors.
-   - Run unit tests: `./gradlew testDebugUnitTest`.
+   - Write clear, imperative commit messages (e.g. `feat(android): add category filter to statement export`, `fix(ios): prevent duplicate split participant selection`).
+3. **Run Tests Locally:**
+   - Verify that all unit test suites pass prior to opening a PR:
+     - Android: `./gradlew testDebugUnitTest`
+     - iOS: `xcodebuild test -project ios/Leaf.xcodeproj -scheme Leaf -destination 'platform=iOS Simulator,name=iPhone 16'`
 4. **Open a Pull Request:**
-   - Describe the problem solved or feature added.
-   - Include screenshots or short screen recordings for any UI changes.
-   - Reference any related open issue numbers.
+   - Provide a concise summary of the problem solved and the implementation details.
+   - Attach screenshots or screen recordings for any visual changes.
 
 ---
 
 ## 🐛 Reporting Issues
 
-- **Bug Reports:** Search existing issues first to avoid duplicates. When filing a new bug, include Android version, device model, steps to reproduce, expected vs actual behavior, and error logs if applicable.
-- **Feature Requests:** Open an issue outlining the user story, proposed solution, and why it benefits offline personal finance management.
+- **Bug Reports:** Search existing issues before opening a new ticket. Include the operating system (Android or iOS), app version, device model, reproduction steps, expected behavior, and relevant logs.
+- **Feature Requests:** Open an issue detailing the user story, proposed solution, and why it benefits offline personal finance management.
 
 ---
 
@@ -99,3 +132,4 @@ If you discover a security vulnerability or sensitive data leakage, please do **
 ## 📄 License
 
 By contributing to Leaf, you agree that your contributions will be licensed under the **GNU General Public License v3.0 (GPLv3)**.
+

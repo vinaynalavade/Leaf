@@ -1,10 +1,26 @@
-# Built application binaries & bundles
+# ==============================================================================
+# Leaf Repository .gitignore
+# Unified ignore rules for Android (Kotlin/Gradle) and iOS (Swift/Xcode/SPM)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Android & Gradle Build Artifacts
+# ------------------------------------------------------------------------------
 *.apk
 *.aab
 *.ap_
 *.dex
+.gradle/
+build/
+*/build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
 
-# Java / Android keystores and signing credentials
+# ------------------------------------------------------------------------------
+# 2. Android Signing Credentials & Local Machine Configurations (SECRETS)
+# ------------------------------------------------------------------------------
 *.jks
 *.keystore
 *.p12
@@ -13,35 +29,107 @@ signing.properties
 keystore.properties
 local.properties
 
-# Gradle files and cache
-.gradle/
-build/
-app/build/
-*/build/
-captures/
-.externalNativeBuild/
-.cxx/
+# ------------------------------------------------------------------------------
+# 3. iOS / Xcode User Data, Derived Data & Build Products
+# ------------------------------------------------------------------------------
+xcuserdata/
+*/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+*/DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
 
-# Android Studio & IntelliJ IDEA
+# Apple compiled products & distribution bundles
+*.app
+*.framework
+*.xctest
+*.appex
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcarchive
+
+# ------------------------------------------------------------------------------
+# 4. Swift Package Manager (SPM)
+# ------------------------------------------------------------------------------
+.build/
+*/.build/
+.swiftpm/
+*/.swiftpm/
+*.pins
+
+# ------------------------------------------------------------------------------
+# 5. IDE & Editor Caches (IntelliJ IDEA, Android Studio, VS Code, Eclipse)
+# ------------------------------------------------------------------------------
 .idea/
 *.iml
 *.iws
 *.ipr
 out/
-
-# VS Code
 .vscode/
+*.swp
+*.swo
+*~
 
-# OS-specific
+# Kotlin compiler sessions & temporary logs
+.kotlin/
+*.log
+output.json
+
+# ------------------------------------------------------------------------------
+# 6. Operating System Metadata
+# ------------------------------------------------------------------------------
 .DS_Store
 .DS_Store?
 ._*
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Kotlin compiler & temporary logs
-.kotlin/
-*.log
-output.json
+# ------------------------------------------------------------------------------
+# 7. Environment, Secrets & Local Data
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.key
+*.cer
+*.crt
+*.pfx
+*.mobileprovision
+
+# Personal backup dumps and test database snapshots
+# (Protects private user financial data from accidental commits)
+leaf_backup*.json
+kharchaflow_backup*.json
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ------------------------------------------------------------------------------
+# 8. Dependency Managers & CI Automation (CocoaPods, Fastlane)
+# ------------------------------------------------------------------------------
+Pods/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
