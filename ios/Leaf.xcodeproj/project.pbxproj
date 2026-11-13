@@ -1,0 +1,2188 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1001 /* LeafApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2001 /* LeafApp.swift */; };
+		1002 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2002 /* AppContainer.swift */; };
+		1003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2003 /* Assets.xcassets */; };
+		1004 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2004 /* Amount.swift */; };
+		1005 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2005 /* Currency.swift */; };
+		1006 /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2006 /* TransactionType.swift */; };
+		1007 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2007 /* PaymentMethod.swift */; };
+		1008 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008 /* Category.swift */; };
+		1009 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009 /* Transaction.swift */; };
+		1010 /* SplitCalculationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2010 /* SplitCalculationEngine.swift */; };
+		1011 /* SplitExpense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011 /* SplitExpense.swift */; };
+		1012 /* SplitParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2012 /* SplitParticipant.swift */; };
+		1013 /* SplitItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2013 /* SplitItem.swift */; };
+		1014 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2014 /* Budget.swift */; };
+		1015 /* SavingsGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2015 /* SavingsGoal.swift */; };
+		1016 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2016 /* Reminder.swift */; };
+		1017 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2017 /* UserPreferences.swift */; };
+		1018 /* ColorTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2018 /* ColorTokens.swift */; };
+		1019 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2019 /* Typography.swift */; };
+		1020 /* Components/SquircleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2020 /* Components/SquircleCard.swift */; };
+		1021 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2021 /* AppDatabase.swift */; };
+		1022 /* Migrations/DatabaseMigrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2022 /* Migrations/DatabaseMigrations.swift */; };
+		1023 /* Seeds/CategorySeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2023 /* Seeds/CategorySeeds.swift */; };
+		1024 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 3001 /* GRDB */; };
+		1025 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 3002 /* GRDB */; };
+		1026 /* AmountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026 /* AmountTests.swift */; };
+		1027 /* CurrencyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2027 /* CurrencyTests.swift */; };
+		1028 /* SplitCalculationEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028 /* SplitCalculationEngineTests.swift */; };
+		1029 /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2029 /* DatabaseMigrationTests.swift */; };
+		1030 /* BudgetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2031 /* BudgetRecord.swift */; };
+		1031 /* CategoryRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2032 /* CategoryRecord.swift */; };
+		1032 /* RecurringTransactionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2033 /* RecurringTransactionRecord.swift */; };
+		1033 /* ReminderRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2034 /* ReminderRecord.swift */; };
+		1034 /* SavingsContributionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2035 /* SavingsContributionRecord.swift */; };
+		1035 /* SavingsGoalRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2036 /* SavingsGoalRecord.swift */; };
+		1036 /* SplitExpenseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2037 /* SplitExpenseRecord.swift */; };
+		1037 /* SplitGroupRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2038 /* SplitGroupRecord.swift */; };
+		1038 /* SplitParticipantRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2039 /* SplitParticipantRecord.swift */; };
+		1039 /* TransactionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2040 /* TransactionRecord.swift */; };
+		1040 /* GRDBCategoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2041 /* GRDBCategoryRepository.swift */; };
+		1041 /* GRDBSplitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2042 /* GRDBSplitRepository.swift */; };
+		1042 /* GRDBTransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2043 /* GRDBTransactionRepository.swift */; };
+		1043 /* CategoryRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2044 /* CategoryRepositoryProtocol.swift */; };
+		1044 /* SplitRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2045 /* SplitRepositoryProtocol.swift */; };
+		1045 /* TransactionRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046 /* TransactionRepositoryProtocol.swift */; };
+		1046 /* AddTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047 /* AddTransactionUseCase.swift */; };
+		1047 /* CalculateSplitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2048 /* CalculateSplitUseCase.swift */; };
+		1048 /* DeleteTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2049 /* DeleteTransactionUseCase.swift */; };
+		1999 /* ReverseTransferUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2999 /* ReverseTransferUseCase.swift */; };
+		1049 /* GetTransactionsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2050 /* GetTransactionsUseCase.swift */; };
+		1050 /* SettleParticipantUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2051 /* SettleParticipantUseCase.swift */; };
+		1051 /* Navigation/LeafRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052 /* Navigation/LeafRoute.swift */; };
+		1052 /* Root/MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2053 /* Root/MainTabView.swift */; };
+		1053 /* RepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2054 /* RepositoryTests.swift */; };
+		1054 /* FinancialSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2055 /* FinancialSummary.swift */; };
+		1055 /* BudgetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2056 /* BudgetStatus.swift */; };
+		1056 /* BudgetProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2057 /* BudgetProgress.swift */; };
+		1057 /* UserPreferencesRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2058 /* UserPreferencesRepositoryProtocol.swift */; };
+		1058 /* BudgetRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2059 /* BudgetRepositoryProtocol.swift */; };
+		1059 /* UserPreferencesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2060 /* UserPreferencesRepository.swift */; };
+		1060 /* GRDBBudgetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2061 /* GRDBBudgetRepository.swift */; };
+		1061 /* GetFinancialSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2062 /* GetFinancialSummaryUseCase.swift */; };
+		1062 /* GetBudgetProgressUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2063 /* GetBudgetProgressUseCase.swift */; };
+		1063 /* Components/CategoryIconBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2064 /* Components/CategoryIconBadge.swift */; };
+		1064 /* Components/EmptyStateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2065 /* Components/EmptyStateCard.swift */; };
+		1065 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2066 /* DashboardViewModel.swift */; };
+		1066 /* DashboardHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2067 /* DashboardHeaderView.swift */; };
+		1067 /* BalanceHeroCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2068 /* BalanceHeroCardView.swift */; };
+		1068 /* QuickActionsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2069 /* QuickActionsRowView.swift */; };
+		1069 /* DashboardBudgetSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2070 /* DashboardBudgetSectionView.swift */; };
+		1070 /* RecentTransactionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2071 /* RecentTransactionsSectionView.swift */; };
+		1071 /* QuickAddTransactionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2072 /* QuickAddTransactionSheet.swift */; };
+		1072 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2073 /* DashboardView.swift */; };
+		1073 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2074 /* DashboardViewModelTests.swift */; };
+		1074 /* CategorySpending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2075 /* CategorySpending.swift */; };
+		1075 /* MonthlyExpenseSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2076 /* MonthlyExpenseSummary.swift */; };
+		1076 /* TransactionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2077 /* TransactionFilter.swift */; };
+		1077 /* UpdateTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2078 /* UpdateTransactionUseCase.swift */; };
+		1078 /* GetMonthlyExpenseSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2079 /* GetMonthlyExpenseSummaryUseCase.swift */; };
+		1079 /* GetCategorySpendingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2080 /* GetCategorySpendingUseCase.swift */; };
+		1080 /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2081 /* ExpensesView.swift */; };
+		1081 /* ExpensesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2082 /* ExpensesViewModel.swift */; };
+		1082 /* ExpensesFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2083 /* ExpensesFilterSheet.swift */; };
+		1083 /* AddEditExpenseSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2084 /* AddEditExpenseSheet.swift */; };
+		1084 /* ExpensesMonthPickerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2085 /* ExpensesMonthPickerHeaderView.swift */; };
+		1085 /* ExpensesMonthlySummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2086 /* ExpensesMonthlySummaryCardView.swift */; };
+		1086 /* ExpensesCategoryBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2087 /* ExpensesCategoryBreakdownView.swift */; };
+		1087 /* ExpensesTransactionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2088 /* ExpensesTransactionHistoryView.swift */; };
+		1088 /* ExpensesSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2089 /* ExpensesSearchBarView.swift */; };
+		1089 /* ExpensesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090 /* ExpensesViewModelTests.swift */; };
+		1090 /* NetBalanceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2091 /* NetBalanceEngine.swift */; };
+		1091 /* CreateSplitExpenseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2092 /* CreateSplitExpenseUseCase.swift */; };
+		1092 /* UpdateSplitExpenseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2093 /* UpdateSplitExpenseUseCase.swift */; };
+		1093 /* DeleteSplitExpenseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2094 /* DeleteSplitExpenseUseCase.swift */; };
+		1094 /* GetSplitSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2095 /* GetSplitSummaryUseCase.swift */; };
+		1095 /* SplitLandingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2096 /* SplitLandingViewModel.swift */; };
+		1096 /* SplitLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097 /* SplitLandingView.swift */; };
+		1097 /* CreateSplitSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2098 /* CreateSplitSheet.swift */; };
+		1098 /* SplitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2099 /* SplitDetailView.swift */; };
+		1099 /* EditSplitSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2100 /* EditSplitSheet.swift */; };
+		1100 /* SplitFinancialOverviewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2101 /* SplitFinancialOverviewCardView.swift */; };
+		1101 /* SplitExpenseCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102 /* SplitExpenseCardView.swift */; };
+		1102 /* SplitViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2103 /* SplitViewModelTests.swift */; };
+		1103 /* SplitPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2104 /* SplitPayment.swift */; };
+		1104 /* SplitPaymentRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2105 /* SplitPaymentRecord.swift */; };
+		1105 /* RecordParticipantPaymentUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2106 /* RecordParticipantPaymentUseCase.swift */; };
+		1106 /* ReverseParticipantPaymentUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107 /* ReverseParticipantPaymentUseCase.swift */; };
+		1107 /* RecordPaymentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2108 /* RecordPaymentSheet.swift */; };
+		1108 /* SavingsGoalContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109 /* SavingsGoalContribution.swift */; };
+		1109 /* SavingsGoalContributionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2110 /* SavingsGoalContributionRecord.swift */; };
+		1110 /* SavingsGoalRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2111 /* SavingsGoalRepositoryProtocol.swift */; };
+		1111 /* GRDBSavingsGoalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2112 /* GRDBSavingsGoalRepository.swift */; };
+		1112 /* SaveBudgetUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2113 /* SaveBudgetUseCase.swift */; };
+		1113 /* DeleteBudgetUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2114 /* DeleteBudgetUseCase.swift */; };
+		1114 /* GetSavingsGoalsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2115 /* GetSavingsGoalsUseCase.swift */; };
+		1115 /* SaveSavingsGoalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2116 /* SaveSavingsGoalUseCase.swift */; };
+		1116 /* DeleteSavingsGoalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2117 /* DeleteSavingsGoalUseCase.swift */; };
+		1117 /* SetSavingsGoalArchivedUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2118 /* SetSavingsGoalArchivedUseCase.swift */; };
+		1118 /* RecordSavingsContributionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2119 /* RecordSavingsContributionUseCase.swift */; };
+		1119 /* ReverseSavingsContributionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2120 /* ReverseSavingsContributionUseCase.swift */; };
+		1120 /* PlanningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2121 /* PlanningViewModel.swift */; };
+		1121 /* PlanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2122 /* PlanningView.swift */; };
+		1122 /* BudgetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2123 /* BudgetCardView.swift */; };
+		1123 /* BudgetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2124 /* BudgetDetailView.swift */; };
+		1124 /* CreateEditBudgetSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2125 /* CreateEditBudgetSheet.swift */; };
+		1125 /* SavingsGoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2126 /* SavingsGoalCardView.swift */; };
+		1126 /* CreateEditSavingsGoalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2127 /* CreateEditSavingsGoalSheet.swift */; };
+		1127 /* AddSavingsContributionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128 /* AddSavingsContributionSheet.swift */; };
+		1128 /* SavingsGoalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2129 /* SavingsGoalDetailView.swift */; };
+		1129 /* PlanningViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130 /* PlanningViewModelTests.swift */; };
+		1130 /* BudgetPeriodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131 /* BudgetPeriodType.swift */; };
+		1131 /* RecordSavingsWithdrawalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132 /* RecordSavingsWithdrawalUseCase.swift */; };
+		1132 /* ReverseSavingsWithdrawalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2133 /* ReverseSavingsWithdrawalUseCase.swift */; };
+		1133 /* AddSavingsWithdrawalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2134 /* AddSavingsWithdrawalSheet.swift */; };
+		1134 /* InsightsPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2135 /* InsightsPeriod.swift */; };
+		1135 /* InsightsFinancialOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2136 /* InsightsFinancialOverview.swift */; };
+		1136 /* CategoryAnalysisItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137 /* CategoryAnalysisItem.swift */; };
+		1137 /* SpendingTrendPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2138 /* SpendingTrendPoint.swift */; };
+		1138 /* BudgetInsightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2139 /* BudgetInsightItem.swift */; };
+		1139 /* FinancialObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140 /* FinancialObservation.swift */; };
+		1140 /* GetInsightsSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2141 /* GetInsightsSummaryUseCase.swift */; };
+		1141 /* GetCategoryAnalysisUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142 /* GetCategoryAnalysisUseCase.swift */; };
+		1142 /* GetSpendingTrendsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143 /* GetSpendingTrendsUseCase.swift */; };
+		1143 /* GetBudgetInsightsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144 /* GetBudgetInsightsUseCase.swift */; };
+		1144 /* GetSavingsInsightsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145 /* GetSavingsInsightsUseCase.swift */; };
+		1145 /* GetFinancialObservationsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146 /* GetFinancialObservationsUseCase.swift */; };
+		1146 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2147 /* InsightsView.swift */; };
+		1147 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2148 /* InsightsViewModel.swift */; };
+		1148 /* InsightsPeriodSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2149 /* InsightsPeriodSelectorView.swift */; };
+		1149 /* CustomDateRangeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2150 /* CustomDateRangeSheet.swift */; };
+		1150 /* FinancialOverviewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2151 /* FinancialOverviewCardView.swift */; };
+		1151 /* FinancialObservationsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152 /* FinancialObservationsSectionView.swift */; };
+		1152 /* SpendingTrendsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2153 /* SpendingTrendsChartView.swift */; };
+		1153 /* CategoryDistributionChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2154 /* CategoryDistributionChartView.swift */; };
+		1154 /* CategoryBreakdownListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2155 /* CategoryBreakdownListView.swift */; };
+		1155 /* BudgetUtilisationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2156 /* BudgetUtilisationSectionView.swift */; };
+		1156 /* SavingsGrowthSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157 /* SavingsGrowthSectionView.swift */; };
+		1157 /* CategoryDetailAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158 /* CategoryDetailAnalyticsView.swift */; };
+		1158 /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2159 /* SettingsSheet.swift */; };
+		1159 /* InsightsAnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2160 /* InsightsAnalyticsTests.swift */; };
+		1160 /* StatementPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2161 /* StatementPeriod.swift */; };
+		1161 /* StatementFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2162 /* StatementFormat.swift */; };
+		1162 /* FinancialStatementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163 /* FinancialStatementData.swift */; };
+		1163 /* SavedStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2164 /* SavedStatement.swift */; };
+		1164 /* StatementRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165 /* StatementRecord.swift */; };
+		1165 /* StatementRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2166 /* StatementRepositoryProtocol.swift */; };
+		1166 /* GRDBStatementRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2167 /* GRDBStatementRepository.swift */; };
+		1167 /* CompileStatementDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2168 /* CompileStatementDataUseCase.swift */; };
+		1168 /* GenerateStatementUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2169 /* GenerateStatementUseCase.swift */; };
+		1169 /* DeleteStatementUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2170 /* DeleteStatementUseCase.swift */; };
+		1170 /* GetStatementsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2171 /* GetStatementsUseCase.swift */; };
+		1171 /* PdfStatementGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2172 /* PdfStatementGenerator.swift */; };
+		1172 /* CsvStatementGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173 /* CsvStatementGenerator.swift */; };
+		1173 /* StatementsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2174 /* StatementsViewModel.swift */; };
+		1174 /* StatementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2175 /* StatementsView.swift */; };
+		1175 /* GenerateStatementSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2176 /* GenerateStatementSheet.swift */; };
+		1176 /* PdfViewerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2177 /* PdfViewerSheet.swift */; };
+		1177 /* DocumentPickerExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178 /* DocumentPickerExportView.swift */; };
+		1178 /* CompoundingFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179 /* CompoundingFrequency.swift */; };
+		1179 /* FinancialToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2180 /* FinancialToolType.swift */; };
+		1180 /* EmiCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181 /* EmiCalculation.swift */; };
+		1181 /* SipCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2182 /* SipCalculation.swift */; };
+		1182 /* FdCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2183 /* FdCalculation.swift */; };
+		1183 /* RdCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2184 /* RdCalculation.swift */; };
+		1184 /* DiscountCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2185 /* DiscountCalculation.swift */; };
+		1185 /* GstCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2186 /* GstCalculation.swift */; };
+		1186 /* FinancialCalculatorEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2187 /* FinancialCalculatorEngine.swift */; };
+		1187 /* CalculateEmiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2188 /* CalculateEmiUseCase.swift */; };
+		1188 /* CalculateSipUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189 /* CalculateSipUseCase.swift */; };
+		1189 /* CalculateFdUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2190 /* CalculateFdUseCase.swift */; };
+		1190 /* CalculateRdUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2191 /* CalculateRdUseCase.swift */; };
+		1191 /* CalculateDiscountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2192 /* CalculateDiscountUseCase.swift */; };
+		1192 /* CalculateGstUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2193 /* CalculateGstUseCase.swift */; };
+		1193 /* ToolsLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2194 /* ToolsLandingView.swift */; };
+		1194 /* ToolsLandingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2195 /* ToolsLandingViewModel.swift */; };
+		1195 /* EmiCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2196 /* EmiCalculatorView.swift */; };
+		1196 /* EmiCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2197 /* EmiCalculatorViewModel.swift */; };
+		1197 /* SipCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198 /* SipCalculatorView.swift */; };
+		1198 /* SipCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199 /* SipCalculatorViewModel.swift */; };
+		1199 /* FdCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200 /* FdCalculatorView.swift */; };
+		1200 /* FdCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2201 /* FdCalculatorViewModel.swift */; };
+		1201 /* RdCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2202 /* RdCalculatorView.swift */; };
+		1202 /* RdCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2203 /* RdCalculatorViewModel.swift */; };
+		1203 /* DiscountCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2204 /* DiscountCalculatorView.swift */; };
+		1204 /* DiscountCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2205 /* DiscountCalculatorViewModel.swift */; };
+		1205 /* GstCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2206 /* GstCalculatorView.swift */; };
+		1206 /* GstCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2207 /* GstCalculatorViewModel.swift */; };
+		1207 /* CalculatorInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2208 /* CalculatorInputField.swift */; };
+		1208 /* CalculatorResultHeroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2209 /* CalculatorResultHeroCard.swift */; };
+		1209 /* CalculatorBreakdownRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2210 /* CalculatorBreakdownRow.swift */; };
+		1210 /* CalculatorCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2211 /* CalculatorCardView.swift */; };
+		1211 /* CalculatorAmortizationScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212 /* CalculatorAmortizationScheduleView.swift */; };
+		1212 /* CalculatorAssumptionDisclosureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2213 /* CalculatorAssumptionDisclosureCard.swift */; };
+		1213 /* RecurringTransactionOccurrenceRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2214 /* RecurringTransactionOccurrenceRecord.swift */; };
+		1214 /* GRDBRecurringRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2215 /* GRDBRecurringRepository.swift */; };
+		1215 /* RecurrenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2216 /* RecurrenceEngine.swift */; };
+		1216 /* RecurringRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2217 /* RecurringRepositoryProtocol.swift */; };
+		1217 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2218 /* NotificationService.swift */; };
+		1218 /* DashboardUpcomingBillsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2219 /* DashboardUpcomingBillsSectionView.swift */; };
+		1219 /* BillPaymentStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2220 /* BillPaymentStatus.swift */; };
+		1220 /* RecurringScheduleFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2221 /* RecurringScheduleFrequency.swift */; };
+		1221 /* RecurringScheduleStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2222 /* RecurringScheduleStatus.swift */; };
+		1222 /* RecurringTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2223 /* RecurringTransaction.swift */; };
+		1223 /* RecurringTransactionOccurrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2224 /* RecurringTransactionOccurrence.swift */; };
+		1224 /* SubscriptionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2225 /* SubscriptionSummary.swift */; };
+		1225 /* UpcomingBillsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2226 /* UpcomingBillsSummary.swift */; };
+		1226 /* CancelRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227 /* CancelRecurringTransactionUseCase.swift */; };
+		1227 /* CreateRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2228 /* CreateRecurringTransactionUseCase.swift */; };
+		1228 /* DeleteRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2229 /* DeleteRecurringTransactionUseCase.swift */; };
+		1229 /* GenerateDueOccurrencesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2230 /* GenerateDueOccurrencesUseCase.swift */; };
+		1230 /* GetRecurringTransactionsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2231 /* GetRecurringTransactionsUseCase.swift */; };
+		1231 /* GetSubscriptionSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232 /* GetSubscriptionSummaryUseCase.swift */; };
+		1232 /* GetUpcomingBillsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233 /* GetUpcomingBillsUseCase.swift */; };
+		1233 /* MarkBillAsPaidUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234 /* MarkBillAsPaidUseCase.swift */; };
+		1234 /* PauseRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2235 /* PauseRecurringTransactionUseCase.swift */; };
+		1235 /* ResumeRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2236 /* ResumeRecurringTransactionUseCase.swift */; };
+		1236 /* SkipBillOccurrenceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2237 /* SkipBillOccurrenceUseCase.swift */; };
+		1237 /* SnoozeBillReminderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2238 /* SnoozeBillReminderUseCase.swift */; };
+		1238 /* UpdateRecurringTransactionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239 /* UpdateRecurringTransactionUseCase.swift */; };
+		1239 /* RecurringHubViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2240 /* RecurringHubViewModel.swift */; };
+		1240 /* RecurringHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2241 /* RecurringHubView.swift */; };
+		1241 /* RecurringDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2242 /* RecurringDetailView.swift */; };
+		1242 /* CreateEditRecurringSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2243 /* CreateEditRecurringSheet.swift */; };
+		1243 /* UpcomingBillCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2244 /* UpcomingBillCardView.swift */; };
+		1244 /* RecurringScheduleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2245 /* RecurringScheduleCardView.swift */; };
+		1245 /* SubscriptionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2246 /* SubscriptionCardView.swift */; };
+		1246 /* SnoozeReminderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2247 /* SnoozeReminderSheet.swift */; };
+		1247 /* ReversePaidOccurrenceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248 /* ReversePaidOccurrenceUseCase.swift */; };
+		1248 /* AppLockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2249 /* AppLockState.swift */; };
+		1249 /* BackupSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2250 /* BackupSummary.swift */; };
+		1250 /* LeafBackupContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251 /* LeafBackupContainer.swift */; };
+		1251 /* LeafBackupPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2252 /* LeafBackupPayload.swift */; };
+		1252 /* CreateBackupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2253 /* CreateBackupUseCase.swift */; };
+		1253 /* DeleteAllFinancialDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2254 /* DeleteAllFinancialDataUseCase.swift */; };
+		1254 /* RestoreBackupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2255 /* RestoreBackupUseCase.swift */; };
+		1255 /* ValidateBackupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2256 /* ValidateBackupUseCase.swift */; };
+		1256 /* AppLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2257 /* AppLockService.swift */; };
+		1257 /* BackupCryptoEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258 /* BackupCryptoEngine.swift */; };
+		1258 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2259 /* BackupService.swift */; };
+		1259 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2260 /* KeychainService.swift */; };
+		1260 /* AppLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2261 /* AppLockView.swift */; };
+		1261 /* BackupRestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2262 /* BackupRestoreView.swift */; };
+		1262 /* CreateBackupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2263 /* CreateBackupSheet.swift */; };
+		1263 /* DeleteDataConfirmationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2264 /* DeleteDataConfirmationSheet.swift */; };
+		1264 /* PrivacyDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2265 /* PrivacyDashboardView.swift */; };
+		1265 /* PrivacyDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266 /* PrivacyDashboardViewModel.swift */; };
+		1266 /* RestoreBackupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2267 /* RestoreBackupSheet.swift */; };
+		1267 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2268 /* ShareSheetView.swift */; };
+		1268 /* StatementFileBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2269 /* StatementFileBackup.swift */; };
+		1269 /* PasswordStrength.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270 /* PasswordStrength.swift */; };
+		1270 /* PrivacyShieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2271 /* PrivacyShieldView.swift */; };
+		1271 /* RestoreProgressState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2272 /* RestoreProgressState.swift */; };
+		1272 /* RestoreJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2273 /* RestoreJournal.swift */; };
+		1273 /* SplitGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274 /* SplitGroup.swift */; };
+		1274 /* SplitGroupAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2275 /* SplitGroupAnalytics.swift */; };
+		1275 /* GetSplitGroupAnalyticsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276 /* GetSplitGroupAnalyticsUseCase.swift */; };
+		1276 /* GetSplitGroupsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2277 /* GetSplitGroupsUseCase.swift */; };
+		1277 /* SaveSplitGroupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2278 /* SaveSplitGroupUseCase.swift */; };
+		1278 /* DeleteSplitGroupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2279 /* DeleteSplitGroupUseCase.swift */; };
+		1279 /* SplitGroupAnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280 /* SplitGroupAnalyticsViewModel.swift */; };
+		1280 /* SplitGroupAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2281 /* SplitGroupAnalyticsView.swift */; };
+		1281 /* SplitGroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2282 /* SplitGroupDetailView.swift */; };
+		1282 /* SplitGroupCategoryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2283 /* SplitGroupCategoryChart.swift */; };
+		1283 /* SplitGroupSpendingTimelineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2284 /* SplitGroupSpendingTimelineChart.swift */; };
+		1284 /* CreateGroupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2285 /* CreateGroupSheet.swift */; };
+		1285 /* ReceiptStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2286 /* ReceiptStorageService.swift */; };
+		1286 /* ReceiptExtractionConfidence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2287 /* ReceiptExtractionConfidence.swift */; };
+		1287 /* ReceiptOCRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2288 /* ReceiptOCRResult.swift */; };
+		1288 /* ReceiptOCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2289 /* ReceiptOCRService.swift */; };
+		1289 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2290 /* ReceiptParser.swift */; };
+		1290 /* ProcessReceiptImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2291 /* ProcessReceiptImageUseCase.swift */; };
+		1291 /* ReceiptCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292 /* ReceiptCameraView.swift */; };
+		1292 /* ReceiptScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2293 /* ReceiptScannerViewModel.swift */; };
+		1293 /* ReceiptReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2294 /* ReceiptReviewView.swift */; };
+		1294 /* ReceiptScannerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2295 /* ReceiptScannerSheet.swift */; };
+		1295 /* ExchangeRateRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2296 /* ExchangeRateRecord.swift */; };
+		1296 /* TravelWalletRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2297 /* TravelWalletRecord.swift */; };
+		1297 /* GRDBExchangeRateRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298 /* GRDBExchangeRateRepository.swift */; };
+		1298 /* GRDBTravelWalletRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299 /* GRDBTravelWalletRepository.swift */; };
+		1299 /* ExchangeRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2300 /* ExchangeRate.swift */; };
+		1300 /* TravelWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301 /* TravelWallet.swift */; };
+		1301 /* ExchangeRateRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2302 /* ExchangeRateRepositoryProtocol.swift */; };
+		1302 /* TravelWalletRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2303 /* TravelWalletRepositoryProtocol.swift */; };
+		1303 /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2304 /* CurrencyConverter.swift */; };
+		1304 /* ChangePrimaryCurrencyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2305 /* ChangePrimaryCurrencyUseCase.swift */; };
+		1305 /* DeleteTravelWalletUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306 /* DeleteTravelWalletUseCase.swift */; };
+		1306 /* GetExchangeRatesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2307 /* GetExchangeRatesUseCase.swift */; };
+		1307 /* GetTravelWalletsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2308 /* GetTravelWalletsUseCase.swift */; };
+		1308 /* SaveExchangeRateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2309 /* SaveExchangeRateUseCase.swift */; };
+		1309 /* SaveTravelWalletUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2310 /* SaveTravelWalletUseCase.swift */; };
+		1310 /* CurrencySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2311 /* CurrencySettingsView.swift */; };
+		1311 /* EditExchangeRateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2312 /* EditExchangeRateSheet.swift */; };
+		1312 /* CreateEditTravelWalletSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313 /* CreateEditTravelWalletSheet.swift */; };
+		1313 /* TravelWalletDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2314 /* TravelWalletDetailView.swift */; };
+		1314 /* TravelWalletsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2315 /* TravelWalletsListView.swift */; };
+		1315 /* TravelWalletsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2316 /* TravelWalletsViewModel.swift */; };
+		1316 /* WidgetDataSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2317 /* WidgetDataSharing.swift */; };
+		1317 /* LeafWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2318 /* LeafWidgets.swift */; };
+		1318 /* GoogleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319 /* GoogleAuthService.swift */; };
+		1319 /* GoogleDriveRestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2320 /* GoogleDriveRestService.swift */; };
+		1320 /* GoogleDriveBackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2321 /* GoogleDriveBackupService.swift */; };
+		1321 /* WidgetDataSharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2317 /* WidgetDataSharing.swift */; };
+		1322 /* LeafWidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2322 /* LeafWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1323 /* SecurePinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326 /* SecurePinManager.swift */; };
+		1324 /* PinKeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2327 /* PinKeypadView.swift */; };
+		1325 /* AppLockSetupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2328 /* AppLockSetupSheet.swift */; };
+		1326 /* ChangePinSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2329 /* ChangePinSheet.swift */; };
+		1327 /* DisableAppLockSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2330 /* DisableAppLockSheet.swift */; };
+		1328 /* LeafWidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2331 /* LeafWidgetViews.swift */; };
+		1329 /* LeafWidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2331 /* LeafWidgetViews.swift */; };
+		1330 /* WidgetShowcaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2332 /* WidgetShowcaseView.swift */; };
+		1331 /* TransferFundsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2333 /* TransferFundsSheet.swift */; };
+		1332 /* LedgersHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334 /* LedgersHubView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2001 /* LeafApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafApp.swift; sourceTree = "<group>"; };
+		2002 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		2003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2004 /* Amount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
+		2005 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		2006 /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
+		2007 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
+		2008 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		2009 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		2010 /* SplitCalculationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitCalculationEngine.swift; sourceTree = "<group>"; };
+		2011 /* SplitExpense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitExpense.swift; sourceTree = "<group>"; };
+		2012 /* SplitParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitParticipant.swift; sourceTree = "<group>"; };
+		2013 /* SplitItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitItem.swift; sourceTree = "<group>"; };
+		2014 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		2015 /* SavingsGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoal.swift; sourceTree = "<group>"; };
+		2016 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		2017 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		2018 /* ColorTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTokens.swift; sourceTree = "<group>"; };
+		2019 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		2020 /* Components/SquircleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/SquircleCard.swift; sourceTree = "<group>"; };
+		2021 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		2022 /* Migrations/DatabaseMigrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrations/DatabaseMigrations.swift; sourceTree = "<group>"; };
+		2023 /* Seeds/CategorySeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seeds/CategorySeeds.swift; sourceTree = "<group>"; };
+		2024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2025 /* Leaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Leaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2026 /* AmountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountTests.swift; sourceTree = "<group>"; };
+		2027 /* CurrencyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTests.swift; sourceTree = "<group>"; };
+		2028 /* SplitCalculationEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitCalculationEngineTests.swift; sourceTree = "<group>"; };
+		2029 /* DatabaseMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseMigrationTests.swift; sourceTree = "<group>"; };
+		2030 /* LeafTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeafTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2031 /* BudgetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetRecord.swift; sourceTree = "<group>"; };
+		2032 /* CategoryRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRecord.swift; sourceTree = "<group>"; };
+		2033 /* RecurringTransactionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionRecord.swift; sourceTree = "<group>"; };
+		2034 /* ReminderRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRecord.swift; sourceTree = "<group>"; };
+		2035 /* SavingsContributionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsContributionRecord.swift; sourceTree = "<group>"; };
+		2036 /* SavingsGoalRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalRecord.swift; sourceTree = "<group>"; };
+		2037 /* SplitExpenseRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitExpenseRecord.swift; sourceTree = "<group>"; };
+		2038 /* SplitGroupRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupRecord.swift; sourceTree = "<group>"; };
+		2039 /* SplitParticipantRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitParticipantRecord.swift; sourceTree = "<group>"; };
+		2040 /* TransactionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRecord.swift; sourceTree = "<group>"; };
+		2041 /* GRDBCategoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBCategoryRepository.swift; sourceTree = "<group>"; };
+		2042 /* GRDBSplitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBSplitRepository.swift; sourceTree = "<group>"; };
+		2043 /* GRDBTransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBTransactionRepository.swift; sourceTree = "<group>"; };
+		2044 /* CategoryRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2045 /* SplitRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2046 /* TransactionRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2047 /* AddTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionUseCase.swift; sourceTree = "<group>"; };
+		2048 /* CalculateSplitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateSplitUseCase.swift; sourceTree = "<group>"; };
+		2049 /* DeleteTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTransactionUseCase.swift; sourceTree = "<group>"; };
+		2999 /* ReverseTransferUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseTransferUseCase.swift; sourceTree = "<group>"; };
+		2050 /* GetTransactionsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTransactionsUseCase.swift; sourceTree = "<group>"; };
+		2051 /* SettleParticipantUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettleParticipantUseCase.swift; sourceTree = "<group>"; };
+		2052 /* Navigation/LeafRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation/LeafRoute.swift; sourceTree = "<group>"; };
+		2053 /* Root/MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Root/MainTabView.swift; sourceTree = "<group>"; };
+		2054 /* RepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTests.swift; sourceTree = "<group>"; };
+		2055 /* FinancialSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialSummary.swift; sourceTree = "<group>"; };
+		2056 /* BudgetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetStatus.swift; sourceTree = "<group>"; };
+		2057 /* BudgetProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetProgress.swift; sourceTree = "<group>"; };
+		2058 /* UserPreferencesRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2059 /* BudgetRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2060 /* UserPreferencesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferencesRepository.swift; sourceTree = "<group>"; };
+		2061 /* GRDBBudgetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBBudgetRepository.swift; sourceTree = "<group>"; };
+		2062 /* GetFinancialSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFinancialSummaryUseCase.swift; sourceTree = "<group>"; };
+		2063 /* GetBudgetProgressUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBudgetProgressUseCase.swift; sourceTree = "<group>"; };
+		2064 /* Components/CategoryIconBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/CategoryIconBadge.swift; sourceTree = "<group>"; };
+		2065 /* Components/EmptyStateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/EmptyStateCard.swift; sourceTree = "<group>"; };
+		2066 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		2067 /* DashboardHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardHeaderView.swift; sourceTree = "<group>"; };
+		2068 /* BalanceHeroCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceHeroCardView.swift; sourceTree = "<group>"; };
+		2069 /* QuickActionsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionsRowView.swift; sourceTree = "<group>"; };
+		2070 /* DashboardBudgetSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardBudgetSectionView.swift; sourceTree = "<group>"; };
+		2071 /* RecentTransactionsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTransactionsSectionView.swift; sourceTree = "<group>"; };
+		2072 /* QuickAddTransactionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddTransactionSheet.swift; sourceTree = "<group>"; };
+		2073 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		2074 /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
+		2075 /* CategorySpending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySpending.swift; sourceTree = "<group>"; };
+		2076 /* MonthlyExpenseSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyExpenseSummary.swift; sourceTree = "<group>"; };
+		2077 /* TransactionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFilter.swift; sourceTree = "<group>"; };
+		2078 /* UpdateTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTransactionUseCase.swift; sourceTree = "<group>"; };
+		2079 /* GetMonthlyExpenseSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMonthlyExpenseSummaryUseCase.swift; sourceTree = "<group>"; };
+		2080 /* GetCategorySpendingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCategorySpendingUseCase.swift; sourceTree = "<group>"; };
+		2081 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
+		2082 /* ExpensesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesViewModel.swift; sourceTree = "<group>"; };
+		2083 /* ExpensesFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesFilterSheet.swift; sourceTree = "<group>"; };
+		2084 /* AddEditExpenseSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditExpenseSheet.swift; sourceTree = "<group>"; };
+		2085 /* ExpensesMonthPickerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesMonthPickerHeaderView.swift; sourceTree = "<group>"; };
+		2086 /* ExpensesMonthlySummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesMonthlySummaryCardView.swift; sourceTree = "<group>"; };
+		2087 /* ExpensesCategoryBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesCategoryBreakdownView.swift; sourceTree = "<group>"; };
+		2088 /* ExpensesTransactionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesTransactionHistoryView.swift; sourceTree = "<group>"; };
+		2089 /* ExpensesSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesSearchBarView.swift; sourceTree = "<group>"; };
+		2090 /* ExpensesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesViewModelTests.swift; sourceTree = "<group>"; };
+		2091 /* NetBalanceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetBalanceEngine.swift; sourceTree = "<group>"; };
+		2092 /* CreateSplitExpenseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSplitExpenseUseCase.swift; sourceTree = "<group>"; };
+		2093 /* UpdateSplitExpenseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSplitExpenseUseCase.swift; sourceTree = "<group>"; };
+		2094 /* DeleteSplitExpenseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSplitExpenseUseCase.swift; sourceTree = "<group>"; };
+		2095 /* GetSplitSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSplitSummaryUseCase.swift; sourceTree = "<group>"; };
+		2096 /* SplitLandingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLandingViewModel.swift; sourceTree = "<group>"; };
+		2097 /* SplitLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLandingView.swift; sourceTree = "<group>"; };
+		2098 /* CreateSplitSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSplitSheet.swift; sourceTree = "<group>"; };
+		2099 /* SplitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitDetailView.swift; sourceTree = "<group>"; };
+		2100 /* EditSplitSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSplitSheet.swift; sourceTree = "<group>"; };
+		2101 /* SplitFinancialOverviewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitFinancialOverviewCardView.swift; sourceTree = "<group>"; };
+		2102 /* SplitExpenseCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitExpenseCardView.swift; sourceTree = "<group>"; };
+		2103 /* SplitViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewModelTests.swift; sourceTree = "<group>"; };
+		2104 /* SplitPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitPayment.swift; sourceTree = "<group>"; };
+		2105 /* SplitPaymentRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitPaymentRecord.swift; sourceTree = "<group>"; };
+		2106 /* RecordParticipantPaymentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordParticipantPaymentUseCase.swift; sourceTree = "<group>"; };
+		2107 /* ReverseParticipantPaymentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseParticipantPaymentUseCase.swift; sourceTree = "<group>"; };
+		2108 /* RecordPaymentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPaymentSheet.swift; sourceTree = "<group>"; };
+		2109 /* SavingsGoalContribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalContribution.swift; sourceTree = "<group>"; };
+		2110 /* SavingsGoalContributionRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalContributionRecord.swift; sourceTree = "<group>"; };
+		2111 /* SavingsGoalRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2112 /* GRDBSavingsGoalRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBSavingsGoalRepository.swift; sourceTree = "<group>"; };
+		2113 /* SaveBudgetUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveBudgetUseCase.swift; sourceTree = "<group>"; };
+		2114 /* DeleteBudgetUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBudgetUseCase.swift; sourceTree = "<group>"; };
+		2115 /* GetSavingsGoalsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSavingsGoalsUseCase.swift; sourceTree = "<group>"; };
+		2116 /* SaveSavingsGoalUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveSavingsGoalUseCase.swift; sourceTree = "<group>"; };
+		2117 /* DeleteSavingsGoalUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSavingsGoalUseCase.swift; sourceTree = "<group>"; };
+		2118 /* SetSavingsGoalArchivedUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSavingsGoalArchivedUseCase.swift; sourceTree = "<group>"; };
+		2119 /* RecordSavingsContributionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSavingsContributionUseCase.swift; sourceTree = "<group>"; };
+		2120 /* ReverseSavingsContributionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseSavingsContributionUseCase.swift; sourceTree = "<group>"; };
+		2121 /* PlanningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningViewModel.swift; sourceTree = "<group>"; };
+		2122 /* PlanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningView.swift; sourceTree = "<group>"; };
+		2123 /* BudgetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetCardView.swift; sourceTree = "<group>"; };
+		2124 /* BudgetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetailView.swift; sourceTree = "<group>"; };
+		2125 /* CreateEditBudgetSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEditBudgetSheet.swift; sourceTree = "<group>"; };
+		2126 /* SavingsGoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalCardView.swift; sourceTree = "<group>"; };
+		2127 /* CreateEditSavingsGoalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEditSavingsGoalSheet.swift; sourceTree = "<group>"; };
+		2128 /* AddSavingsContributionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSavingsContributionSheet.swift; sourceTree = "<group>"; };
+		2129 /* SavingsGoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGoalDetailView.swift; sourceTree = "<group>"; };
+		2130 /* PlanningViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningViewModelTests.swift; sourceTree = "<group>"; };
+		2131 /* BudgetPeriodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetPeriodType.swift; sourceTree = "<group>"; };
+		2132 /* RecordSavingsWithdrawalUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSavingsWithdrawalUseCase.swift; sourceTree = "<group>"; };
+		2133 /* ReverseSavingsWithdrawalUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseSavingsWithdrawalUseCase.swift; sourceTree = "<group>"; };
+		2134 /* AddSavingsWithdrawalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSavingsWithdrawalSheet.swift; sourceTree = "<group>"; };
+		2135 /* InsightsPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsPeriod.swift; sourceTree = "<group>"; };
+		2136 /* InsightsFinancialOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsFinancialOverview.swift; sourceTree = "<group>"; };
+		2137 /* CategoryAnalysisItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAnalysisItem.swift; sourceTree = "<group>"; };
+		2138 /* SpendingTrendPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingTrendPoint.swift; sourceTree = "<group>"; };
+		2139 /* BudgetInsightItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetInsightItem.swift; sourceTree = "<group>"; };
+		2140 /* FinancialObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialObservation.swift; sourceTree = "<group>"; };
+		2141 /* GetInsightsSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInsightsSummaryUseCase.swift; sourceTree = "<group>"; };
+		2142 /* GetCategoryAnalysisUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCategoryAnalysisUseCase.swift; sourceTree = "<group>"; };
+		2143 /* GetSpendingTrendsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSpendingTrendsUseCase.swift; sourceTree = "<group>"; };
+		2144 /* GetBudgetInsightsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBudgetInsightsUseCase.swift; sourceTree = "<group>"; };
+		2145 /* GetSavingsInsightsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSavingsInsightsUseCase.swift; sourceTree = "<group>"; };
+		2146 /* GetFinancialObservationsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFinancialObservationsUseCase.swift; sourceTree = "<group>"; };
+		2147 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		2148 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
+		2149 /* InsightsPeriodSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsPeriodSelectorView.swift; sourceTree = "<group>"; };
+		2150 /* CustomDateRangeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDateRangeSheet.swift; sourceTree = "<group>"; };
+		2151 /* FinancialOverviewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialOverviewCardView.swift; sourceTree = "<group>"; };
+		2152 /* FinancialObservationsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialObservationsSectionView.swift; sourceTree = "<group>"; };
+		2153 /* SpendingTrendsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingTrendsChartView.swift; sourceTree = "<group>"; };
+		2154 /* CategoryDistributionChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDistributionChartView.swift; sourceTree = "<group>"; };
+		2155 /* CategoryBreakdownListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBreakdownListView.swift; sourceTree = "<group>"; };
+		2156 /* BudgetUtilisationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetUtilisationSectionView.swift; sourceTree = "<group>"; };
+		2157 /* SavingsGrowthSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsGrowthSectionView.swift; sourceTree = "<group>"; };
+		2158 /* CategoryDetailAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailAnalyticsView.swift; sourceTree = "<group>"; };
+		2159 /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
+		2160 /* InsightsAnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsAnalyticsTests.swift; sourceTree = "<group>"; };
+		2161 /* StatementPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementPeriod.swift; sourceTree = "<group>"; };
+		2162 /* StatementFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementFormat.swift; sourceTree = "<group>"; };
+		2163 /* FinancialStatementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialStatementData.swift; sourceTree = "<group>"; };
+		2164 /* SavedStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedStatement.swift; sourceTree = "<group>"; };
+		2165 /* StatementRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementRecord.swift; sourceTree = "<group>"; };
+		2166 /* StatementRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2167 /* GRDBStatementRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBStatementRepository.swift; sourceTree = "<group>"; };
+		2168 /* CompileStatementDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompileStatementDataUseCase.swift; sourceTree = "<group>"; };
+		2169 /* GenerateStatementUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateStatementUseCase.swift; sourceTree = "<group>"; };
+		2170 /* DeleteStatementUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteStatementUseCase.swift; sourceTree = "<group>"; };
+		2171 /* GetStatementsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStatementsUseCase.swift; sourceTree = "<group>"; };
+		2172 /* PdfStatementGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfStatementGenerator.swift; sourceTree = "<group>"; };
+		2173 /* CsvStatementGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvStatementGenerator.swift; sourceTree = "<group>"; };
+		2174 /* StatementsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementsViewModel.swift; sourceTree = "<group>"; };
+		2175 /* StatementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementsView.swift; sourceTree = "<group>"; };
+		2176 /* GenerateStatementSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateStatementSheet.swift; sourceTree = "<group>"; };
+		2177 /* PdfViewerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfViewerSheet.swift; sourceTree = "<group>"; };
+		2178 /* DocumentPickerExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerExportView.swift; sourceTree = "<group>"; };
+		2179 /* CompoundingFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundingFrequency.swift; sourceTree = "<group>"; };
+		2180 /* FinancialToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialToolType.swift; sourceTree = "<group>"; };
+		2181 /* EmiCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmiCalculation.swift; sourceTree = "<group>"; };
+		2182 /* SipCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SipCalculation.swift; sourceTree = "<group>"; };
+		2183 /* FdCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FdCalculation.swift; sourceTree = "<group>"; };
+		2184 /* RdCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RdCalculation.swift; sourceTree = "<group>"; };
+		2185 /* DiscountCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountCalculation.swift; sourceTree = "<group>"; };
+		2186 /* GstCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GstCalculation.swift; sourceTree = "<group>"; };
+		2187 /* FinancialCalculatorEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialCalculatorEngine.swift; sourceTree = "<group>"; };
+		2188 /* CalculateEmiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateEmiUseCase.swift; sourceTree = "<group>"; };
+		2189 /* CalculateSipUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateSipUseCase.swift; sourceTree = "<group>"; };
+		2190 /* CalculateFdUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateFdUseCase.swift; sourceTree = "<group>"; };
+		2191 /* CalculateRdUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateRdUseCase.swift; sourceTree = "<group>"; };
+		2192 /* CalculateDiscountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateDiscountUseCase.swift; sourceTree = "<group>"; };
+		2193 /* CalculateGstUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateGstUseCase.swift; sourceTree = "<group>"; };
+		2194 /* ToolsLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsLandingView.swift; sourceTree = "<group>"; };
+		2195 /* ToolsLandingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsLandingViewModel.swift; sourceTree = "<group>"; };
+		2196 /* EmiCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmiCalculatorView.swift; sourceTree = "<group>"; };
+		2197 /* EmiCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmiCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2198 /* SipCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SipCalculatorView.swift; sourceTree = "<group>"; };
+		2199 /* SipCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SipCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2200 /* FdCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FdCalculatorView.swift; sourceTree = "<group>"; };
+		2201 /* FdCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FdCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2202 /* RdCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RdCalculatorView.swift; sourceTree = "<group>"; };
+		2203 /* RdCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RdCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2204 /* DiscountCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountCalculatorView.swift; sourceTree = "<group>"; };
+		2205 /* DiscountCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2206 /* GstCalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GstCalculatorView.swift; sourceTree = "<group>"; };
+		2207 /* GstCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GstCalculatorViewModel.swift; sourceTree = "<group>"; };
+		2208 /* CalculatorInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorInputField.swift; sourceTree = "<group>"; };
+		2209 /* CalculatorResultHeroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorResultHeroCard.swift; sourceTree = "<group>"; };
+		2210 /* CalculatorBreakdownRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorBreakdownRow.swift; sourceTree = "<group>"; };
+		2211 /* CalculatorCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorCardView.swift; sourceTree = "<group>"; };
+		2212 /* CalculatorAmortizationScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorAmortizationScheduleView.swift; sourceTree = "<group>"; };
+		2213 /* CalculatorAssumptionDisclosureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorAssumptionDisclosureCard.swift; sourceTree = "<group>"; };
+		2214 /* RecurringTransactionOccurrenceRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionOccurrenceRecord.swift; sourceTree = "<group>"; };
+		2215 /* GRDBRecurringRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBRecurringRepository.swift; sourceTree = "<group>"; };
+		2216 /* RecurrenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceEngine.swift; sourceTree = "<group>"; };
+		2217 /* RecurringRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2218 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		2219 /* DashboardUpcomingBillsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardUpcomingBillsSectionView.swift; sourceTree = "<group>"; };
+		2220 /* BillPaymentStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillPaymentStatus.swift; sourceTree = "<group>"; };
+		2221 /* RecurringScheduleFrequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringScheduleFrequency.swift; sourceTree = "<group>"; };
+		2222 /* RecurringScheduleStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringScheduleStatus.swift; sourceTree = "<group>"; };
+		2223 /* RecurringTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransaction.swift; sourceTree = "<group>"; };
+		2224 /* RecurringTransactionOccurrence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionOccurrence.swift; sourceTree = "<group>"; };
+		2225 /* SubscriptionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionSummary.swift; sourceTree = "<group>"; };
+		2226 /* UpcomingBillsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingBillsSummary.swift; sourceTree = "<group>"; };
+		2227 /* CancelRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2228 /* CreateRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2229 /* DeleteRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2230 /* GenerateDueOccurrencesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateDueOccurrencesUseCase.swift; sourceTree = "<group>"; };
+		2231 /* GetRecurringTransactionsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecurringTransactionsUseCase.swift; sourceTree = "<group>"; };
+		2232 /* GetSubscriptionSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSubscriptionSummaryUseCase.swift; sourceTree = "<group>"; };
+		2233 /* GetUpcomingBillsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetUpcomingBillsUseCase.swift; sourceTree = "<group>"; };
+		2234 /* MarkBillAsPaidUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkBillAsPaidUseCase.swift; sourceTree = "<group>"; };
+		2235 /* PauseRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2236 /* ResumeRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2237 /* SkipBillOccurrenceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipBillOccurrenceUseCase.swift; sourceTree = "<group>"; };
+		2238 /* SnoozeBillReminderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnoozeBillReminderUseCase.swift; sourceTree = "<group>"; };
+		2239 /* UpdateRecurringTransactionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRecurringTransactionUseCase.swift; sourceTree = "<group>"; };
+		2240 /* RecurringHubViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringHubViewModel.swift; sourceTree = "<group>"; };
+		2241 /* RecurringHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringHubView.swift; sourceTree = "<group>"; };
+		2242 /* RecurringDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringDetailView.swift; sourceTree = "<group>"; };
+		2243 /* CreateEditRecurringSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEditRecurringSheet.swift; sourceTree = "<group>"; };
+		2244 /* UpcomingBillCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingBillCardView.swift; sourceTree = "<group>"; };
+		2245 /* RecurringScheduleCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringScheduleCardView.swift; sourceTree = "<group>"; };
+		2246 /* SubscriptionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCardView.swift; sourceTree = "<group>"; };
+		2247 /* SnoozeReminderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnoozeReminderSheet.swift; sourceTree = "<group>"; };
+		2248 /* ReversePaidOccurrenceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePaidOccurrenceUseCase.swift; sourceTree = "<group>"; };
+		2249 /* AppLockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockState.swift; sourceTree = "<group>"; };
+		2250 /* BackupSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSummary.swift; sourceTree = "<group>"; };
+		2251 /* LeafBackupContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafBackupContainer.swift; sourceTree = "<group>"; };
+		2252 /* LeafBackupPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafBackupPayload.swift; sourceTree = "<group>"; };
+		2253 /* CreateBackupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBackupUseCase.swift; sourceTree = "<group>"; };
+		2254 /* DeleteAllFinancialDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllFinancialDataUseCase.swift; sourceTree = "<group>"; };
+		2255 /* RestoreBackupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupUseCase.swift; sourceTree = "<group>"; };
+		2256 /* ValidateBackupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateBackupUseCase.swift; sourceTree = "<group>"; };
+		2257 /* AppLockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockService.swift; sourceTree = "<group>"; };
+		2258 /* BackupCryptoEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCryptoEngine.swift; sourceTree = "<group>"; };
+		2259 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
+		2260 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		2261 /* AppLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockView.swift; sourceTree = "<group>"; };
+		2262 /* BackupRestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupRestoreView.swift; sourceTree = "<group>"; };
+		2263 /* CreateBackupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBackupSheet.swift; sourceTree = "<group>"; };
+		2264 /* DeleteDataConfirmationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDataConfirmationSheet.swift; sourceTree = "<group>"; };
+		2265 /* PrivacyDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyDashboardView.swift; sourceTree = "<group>"; };
+		2266 /* PrivacyDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyDashboardViewModel.swift; sourceTree = "<group>"; };
+		2267 /* RestoreBackupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupSheet.swift; sourceTree = "<group>"; };
+		2268 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
+		2269 /* StatementFileBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementFileBackup.swift; sourceTree = "<group>"; };
+		2270 /* PasswordStrength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordStrength.swift; sourceTree = "<group>"; };
+		2271 /* PrivacyShieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyShieldView.swift; sourceTree = "<group>"; };
+		2272 /* RestoreProgressState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreProgressState.swift; sourceTree = "<group>"; };
+		2273 /* RestoreJournal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreJournal.swift; sourceTree = "<group>"; };
+		2274 /* SplitGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroup.swift; sourceTree = "<group>"; };
+		2275 /* SplitGroupAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupAnalytics.swift; sourceTree = "<group>"; };
+		2276 /* GetSplitGroupAnalyticsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSplitGroupAnalyticsUseCase.swift; sourceTree = "<group>"; };
+		2277 /* GetSplitGroupsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSplitGroupsUseCase.swift; sourceTree = "<group>"; };
+		2278 /* SaveSplitGroupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveSplitGroupUseCase.swift; sourceTree = "<group>"; };
+		2279 /* DeleteSplitGroupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSplitGroupUseCase.swift; sourceTree = "<group>"; };
+		2280 /* SplitGroupAnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupAnalyticsViewModel.swift; sourceTree = "<group>"; };
+		2281 /* SplitGroupAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupAnalyticsView.swift; sourceTree = "<group>"; };
+		2282 /* SplitGroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupDetailView.swift; sourceTree = "<group>"; };
+		2283 /* SplitGroupCategoryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupCategoryChart.swift; sourceTree = "<group>"; };
+		2284 /* SplitGroupSpendingTimelineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitGroupSpendingTimelineChart.swift; sourceTree = "<group>"; };
+		2285 /* CreateGroupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupSheet.swift; sourceTree = "<group>"; };
+		2286 /* ReceiptStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStorageService.swift; sourceTree = "<group>"; };
+		2287 /* ReceiptExtractionConfidence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptExtractionConfidence.swift; sourceTree = "<group>"; };
+		2288 /* ReceiptOCRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptOCRResult.swift; sourceTree = "<group>"; };
+		2289 /* ReceiptOCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptOCRService.swift; sourceTree = "<group>"; };
+		2290 /* ReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParser.swift; sourceTree = "<group>"; };
+		2291 /* ProcessReceiptImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessReceiptImageUseCase.swift; sourceTree = "<group>"; };
+		2292 /* ReceiptCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCameraView.swift; sourceTree = "<group>"; };
+		2293 /* ReceiptScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptScannerViewModel.swift; sourceTree = "<group>"; };
+		2294 /* ReceiptReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptReviewView.swift; sourceTree = "<group>"; };
+		2295 /* ReceiptScannerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptScannerSheet.swift; sourceTree = "<group>"; };
+		2296 /* ExchangeRateRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateRecord.swift; sourceTree = "<group>"; };
+		2297 /* TravelWalletRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWalletRecord.swift; sourceTree = "<group>"; };
+		2298 /* GRDBExchangeRateRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBExchangeRateRepository.swift; sourceTree = "<group>"; };
+		2299 /* GRDBTravelWalletRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBTravelWalletRepository.swift; sourceTree = "<group>"; };
+		2300 /* ExchangeRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRate.swift; sourceTree = "<group>"; };
+		2301 /* TravelWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWallet.swift; sourceTree = "<group>"; };
+		2302 /* ExchangeRateRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2303 /* TravelWalletRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWalletRepositoryProtocol.swift; sourceTree = "<group>"; };
+		2304 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
+		2305 /* ChangePrimaryCurrencyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePrimaryCurrencyUseCase.swift; sourceTree = "<group>"; };
+		2306 /* DeleteTravelWalletUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTravelWalletUseCase.swift; sourceTree = "<group>"; };
+		2307 /* GetExchangeRatesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetExchangeRatesUseCase.swift; sourceTree = "<group>"; };
+		2308 /* GetTravelWalletsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTravelWalletsUseCase.swift; sourceTree = "<group>"; };
+		2309 /* SaveExchangeRateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveExchangeRateUseCase.swift; sourceTree = "<group>"; };
+		2310 /* SaveTravelWalletUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTravelWalletUseCase.swift; sourceTree = "<group>"; };
+		2311 /* CurrencySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySettingsView.swift; sourceTree = "<group>"; };
+		2312 /* EditExchangeRateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExchangeRateSheet.swift; sourceTree = "<group>"; };
+		2313 /* CreateEditTravelWalletSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEditTravelWalletSheet.swift; sourceTree = "<group>"; };
+		2314 /* TravelWalletDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWalletDetailView.swift; sourceTree = "<group>"; };
+		2315 /* TravelWalletsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWalletsListView.swift; sourceTree = "<group>"; };
+		2316 /* TravelWalletsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelWalletsViewModel.swift; sourceTree = "<group>"; };
+		2317 /* WidgetDataSharing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataSharing.swift; sourceTree = "<group>"; };
+		2318 /* LeafWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafWidgets.swift; sourceTree = "<group>"; };
+		2319 /* GoogleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthService.swift; sourceTree = "<group>"; };
+		2320 /* GoogleDriveRestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDriveRestService.swift; sourceTree = "<group>"; };
+		2321 /* GoogleDriveBackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDriveBackupService.swift; sourceTree = "<group>"; };
+		2322 /* LeafWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LeafWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2323 /* Leaf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Leaf.entitlements; sourceTree = "<group>"; };
+		2324 /* LeafWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LeafWidgetsExtension.entitlements; sourceTree = "<group>"; };
+		2325 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2326 /* SecurePinManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurePinManager.swift; sourceTree = "<group>"; };
+		2327 /* PinKeypadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinKeypadView.swift; sourceTree = "<group>"; };
+		2328 /* AppLockSetupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupSheet.swift; sourceTree = "<group>"; };
+		2329 /* ChangePinSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePinSheet.swift; sourceTree = "<group>"; };
+		2330 /* DisableAppLockSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableAppLockSheet.swift; sourceTree = "<group>"; };
+		2331 /* LeafWidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafWidgetViews.swift; sourceTree = "<group>"; };
+		2332 /* WidgetShowcaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetShowcaseView.swift; sourceTree = "<group>"; };
+		2333 /* TransferFundsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFundsSheet.swift; sourceTree = "<group>"; };
+		2334 /* LedgersHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LedgersHubView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+		9502 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6003;
+			remoteInfo = LeafWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9002 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				1322 /* LeafWidgetsExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1024 /* GRDB in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1025 /* GRDB in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5001 = {
+			isa = PBXGroup;
+			children = (
+				5002 /* Leaf */,
+				5003 /* LeafTests */,
+				5050 /* LeafWidgetsExtension */,
+				5004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5002 /* Leaf */ = {
+			isa = PBXGroup;
+			children = (
+				2323 /* Leaf.entitlements */,
+				5005 /* App */,
+				5006 /* Core */,
+				5007 /* Resources */,
+			);
+			path = Leaf;
+			sourceTree = "<group>";
+		};
+		5003 /* LeafTests */ = {
+			isa = PBXGroup;
+			children = (
+				2026 /* AmountTests.swift */,
+				2027 /* CurrencyTests.swift */,
+				2028 /* SplitCalculationEngineTests.swift */,
+				2029 /* DatabaseMigrationTests.swift */,
+				2054 /* RepositoryTests.swift */,
+				2074 /* DashboardViewModelTests.swift */,
+				2090 /* ExpensesViewModelTests.swift */,
+				2103 /* SplitViewModelTests.swift */,
+				2130 /* PlanningViewModelTests.swift */,
+				2160 /* InsightsAnalyticsTests.swift */,
+			);
+			path = LeafTests;
+			sourceTree = "<group>";
+		};
+		5004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2025 /* Leaf.app */,
+				2030 /* LeafTests.xctest */,
+				2322 /* LeafWidgetsExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5005 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2001 /* LeafApp.swift */,
+				2002 /* AppContainer.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5006 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				5008 /* Domain */,
+				5009 /* Data/Database */,
+				5010 /* DesignSystem */,
+				5014 /* Presentation */,
+				5031 /* Services */,
+				5049 /* Widgets */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		5007 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2024 /* Info.plist */,
+				2003 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5008 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				5047 /* Services */,
+				5011 /* Model */,
+				5034 /* Engine */,
+				5012 /* Repository */,
+				5013 /* UseCase */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		5009 /* Data/Database */ = {
+			isa = PBXGroup;
+			children = (
+				2021 /* AppDatabase.swift */,
+				2022 /* Migrations/DatabaseMigrations.swift */,
+				2023 /* Seeds/CategorySeeds.swift */,
+				5015 /* Record */,
+				5016 /* RepositoryImpl */,
+				5017 /* ../Preferences */,
+			);
+			path = Data/Database;
+			sourceTree = "<group>";
+		};
+		5010 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				2018 /* ColorTokens.swift */,
+				2019 /* Typography.swift */,
+				2020 /* Components/SquircleCard.swift */,
+				2064 /* Components/CategoryIconBadge.swift */,
+				2065 /* Components/EmptyStateCard.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		5011 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2300 /* ExchangeRate.swift */,
+				2301 /* TravelWallet.swift */,
+				2004 /* Amount.swift */,
+				2005 /* Currency.swift */,
+				2006 /* TransactionType.swift */,
+				2007 /* PaymentMethod.swift */,
+				2008 /* Category.swift */,
+				2009 /* Transaction.swift */,
+				2010 /* SplitCalculationEngine.swift */,
+				2011 /* SplitExpense.swift */,
+				2012 /* SplitParticipant.swift */,
+				2013 /* SplitItem.swift */,
+				2014 /* Budget.swift */,
+				2015 /* SavingsGoal.swift */,
+				2016 /* Reminder.swift */,
+				2017 /* UserPreferences.swift */,
+				2055 /* FinancialSummary.swift */,
+				2056 /* BudgetStatus.swift */,
+				2057 /* BudgetProgress.swift */,
+				2075 /* CategorySpending.swift */,
+				2076 /* MonthlyExpenseSummary.swift */,
+				2077 /* TransactionFilter.swift */,
+				2091 /* NetBalanceEngine.swift */,
+				2104 /* SplitPayment.swift */,
+				2109 /* SavingsGoalContribution.swift */,
+				2131 /* BudgetPeriodType.swift */,
+				2135 /* InsightsPeriod.swift */,
+				2136 /* InsightsFinancialOverview.swift */,
+				2137 /* CategoryAnalysisItem.swift */,
+				2138 /* SpendingTrendPoint.swift */,
+				2139 /* BudgetInsightItem.swift */,
+				2140 /* FinancialObservation.swift */,
+				2161 /* StatementPeriod.swift */,
+				2162 /* StatementFormat.swift */,
+				2163 /* FinancialStatementData.swift */,
+				2164 /* SavedStatement.swift */,
+				2274 /* SplitGroup.swift */,
+				2275 /* SplitGroupAnalytics.swift */,
+				2287 /* ReceiptExtractionConfidence.swift */,
+				2288 /* ReceiptOCRResult.swift */,
+				5033 /* Tools */,
+				5038 /* Recurring */,
+				5042 /* Backup */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5012 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				2302 /* ExchangeRateRepositoryProtocol.swift */,
+				2303 /* TravelWalletRepositoryProtocol.swift */,
+				2044 /* CategoryRepositoryProtocol.swift */,
+				2045 /* SplitRepositoryProtocol.swift */,
+				2046 /* TransactionRepositoryProtocol.swift */,
+				2058 /* UserPreferencesRepositoryProtocol.swift */,
+				2059 /* BudgetRepositoryProtocol.swift */,
+				2111 /* SavingsGoalRepositoryProtocol.swift */,
+				2166 /* StatementRepositoryProtocol.swift */,
+				2217 /* RecurringRepositoryProtocol.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		5013 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				2305 /* ChangePrimaryCurrencyUseCase.swift */,
+				2306 /* DeleteTravelWalletUseCase.swift */,
+				2307 /* GetExchangeRatesUseCase.swift */,
+				2308 /* GetTravelWalletsUseCase.swift */,
+				2309 /* SaveExchangeRateUseCase.swift */,
+				2310 /* SaveTravelWalletUseCase.swift */,
+				2047 /* AddTransactionUseCase.swift */,
+				2048 /* CalculateSplitUseCase.swift */,
+				2049 /* DeleteTransactionUseCase.swift */,
+				2999 /* ReverseTransferUseCase.swift */,
+				2050 /* GetTransactionsUseCase.swift */,
+				2051 /* SettleParticipantUseCase.swift */,
+				2062 /* GetFinancialSummaryUseCase.swift */,
+				2063 /* GetBudgetProgressUseCase.swift */,
+				2078 /* UpdateTransactionUseCase.swift */,
+				2079 /* GetMonthlyExpenseSummaryUseCase.swift */,
+				2080 /* GetCategorySpendingUseCase.swift */,
+				2092 /* CreateSplitExpenseUseCase.swift */,
+				2093 /* UpdateSplitExpenseUseCase.swift */,
+				2094 /* DeleteSplitExpenseUseCase.swift */,
+				2095 /* GetSplitSummaryUseCase.swift */,
+				2106 /* RecordParticipantPaymentUseCase.swift */,
+				2107 /* ReverseParticipantPaymentUseCase.swift */,
+				2113 /* SaveBudgetUseCase.swift */,
+				2114 /* DeleteBudgetUseCase.swift */,
+				2115 /* GetSavingsGoalsUseCase.swift */,
+				2116 /* SaveSavingsGoalUseCase.swift */,
+				2117 /* DeleteSavingsGoalUseCase.swift */,
+				2118 /* SetSavingsGoalArchivedUseCase.swift */,
+				2119 /* RecordSavingsContributionUseCase.swift */,
+				2120 /* ReverseSavingsContributionUseCase.swift */,
+				2132 /* RecordSavingsWithdrawalUseCase.swift */,
+				2133 /* ReverseSavingsWithdrawalUseCase.swift */,
+				2141 /* GetInsightsSummaryUseCase.swift */,
+				2142 /* GetCategoryAnalysisUseCase.swift */,
+				2143 /* GetSpendingTrendsUseCase.swift */,
+				2144 /* GetBudgetInsightsUseCase.swift */,
+				2145 /* GetSavingsInsightsUseCase.swift */,
+				2146 /* GetFinancialObservationsUseCase.swift */,
+				2168 /* CompileStatementDataUseCase.swift */,
+				2169 /* GenerateStatementUseCase.swift */,
+				2170 /* DeleteStatementUseCase.swift */,
+				2171 /* GetStatementsUseCase.swift */,
+				2276 /* GetSplitGroupAnalyticsUseCase.swift */,
+				2277 /* GetSplitGroupsUseCase.swift */,
+				2278 /* SaveSplitGroupUseCase.swift */,
+				2279 /* DeleteSplitGroupUseCase.swift */,
+				2291 /* ProcessReceiptImageUseCase.swift */,
+				5035 /* Tools */,
+				5039 /* Recurring */,
+				5043 /* Backup */,
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		5014 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				5048 /* Wallets */,
+				2052 /* Navigation/LeafRoute.swift */,
+				2053 /* Root/MainTabView.swift */,
+				5018 /* Dashboard */,
+				5020 /* Entry */,
+				5021 /* Expenses */,
+				5023 /* Split */,
+				5025 /* Planning */,
+				5027 /* Insights */,
+				5029 /* Settings */,
+				5032 /* Statements */,
+				5036 /* Tools */,
+				5040 /* Recurring */,
+				5044 /* Security */,
+				5051 /* Widgets */,
+				5052 /* Ledgers */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		5015 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				2296 /* ExchangeRateRecord.swift */,
+				2297 /* TravelWalletRecord.swift */,
+				2031 /* BudgetRecord.swift */,
+				2032 /* CategoryRecord.swift */,
+				2033 /* RecurringTransactionRecord.swift */,
+				2034 /* ReminderRecord.swift */,
+				2035 /* SavingsContributionRecord.swift */,
+				2036 /* SavingsGoalRecord.swift */,
+				2037 /* SplitExpenseRecord.swift */,
+				2038 /* SplitGroupRecord.swift */,
+				2039 /* SplitParticipantRecord.swift */,
+				2040 /* TransactionRecord.swift */,
+				2105 /* SplitPaymentRecord.swift */,
+				2110 /* SavingsGoalContributionRecord.swift */,
+				2165 /* StatementRecord.swift */,
+				2214 /* RecurringTransactionOccurrenceRecord.swift */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		5016 /* RepositoryImpl */ = {
+			isa = PBXGroup;
+			children = (
+				2298 /* GRDBExchangeRateRepository.swift */,
+				2299 /* GRDBTravelWalletRepository.swift */,
+				2041 /* GRDBCategoryRepository.swift */,
+				2042 /* GRDBSplitRepository.swift */,
+				2043 /* GRDBTransactionRepository.swift */,
+				2061 /* GRDBBudgetRepository.swift */,
+				2112 /* GRDBSavingsGoalRepository.swift */,
+				2167 /* GRDBStatementRepository.swift */,
+				2215 /* GRDBRecurringRepository.swift */,
+			);
+			path = RepositoryImpl;
+			sourceTree = "<group>";
+		};
+		5017 /* ../Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				2060 /* UserPreferencesRepository.swift */,
+			);
+			path = ../Preferences;
+			sourceTree = "<group>";
+		};
+		5018 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				2073 /* DashboardView.swift */,
+				2066 /* DashboardViewModel.swift */,
+				5019 /* Components */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		5019 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2067 /* DashboardHeaderView.swift */,
+				2068 /* BalanceHeroCardView.swift */,
+				2069 /* QuickActionsRowView.swift */,
+				2070 /* DashboardBudgetSectionView.swift */,
+				2071 /* RecentTransactionsSectionView.swift */,
+				2219 /* DashboardUpcomingBillsSectionView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5020 /* Entry */ = {
+			isa = PBXGroup;
+			children = (
+				2072 /* QuickAddTransactionSheet.swift */,
+			);
+			path = Entry;
+			sourceTree = "<group>";
+		};
+		5021 /* Expenses */ = {
+			isa = PBXGroup;
+			children = (
+				2081 /* ExpensesView.swift */,
+				2082 /* ExpensesViewModel.swift */,
+				2083 /* ExpensesFilterSheet.swift */,
+				2084 /* AddEditExpenseSheet.swift */,
+				2293 /* ReceiptScannerViewModel.swift */,
+				2294 /* ReceiptReviewView.swift */,
+				2295 /* ReceiptScannerSheet.swift */,
+				5022 /* Components */,
+			);
+			path = Expenses;
+			sourceTree = "<group>";
+		};
+		5022 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2085 /* ExpensesMonthPickerHeaderView.swift */,
+				2086 /* ExpensesMonthlySummaryCardView.swift */,
+				2087 /* ExpensesCategoryBreakdownView.swift */,
+				2088 /* ExpensesTransactionHistoryView.swift */,
+				2089 /* ExpensesSearchBarView.swift */,
+				2292 /* ReceiptCameraView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5023 /* Split */ = {
+			isa = PBXGroup;
+			children = (
+				2096 /* SplitLandingViewModel.swift */,
+				2097 /* SplitLandingView.swift */,
+				2098 /* CreateSplitSheet.swift */,
+				2099 /* SplitDetailView.swift */,
+				2100 /* EditSplitSheet.swift */,
+				2108 /* RecordPaymentSheet.swift */,
+				2280 /* SplitGroupAnalyticsViewModel.swift */,
+				2281 /* SplitGroupAnalyticsView.swift */,
+				2282 /* SplitGroupDetailView.swift */,
+				5024 /* Components */,
+			);
+			path = Split;
+			sourceTree = "<group>";
+		};
+		5024 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2101 /* SplitFinancialOverviewCardView.swift */,
+				2102 /* SplitExpenseCardView.swift */,
+				2283 /* SplitGroupCategoryChart.swift */,
+				2284 /* SplitGroupSpendingTimelineChart.swift */,
+				2285 /* CreateGroupSheet.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5025 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				2121 /* PlanningViewModel.swift */,
+				2122 /* PlanningView.swift */,
+				5026 /* Components */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		5026 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2123 /* BudgetCardView.swift */,
+				2124 /* BudgetDetailView.swift */,
+				2125 /* CreateEditBudgetSheet.swift */,
+				2126 /* SavingsGoalCardView.swift */,
+				2127 /* CreateEditSavingsGoalSheet.swift */,
+				2128 /* AddSavingsContributionSheet.swift */,
+				2129 /* SavingsGoalDetailView.swift */,
+				2134 /* AddSavingsWithdrawalSheet.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5027 /* Insights */ = {
+			isa = PBXGroup;
+			children = (
+				2147 /* InsightsView.swift */,
+				2148 /* InsightsViewModel.swift */,
+				5028 /* Components */,
+			);
+			path = Insights;
+			sourceTree = "<group>";
+		};
+		5028 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2149 /* InsightsPeriodSelectorView.swift */,
+				2150 /* CustomDateRangeSheet.swift */,
+				2151 /* FinancialOverviewCardView.swift */,
+				2152 /* FinancialObservationsSectionView.swift */,
+				2153 /* SpendingTrendsChartView.swift */,
+				2154 /* CategoryDistributionChartView.swift */,
+				2155 /* CategoryBreakdownListView.swift */,
+				2156 /* BudgetUtilisationSectionView.swift */,
+				2157 /* SavingsGrowthSectionView.swift */,
+				2158 /* CategoryDetailAnalyticsView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5029 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2311 /* CurrencySettingsView.swift */,
+				2312 /* EditExchangeRateSheet.swift */,
+				2159 /* SettingsSheet.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		5031 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2172 /* PdfStatementGenerator.swift */,
+				2173 /* CsvStatementGenerator.swift */,
+				2218 /* NotificationService.swift */,
+				2257 /* AppLockService.swift */,
+				2258 /* BackupCryptoEngine.swift */,
+				2259 /* BackupService.swift */,
+				2260 /* KeychainService.swift */,
+				2286 /* ReceiptStorageService.swift */,
+				2289 /* ReceiptOCRService.swift */,
+				2290 /* ReceiptParser.swift */,
+				2319 /* GoogleAuthService.swift */,
+				2320 /* GoogleDriveRestService.swift */,
+				2321 /* GoogleDriveBackupService.swift */,
+				2326 /* SecurePinManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5032 /* Statements */ = {
+			isa = PBXGroup;
+			children = (
+				2174 /* StatementsViewModel.swift */,
+				2175 /* StatementsView.swift */,
+				2176 /* GenerateStatementSheet.swift */,
+				2177 /* PdfViewerSheet.swift */,
+				2178 /* DocumentPickerExportView.swift */,
+			);
+			path = Statements;
+			sourceTree = "<group>";
+		};
+		5033 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				2179 /* CompoundingFrequency.swift */,
+				2180 /* FinancialToolType.swift */,
+				2181 /* EmiCalculation.swift */,
+				2182 /* SipCalculation.swift */,
+				2183 /* FdCalculation.swift */,
+				2184 /* RdCalculation.swift */,
+				2185 /* DiscountCalculation.swift */,
+				2186 /* GstCalculation.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		5034 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				2187 /* FinancialCalculatorEngine.swift */,
+				2216 /* RecurrenceEngine.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		5035 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				2188 /* CalculateEmiUseCase.swift */,
+				2189 /* CalculateSipUseCase.swift */,
+				2190 /* CalculateFdUseCase.swift */,
+				2191 /* CalculateRdUseCase.swift */,
+				2192 /* CalculateDiscountUseCase.swift */,
+				2193 /* CalculateGstUseCase.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		5036 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				2194 /* ToolsLandingView.swift */,
+				2195 /* ToolsLandingViewModel.swift */,
+				2196 /* EmiCalculatorView.swift */,
+				2197 /* EmiCalculatorViewModel.swift */,
+				2198 /* SipCalculatorView.swift */,
+				2199 /* SipCalculatorViewModel.swift */,
+				2200 /* FdCalculatorView.swift */,
+				2201 /* FdCalculatorViewModel.swift */,
+				2202 /* RdCalculatorView.swift */,
+				2203 /* RdCalculatorViewModel.swift */,
+				2204 /* DiscountCalculatorView.swift */,
+				2205 /* DiscountCalculatorViewModel.swift */,
+				2206 /* GstCalculatorView.swift */,
+				2207 /* GstCalculatorViewModel.swift */,
+				5037 /* Components */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		5037 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2208 /* CalculatorInputField.swift */,
+				2209 /* CalculatorResultHeroCard.swift */,
+				2210 /* CalculatorBreakdownRow.swift */,
+				2211 /* CalculatorCardView.swift */,
+				2212 /* CalculatorAmortizationScheduleView.swift */,
+				2213 /* CalculatorAssumptionDisclosureCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5038 /* Recurring */ = {
+			isa = PBXGroup;
+			children = (
+				2220 /* BillPaymentStatus.swift */,
+				2221 /* RecurringScheduleFrequency.swift */,
+				2222 /* RecurringScheduleStatus.swift */,
+				2223 /* RecurringTransaction.swift */,
+				2224 /* RecurringTransactionOccurrence.swift */,
+				2225 /* SubscriptionSummary.swift */,
+				2226 /* UpcomingBillsSummary.swift */,
+			);
+			path = Recurring;
+			sourceTree = "<group>";
+		};
+		5039 /* Recurring */ = {
+			isa = PBXGroup;
+			children = (
+				2227 /* CancelRecurringTransactionUseCase.swift */,
+				2228 /* CreateRecurringTransactionUseCase.swift */,
+				2229 /* DeleteRecurringTransactionUseCase.swift */,
+				2230 /* GenerateDueOccurrencesUseCase.swift */,
+				2231 /* GetRecurringTransactionsUseCase.swift */,
+				2232 /* GetSubscriptionSummaryUseCase.swift */,
+				2233 /* GetUpcomingBillsUseCase.swift */,
+				2234 /* MarkBillAsPaidUseCase.swift */,
+				2235 /* PauseRecurringTransactionUseCase.swift */,
+				2236 /* ResumeRecurringTransactionUseCase.swift */,
+				2237 /* SkipBillOccurrenceUseCase.swift */,
+				2238 /* SnoozeBillReminderUseCase.swift */,
+				2239 /* UpdateRecurringTransactionUseCase.swift */,
+				2248 /* ReversePaidOccurrenceUseCase.swift */,
+			);
+			path = Recurring;
+			sourceTree = "<group>";
+		};
+		5040 /* Recurring */ = {
+			isa = PBXGroup;
+			children = (
+				2240 /* RecurringHubViewModel.swift */,
+				2241 /* RecurringHubView.swift */,
+				2242 /* RecurringDetailView.swift */,
+				2243 /* CreateEditRecurringSheet.swift */,
+				5041 /* Components */,
+			);
+			path = Recurring;
+			sourceTree = "<group>";
+		};
+		5041 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2244 /* UpcomingBillCardView.swift */,
+				2245 /* RecurringScheduleCardView.swift */,
+				2246 /* SubscriptionCardView.swift */,
+				2247 /* SnoozeReminderSheet.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		5042 /* Backup */ = {
+			isa = PBXGroup;
+			children = (
+				2249 /* AppLockState.swift */,
+				2250 /* BackupSummary.swift */,
+				2251 /* LeafBackupContainer.swift */,
+				2252 /* LeafBackupPayload.swift */,
+				2269 /* StatementFileBackup.swift */,
+				2270 /* PasswordStrength.swift */,
+				2272 /* RestoreProgressState.swift */,
+				2273 /* RestoreJournal.swift */,
+			);
+			path = Backup;
+			sourceTree = "<group>";
+		};
+		5043 /* Backup */ = {
+			isa = PBXGroup;
+			children = (
+				2253 /* CreateBackupUseCase.swift */,
+				2254 /* DeleteAllFinancialDataUseCase.swift */,
+				2255 /* RestoreBackupUseCase.swift */,
+				2256 /* ValidateBackupUseCase.swift */,
+			);
+			path = Backup;
+			sourceTree = "<group>";
+		};
+		5044 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				2261 /* AppLockView.swift */,
+				2262 /* BackupRestoreView.swift */,
+				2263 /* CreateBackupSheet.swift */,
+				2264 /* DeleteDataConfirmationSheet.swift */,
+				2265 /* PrivacyDashboardView.swift */,
+				2266 /* PrivacyDashboardViewModel.swift */,
+				2267 /* RestoreBackupSheet.swift */,
+				2268 /* ShareSheetView.swift */,
+				2271 /* PrivacyShieldView.swift */,
+				2327 /* PinKeypadView.swift */,
+				2328 /* AppLockSetupSheet.swift */,
+				2329 /* ChangePinSheet.swift */,
+				2330 /* DisableAppLockSheet.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		5047 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2304 /* CurrencyConverter.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5048 /* Wallets */ = {
+			isa = PBXGroup;
+			children = (
+				2313 /* CreateEditTravelWalletSheet.swift */,
+				2314 /* TravelWalletDetailView.swift */,
+				2315 /* TravelWalletsListView.swift */,
+				2316 /* TravelWalletsViewModel.swift */,
+			);
+			path = Wallets;
+			sourceTree = "<group>";
+		};
+		5049 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				2317 /* WidgetDataSharing.swift */,
+				2318 /* LeafWidgets.swift */,
+				2331 /* LeafWidgetViews.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		5050 /* LeafWidgetsExtension */ = {
+			isa = PBXGroup;
+			children = (
+				2324 /* LeafWidgetsExtension.entitlements */,
+				2325 /* Info.plist */,
+			);
+			path = LeafWidgetsExtension;
+			sourceTree = "<group>";
+		};
+		5051 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				2332 /* WidgetShowcaseView.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		5052 /* Ledgers */ = {
+			isa = PBXGroup;
+			children = (
+				2333 /* TransferFundsSheet.swift */,
+				2334 /* LedgersHubView.swift */,
+			);
+			path = Ledgers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6001 /* Leaf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7001 /* Build configuration list for PBXNativeTarget "Leaf" */;
+			buildPhases = (
+				8001 /* Sources */,
+				4001 /* Frameworks */,
+				9001 /* Resources */,
+				9002 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9501 /* PBXTargetDependency */,
+			);
+			name = Leaf;
+			packageProductDependencies = (
+				3001 /* GRDB */,
+			);
+			productName = Leaf;
+			productReference = 2025 /* Leaf.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6002 /* LeafTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7002 /* Build configuration list for PBXNativeTarget "LeafTests" */;
+			buildPhases = (
+				8002 /* Sources */,
+				4002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LeafTests;
+			packageProductDependencies = (
+				3002 /* GRDB */,
+			);
+			productName = LeafTests;
+			productReference = 2030 /* LeafTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6003 /* LeafWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7004 /* Build configuration list for PBXNativeTarget "LeafWidgetsExtension" */;
+			buildPhases = (
+				8003 /* Sources */,
+				4003 /* Frameworks */,
+				9003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LeafWidgetsExtension;
+			productName = LeafWidgetsExtension;
+			productReference = 2322 /* LeafWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXTargetDependency section */
+		9501 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6003 /* LeafWidgetsExtension */;
+			targetProxy = 9502 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXProject section */
+		0001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					6001 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					6002 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 6001;
+					};
+					6003 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = 7003 /* Build configuration list for PBXProject "Leaf" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5001;
+			packageReferences = (
+				0002 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
+			productRefGroup = 5004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6001 /* Leaf */,
+				6002 /* LeafTests */,
+				6003 /* LeafWidgetsExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1003 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1295 /* ExchangeRateRecord.swift in Sources */,
+				1296 /* TravelWalletRecord.swift in Sources */,
+				1297 /* GRDBExchangeRateRepository.swift in Sources */,
+				1298 /* GRDBTravelWalletRepository.swift in Sources */,
+				1299 /* ExchangeRate.swift in Sources */,
+				1300 /* TravelWallet.swift in Sources */,
+				1301 /* ExchangeRateRepositoryProtocol.swift in Sources */,
+				1302 /* TravelWalletRepositoryProtocol.swift in Sources */,
+				1303 /* CurrencyConverter.swift in Sources */,
+				1304 /* ChangePrimaryCurrencyUseCase.swift in Sources */,
+				1305 /* DeleteTravelWalletUseCase.swift in Sources */,
+				1306 /* GetExchangeRatesUseCase.swift in Sources */,
+				1307 /* GetTravelWalletsUseCase.swift in Sources */,
+				1308 /* SaveExchangeRateUseCase.swift in Sources */,
+				1309 /* SaveTravelWalletUseCase.swift in Sources */,
+				1310 /* CurrencySettingsView.swift in Sources */,
+				1311 /* EditExchangeRateSheet.swift in Sources */,
+				1312 /* CreateEditTravelWalletSheet.swift in Sources */,
+				1313 /* TravelWalletDetailView.swift in Sources */,
+				1314 /* TravelWalletsListView.swift in Sources */,
+				1315 /* TravelWalletsViewModel.swift in Sources */,
+				1316 /* WidgetDataSharing.swift in Sources */,
+				1318 /* GoogleAuthService.swift in Sources */,
+				1319 /* GoogleDriveRestService.swift in Sources */,
+				1320 /* GoogleDriveBackupService.swift in Sources */,
+				1323 /* SecurePinManager.swift in Sources */,
+				1324 /* PinKeypadView.swift in Sources */,
+				1325 /* AppLockSetupSheet.swift in Sources */,
+				1326 /* ChangePinSheet.swift in Sources */,
+				1327 /* DisableAppLockSheet.swift in Sources */,
+				1328 /* LeafWidgetViews.swift in Sources */,
+				1330 /* WidgetShowcaseView.swift in Sources */,
+				1331 /* TransferFundsSheet.swift in Sources */,
+				1332 /* LedgersHubView.swift in Sources */,
+				1001 /* LeafApp.swift in Sources */,
+				1002 /* AppContainer.swift in Sources */,
+				1004 /* Amount.swift in Sources */,
+				1005 /* Currency.swift in Sources */,
+				1006 /* TransactionType.swift in Sources */,
+				1007 /* PaymentMethod.swift in Sources */,
+				1008 /* Category.swift in Sources */,
+				1009 /* Transaction.swift in Sources */,
+				1010 /* SplitCalculationEngine.swift in Sources */,
+				1011 /* SplitExpense.swift in Sources */,
+				1012 /* SplitParticipant.swift in Sources */,
+				1013 /* SplitItem.swift in Sources */,
+				1014 /* Budget.swift in Sources */,
+				1015 /* SavingsGoal.swift in Sources */,
+				1016 /* Reminder.swift in Sources */,
+				1017 /* UserPreferences.swift in Sources */,
+				1018 /* ColorTokens.swift in Sources */,
+				1019 /* Typography.swift in Sources */,
+				1020 /* Components/SquircleCard.swift in Sources */,
+				1021 /* AppDatabase.swift in Sources */,
+				1022 /* Migrations/DatabaseMigrations.swift in Sources */,
+				1023 /* Seeds/CategorySeeds.swift in Sources */,
+				1030 /* BudgetRecord.swift in Sources */,
+				1031 /* CategoryRecord.swift in Sources */,
+				1032 /* RecurringTransactionRecord.swift in Sources */,
+				1033 /* ReminderRecord.swift in Sources */,
+				1034 /* SavingsContributionRecord.swift in Sources */,
+				1035 /* SavingsGoalRecord.swift in Sources */,
+				1036 /* SplitExpenseRecord.swift in Sources */,
+				1037 /* SplitGroupRecord.swift in Sources */,
+				1038 /* SplitParticipantRecord.swift in Sources */,
+				1039 /* TransactionRecord.swift in Sources */,
+				1040 /* GRDBCategoryRepository.swift in Sources */,
+				1041 /* GRDBSplitRepository.swift in Sources */,
+				1042 /* GRDBTransactionRepository.swift in Sources */,
+				1043 /* CategoryRepositoryProtocol.swift in Sources */,
+				1044 /* SplitRepositoryProtocol.swift in Sources */,
+				1045 /* TransactionRepositoryProtocol.swift in Sources */,
+				1046 /* AddTransactionUseCase.swift in Sources */,
+				1047 /* CalculateSplitUseCase.swift in Sources */,
+				1048 /* DeleteTransactionUseCase.swift in Sources */,
+				1999 /* ReverseTransferUseCase.swift in Sources */,
+				1049 /* GetTransactionsUseCase.swift in Sources */,
+				1050 /* SettleParticipantUseCase.swift in Sources */,
+				1051 /* Navigation/LeafRoute.swift in Sources */,
+				1052 /* Root/MainTabView.swift in Sources */,
+				1054 /* FinancialSummary.swift in Sources */,
+				1055 /* BudgetStatus.swift in Sources */,
+				1056 /* BudgetProgress.swift in Sources */,
+				1057 /* UserPreferencesRepositoryProtocol.swift in Sources */,
+				1058 /* BudgetRepositoryProtocol.swift in Sources */,
+				1059 /* UserPreferencesRepository.swift in Sources */,
+				1060 /* GRDBBudgetRepository.swift in Sources */,
+				1061 /* GetFinancialSummaryUseCase.swift in Sources */,
+				1062 /* GetBudgetProgressUseCase.swift in Sources */,
+				1063 /* Components/CategoryIconBadge.swift in Sources */,
+				1064 /* Components/EmptyStateCard.swift in Sources */,
+				1065 /* DashboardViewModel.swift in Sources */,
+				1066 /* DashboardHeaderView.swift in Sources */,
+				1067 /* BalanceHeroCardView.swift in Sources */,
+				1068 /* QuickActionsRowView.swift in Sources */,
+				1069 /* DashboardBudgetSectionView.swift in Sources */,
+				1070 /* RecentTransactionsSectionView.swift in Sources */,
+				1071 /* QuickAddTransactionSheet.swift in Sources */,
+				1072 /* DashboardView.swift in Sources */,
+				1074 /* CategorySpending.swift in Sources */,
+				1075 /* MonthlyExpenseSummary.swift in Sources */,
+				1076 /* TransactionFilter.swift in Sources */,
+				1077 /* UpdateTransactionUseCase.swift in Sources */,
+				1078 /* GetMonthlyExpenseSummaryUseCase.swift in Sources */,
+				1079 /* GetCategorySpendingUseCase.swift in Sources */,
+				1080 /* ExpensesView.swift in Sources */,
+				1081 /* ExpensesViewModel.swift in Sources */,
+				1082 /* ExpensesFilterSheet.swift in Sources */,
+				1083 /* AddEditExpenseSheet.swift in Sources */,
+				1084 /* ExpensesMonthPickerHeaderView.swift in Sources */,
+				1085 /* ExpensesMonthlySummaryCardView.swift in Sources */,
+				1086 /* ExpensesCategoryBreakdownView.swift in Sources */,
+				1087 /* ExpensesTransactionHistoryView.swift in Sources */,
+				1088 /* ExpensesSearchBarView.swift in Sources */,
+				1090 /* NetBalanceEngine.swift in Sources */,
+				1091 /* CreateSplitExpenseUseCase.swift in Sources */,
+				1092 /* UpdateSplitExpenseUseCase.swift in Sources */,
+				1093 /* DeleteSplitExpenseUseCase.swift in Sources */,
+				1094 /* GetSplitSummaryUseCase.swift in Sources */,
+				1095 /* SplitLandingViewModel.swift in Sources */,
+				1096 /* SplitLandingView.swift in Sources */,
+				1097 /* CreateSplitSheet.swift in Sources */,
+				1098 /* SplitDetailView.swift in Sources */,
+				1099 /* EditSplitSheet.swift in Sources */,
+				1100 /* SplitFinancialOverviewCardView.swift in Sources */,
+				1101 /* SplitExpenseCardView.swift in Sources */,
+				1103 /* SplitPayment.swift in Sources */,
+				1104 /* SplitPaymentRecord.swift in Sources */,
+				1105 /* RecordParticipantPaymentUseCase.swift in Sources */,
+				1106 /* ReverseParticipantPaymentUseCase.swift in Sources */,
+				1107 /* RecordPaymentSheet.swift in Sources */,
+				1108 /* SavingsGoalContribution.swift in Sources */,
+				1109 /* SavingsGoalContributionRecord.swift in Sources */,
+				1110 /* SavingsGoalRepositoryProtocol.swift in Sources */,
+				1111 /* GRDBSavingsGoalRepository.swift in Sources */,
+				1112 /* SaveBudgetUseCase.swift in Sources */,
+				1113 /* DeleteBudgetUseCase.swift in Sources */,
+				1114 /* GetSavingsGoalsUseCase.swift in Sources */,
+				1115 /* SaveSavingsGoalUseCase.swift in Sources */,
+				1116 /* DeleteSavingsGoalUseCase.swift in Sources */,
+				1117 /* SetSavingsGoalArchivedUseCase.swift in Sources */,
+				1118 /* RecordSavingsContributionUseCase.swift in Sources */,
+				1119 /* ReverseSavingsContributionUseCase.swift in Sources */,
+				1120 /* PlanningViewModel.swift in Sources */,
+				1121 /* PlanningView.swift in Sources */,
+				1122 /* BudgetCardView.swift in Sources */,
+				1123 /* BudgetDetailView.swift in Sources */,
+				1124 /* CreateEditBudgetSheet.swift in Sources */,
+				1125 /* SavingsGoalCardView.swift in Sources */,
+				1126 /* CreateEditSavingsGoalSheet.swift in Sources */,
+				1127 /* AddSavingsContributionSheet.swift in Sources */,
+				1128 /* SavingsGoalDetailView.swift in Sources */,
+				1130 /* BudgetPeriodType.swift in Sources */,
+				1131 /* RecordSavingsWithdrawalUseCase.swift in Sources */,
+				1132 /* ReverseSavingsWithdrawalUseCase.swift in Sources */,
+				1133 /* AddSavingsWithdrawalSheet.swift in Sources */,
+				1134 /* InsightsPeriod.swift in Sources */,
+				1135 /* InsightsFinancialOverview.swift in Sources */,
+				1136 /* CategoryAnalysisItem.swift in Sources */,
+				1137 /* SpendingTrendPoint.swift in Sources */,
+				1138 /* BudgetInsightItem.swift in Sources */,
+				1139 /* FinancialObservation.swift in Sources */,
+				1140 /* GetInsightsSummaryUseCase.swift in Sources */,
+				1141 /* GetCategoryAnalysisUseCase.swift in Sources */,
+				1142 /* GetSpendingTrendsUseCase.swift in Sources */,
+				1143 /* GetBudgetInsightsUseCase.swift in Sources */,
+				1144 /* GetSavingsInsightsUseCase.swift in Sources */,
+				1145 /* GetFinancialObservationsUseCase.swift in Sources */,
+				1146 /* InsightsView.swift in Sources */,
+				1147 /* InsightsViewModel.swift in Sources */,
+				1148 /* InsightsPeriodSelectorView.swift in Sources */,
+				1149 /* CustomDateRangeSheet.swift in Sources */,
+				1150 /* FinancialOverviewCardView.swift in Sources */,
+				1151 /* FinancialObservationsSectionView.swift in Sources */,
+				1152 /* SpendingTrendsChartView.swift in Sources */,
+				1153 /* CategoryDistributionChartView.swift in Sources */,
+				1154 /* CategoryBreakdownListView.swift in Sources */,
+				1155 /* BudgetUtilisationSectionView.swift in Sources */,
+				1156 /* SavingsGrowthSectionView.swift in Sources */,
+				1157 /* CategoryDetailAnalyticsView.swift in Sources */,
+				1158 /* SettingsSheet.swift in Sources */,
+				1160 /* StatementPeriod.swift in Sources */,
+				1161 /* StatementFormat.swift in Sources */,
+				1162 /* FinancialStatementData.swift in Sources */,
+				1163 /* SavedStatement.swift in Sources */,
+				1164 /* StatementRecord.swift in Sources */,
+				1165 /* StatementRepositoryProtocol.swift in Sources */,
+				1166 /* GRDBStatementRepository.swift in Sources */,
+				1167 /* CompileStatementDataUseCase.swift in Sources */,
+				1168 /* GenerateStatementUseCase.swift in Sources */,
+				1169 /* DeleteStatementUseCase.swift in Sources */,
+				1170 /* GetStatementsUseCase.swift in Sources */,
+				1171 /* PdfStatementGenerator.swift in Sources */,
+				1172 /* CsvStatementGenerator.swift in Sources */,
+				1173 /* StatementsViewModel.swift in Sources */,
+				1174 /* StatementsView.swift in Sources */,
+				1175 /* GenerateStatementSheet.swift in Sources */,
+				1176 /* PdfViewerSheet.swift in Sources */,
+				1177 /* DocumentPickerExportView.swift in Sources */,
+				1178 /* CompoundingFrequency.swift in Sources */,
+				1179 /* FinancialToolType.swift in Sources */,
+				1180 /* EmiCalculation.swift in Sources */,
+				1181 /* SipCalculation.swift in Sources */,
+				1182 /* FdCalculation.swift in Sources */,
+				1183 /* RdCalculation.swift in Sources */,
+				1184 /* DiscountCalculation.swift in Sources */,
+				1185 /* GstCalculation.swift in Sources */,
+				1186 /* FinancialCalculatorEngine.swift in Sources */,
+				1187 /* CalculateEmiUseCase.swift in Sources */,
+				1188 /* CalculateSipUseCase.swift in Sources */,
+				1189 /* CalculateFdUseCase.swift in Sources */,
+				1190 /* CalculateRdUseCase.swift in Sources */,
+				1191 /* CalculateDiscountUseCase.swift in Sources */,
+				1192 /* CalculateGstUseCase.swift in Sources */,
+				1193 /* ToolsLandingView.swift in Sources */,
+				1194 /* ToolsLandingViewModel.swift in Sources */,
+				1195 /* EmiCalculatorView.swift in Sources */,
+				1196 /* EmiCalculatorViewModel.swift in Sources */,
+				1197 /* SipCalculatorView.swift in Sources */,
+				1198 /* SipCalculatorViewModel.swift in Sources */,
+				1199 /* FdCalculatorView.swift in Sources */,
+				1200 /* FdCalculatorViewModel.swift in Sources */,
+				1201 /* RdCalculatorView.swift in Sources */,
+				1202 /* RdCalculatorViewModel.swift in Sources */,
+				1203 /* DiscountCalculatorView.swift in Sources */,
+				1204 /* DiscountCalculatorViewModel.swift in Sources */,
+				1205 /* GstCalculatorView.swift in Sources */,
+				1206 /* GstCalculatorViewModel.swift in Sources */,
+				1207 /* CalculatorInputField.swift in Sources */,
+				1208 /* CalculatorResultHeroCard.swift in Sources */,
+				1209 /* CalculatorBreakdownRow.swift in Sources */,
+				1210 /* CalculatorCardView.swift in Sources */,
+				1211 /* CalculatorAmortizationScheduleView.swift in Sources */,
+				1212 /* CalculatorAssumptionDisclosureCard.swift in Sources */,
+				1213 /* RecurringTransactionOccurrenceRecord.swift in Sources */,
+				1214 /* GRDBRecurringRepository.swift in Sources */,
+				1215 /* RecurrenceEngine.swift in Sources */,
+				1216 /* RecurringRepositoryProtocol.swift in Sources */,
+				1217 /* NotificationService.swift in Sources */,
+				1218 /* DashboardUpcomingBillsSectionView.swift in Sources */,
+				1219 /* BillPaymentStatus.swift in Sources */,
+				1220 /* RecurringScheduleFrequency.swift in Sources */,
+				1221 /* RecurringScheduleStatus.swift in Sources */,
+				1222 /* RecurringTransaction.swift in Sources */,
+				1223 /* RecurringTransactionOccurrence.swift in Sources */,
+				1224 /* SubscriptionSummary.swift in Sources */,
+				1225 /* UpcomingBillsSummary.swift in Sources */,
+				1226 /* CancelRecurringTransactionUseCase.swift in Sources */,
+				1227 /* CreateRecurringTransactionUseCase.swift in Sources */,
+				1228 /* DeleteRecurringTransactionUseCase.swift in Sources */,
+				1229 /* GenerateDueOccurrencesUseCase.swift in Sources */,
+				1230 /* GetRecurringTransactionsUseCase.swift in Sources */,
+				1231 /* GetSubscriptionSummaryUseCase.swift in Sources */,
+				1232 /* GetUpcomingBillsUseCase.swift in Sources */,
+				1233 /* MarkBillAsPaidUseCase.swift in Sources */,
+				1234 /* PauseRecurringTransactionUseCase.swift in Sources */,
+				1235 /* ResumeRecurringTransactionUseCase.swift in Sources */,
+				1236 /* SkipBillOccurrenceUseCase.swift in Sources */,
+				1237 /* SnoozeBillReminderUseCase.swift in Sources */,
+				1238 /* UpdateRecurringTransactionUseCase.swift in Sources */,
+				1239 /* RecurringHubViewModel.swift in Sources */,
+				1240 /* RecurringHubView.swift in Sources */,
+				1241 /* RecurringDetailView.swift in Sources */,
+				1242 /* CreateEditRecurringSheet.swift in Sources */,
+				1243 /* UpcomingBillCardView.swift in Sources */,
+				1244 /* RecurringScheduleCardView.swift in Sources */,
+				1245 /* SubscriptionCardView.swift in Sources */,
+				1246 /* SnoozeReminderSheet.swift in Sources */,
+				1247 /* ReversePaidOccurrenceUseCase.swift in Sources */,
+				1248 /* AppLockState.swift in Sources */,
+				1249 /* BackupSummary.swift in Sources */,
+				1250 /* LeafBackupContainer.swift in Sources */,
+				1251 /* LeafBackupPayload.swift in Sources */,
+				1252 /* CreateBackupUseCase.swift in Sources */,
+				1253 /* DeleteAllFinancialDataUseCase.swift in Sources */,
+				1254 /* RestoreBackupUseCase.swift in Sources */,
+				1255 /* ValidateBackupUseCase.swift in Sources */,
+				1256 /* AppLockService.swift in Sources */,
+				1257 /* BackupCryptoEngine.swift in Sources */,
+				1258 /* BackupService.swift in Sources */,
+				1259 /* KeychainService.swift in Sources */,
+				1260 /* AppLockView.swift in Sources */,
+				1261 /* BackupRestoreView.swift in Sources */,
+				1262 /* CreateBackupSheet.swift in Sources */,
+				1263 /* DeleteDataConfirmationSheet.swift in Sources */,
+				1264 /* PrivacyDashboardView.swift in Sources */,
+				1265 /* PrivacyDashboardViewModel.swift in Sources */,
+				1266 /* RestoreBackupSheet.swift in Sources */,
+				1267 /* ShareSheetView.swift in Sources */,
+				1268 /* StatementFileBackup.swift in Sources */,
+				1269 /* PasswordStrength.swift in Sources */,
+				1270 /* PrivacyShieldView.swift in Sources */,
+				1271 /* RestoreProgressState.swift in Sources */,
+				1272 /* RestoreJournal.swift in Sources */,
+				1273 /* SplitGroup.swift in Sources */,
+				1274 /* SplitGroupAnalytics.swift in Sources */,
+				1275 /* GetSplitGroupAnalyticsUseCase.swift in Sources */,
+				1276 /* GetSplitGroupsUseCase.swift in Sources */,
+				1277 /* SaveSplitGroupUseCase.swift in Sources */,
+				1278 /* DeleteSplitGroupUseCase.swift in Sources */,
+				1279 /* SplitGroupAnalyticsViewModel.swift in Sources */,
+				1280 /* SplitGroupAnalyticsView.swift in Sources */,
+				1281 /* SplitGroupDetailView.swift in Sources */,
+				1282 /* SplitGroupCategoryChart.swift in Sources */,
+				1283 /* SplitGroupSpendingTimelineChart.swift in Sources */,
+				1284 /* CreateGroupSheet.swift in Sources */,
+				1285 /* ReceiptStorageService.swift in Sources */,
+				1286 /* ReceiptExtractionConfidence.swift in Sources */,
+				1287 /* ReceiptOCRResult.swift in Sources */,
+				1288 /* ReceiptOCRService.swift in Sources */,
+				1289 /* ReceiptParser.swift in Sources */,
+				1290 /* ProcessReceiptImageUseCase.swift in Sources */,
+				1291 /* ReceiptCameraView.swift in Sources */,
+				1292 /* ReceiptScannerViewModel.swift in Sources */,
+				1293 /* ReceiptReviewView.swift in Sources */,
+				1294 /* ReceiptScannerSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1026 /* AmountTests.swift in Sources */,
+				1027 /* CurrencyTests.swift in Sources */,
+				1028 /* SplitCalculationEngineTests.swift in Sources */,
+				1029 /* DatabaseMigrationTests.swift in Sources */,
+				1053 /* RepositoryTests.swift in Sources */,
+				1073 /* DashboardViewModelTests.swift in Sources */,
+				1089 /* ExpensesViewModelTests.swift in Sources */,
+				1102 /* SplitViewModelTests.swift in Sources */,
+				1129 /* PlanningViewModelTests.swift in Sources */,
+				1159 /* InsightsAnalyticsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1317 /* LeafWidgets.swift in Sources */,
+				1321 /* WidgetDataSharing.swift in Sources */,
+				1329 /* LeafWidgetViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Leaf/Leaf.entitlements;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Leaf/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Leaf;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7102 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Leaf/Leaf.entitlements;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Leaf/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Leaf;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7103 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7104 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7105 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.LeafTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leaf";
+			};
+			name = Debug;
+		};
+		7106 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.LeafTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leaf";
+			};
+			name = Release;
+		};
+		7107 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LeafWidgetsExtension/LeafWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LeafWidgetsExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Leaf Widgets";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf.LeafWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7108 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LeafWidgetsExtension/LeafWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LeafWidgetsExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Leaf Widgets";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf.LeafWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7001 /* Build configuration list for PBXNativeTarget "Leaf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7101 /* Debug */,
+				7102 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7002 /* Build configuration list for PBXNativeTarget "LeafTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7105 /* Debug */,
+				7106 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7003 /* Build configuration list for PBXProject "Leaf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7103 /* Debug */,
+				7104 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7004 /* Build configuration list for PBXNativeTarget "LeafWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7107 /* Debug */,
+				7108 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0002 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.29.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3001 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0002 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		3002 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0002 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0001 /* Project object */;
+}
