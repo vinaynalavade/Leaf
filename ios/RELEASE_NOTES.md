@@ -1,9 +1,9 @@
-# Leaf for iOS — Release Notes (v1.0.0 Build 2)
+# Leaf for iOS — Release Notes (v1.1.4 Build 3)
 
-**Release Date:** November 13, 2026  
+**Release Date:** November 14, 2026  
 **Platform:** iOS 17.0+ (iPhone & iPad)  
 **Bundle Identifier:** `com.vinaynalavade.Leaf`  
-**Version:** `1.0.0` (Build `2`)  
+**Version:** `1.1.4` (Build `3`)  
 **Architecture:** Apple Silicon / arm64 Native  
 
 ---
