@@ -76,15 +76,22 @@ If GitHub API rate limits or offline conditions occur, the website falls back to
 const RELEASE_CONFIG = {
   owner: 'vinaynalavade',
   repo: 'Leaf',
-  defaultVersionName: '1.1.3',
-  defaultVersionCode: 15,
-  defaultReleaseDate: 'October 10, 2026',
+  defaultVersionName: '1.1.4',
+  defaultVersionCode: 16,
+  defaultReleaseDate: 'October 2026',
   defaultApkSize: '4.4 MB',
-  defaultApkFileName: 'Leaf_v1.1.3.apk',
-  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk',
-  defaultSha256: '13220a715849d30f79e2c6b79e1bef4bb867550c64bee08d05a3b726601eec87',
+  defaultApkFileName: 'Leaf_v1.1.4.apk',
+  defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk',
+  defaultSha256: '7ad7879a99c4bd1b07fb021bff5ea6627c3db4adc263297d935107e3b5d8fbf9',
   repoUrl: 'https://github.com/vinaynalavade/Leaf',
-  releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
+  releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases',
+  // iOS Sideloading Package (Unsigned)
+  iosVersionName: '1.1.4',
+  iosBuildCode: 3,
+  iosIpaSize: '10.1 MB',
+  iosIpaFileName: 'Leaf-v1.1.4-Sideloading-Unsigned.ipa',
+  iosDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf-v1.1.4-Sideloading-Unsigned.ipa',
+  iosSha256: 'ff9c38db5afdaf72558bcd448481412f226b82d85f95d4beabb94f3e84198096'
 };
 ```
 

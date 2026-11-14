@@ -12,15 +12,22 @@
   const RELEASE_CONFIG = {
     owner: 'vinaynalavade',
     repo: 'Leaf',
-    defaultVersionName: '1.1.3',
-    defaultVersionCode: 15,
-    defaultReleaseDate: 'October 10, 2026',
+    defaultVersionName: '1.1.4',
+    defaultVersionCode: 16,
+    defaultReleaseDate: 'October 2026',
     defaultApkSize: '4.4 MB',
-    defaultApkFileName: 'Leaf_v1.1.3.apk',
-    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk',
-    defaultSha256: '13220a715849d30f79e2c6b79e1bef4bb867550c64bee08d05a3b726601eec87',
+    defaultApkFileName: 'Leaf_v1.1.4.apk',
+    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk',
+    defaultSha256: '7ad7879a99c4bd1b07fb021bff5ea6627c3db4adc263297d935107e3b5d8fbf9',
     repoUrl: 'https://github.com/vinaynalavade/Leaf',
-    releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases'
+    releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases',
+    // iOS Sideloading Package (Unsigned)
+    iosVersionName: '1.1.4',
+    iosBuildCode: 3,
+    iosIpaSize: '10.1 MB',
+    iosIpaFileName: 'Leaf-v1.1.4-Sideloading-Unsigned.ipa',
+    iosDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf-v1.1.4-Sideloading-Unsigned.ipa',
+    iosSha256: 'ff9c38db5afdaf72558bcd448481412f226b82d85f95d4beabb94f3e84198096'
   };
 
   // --- Mobile Navigation Drawer ---
@@ -137,10 +144,16 @@
       versionName: RELEASE_CONFIG.defaultVersionName,
       downloadUrl: RELEASE_CONFIG.defaultDownloadUrl,
       sha256: RELEASE_CONFIG.defaultSha256,
-      sizeBytes: 4584952,
+      sizeBytes: 4625000,
       formattedSize: RELEASE_CONFIG.defaultApkSize,
       publishedAt: RELEASE_CONFIG.defaultReleaseDate,
-      fileName: RELEASE_CONFIG.defaultApkFileName
+      fileName: RELEASE_CONFIG.defaultApkFileName,
+      // iOS
+      iosVersionName: RELEASE_CONFIG.iosVersionName,
+      iosDownloadUrl: RELEASE_CONFIG.iosDownloadUrl,
+      iosSha256: RELEASE_CONFIG.iosSha256,
+      iosFormattedSize: RELEASE_CONFIG.iosIpaSize,
+      iosFileName: RELEASE_CONFIG.iosIpaFileName
     });
 
     try {
@@ -165,7 +178,9 @@
         asset => asset.name && asset.name.endsWith('.apk') && !asset.name.includes('debug')
       ) || releaseData.assets.find(asset => asset.name && asset.name.endsWith('.apk'));
 
-      if (!apkAsset) return;
+      const ipaAsset = releaseData.assets.find(
+        asset => asset.name && asset.name.endsWith('.ipa')
+      );
 
       const rawTag = releaseData.tag_name || '';
       const versionName = rawTag.replace(/^v/i, '') || RELEASE_CONFIG.defaultVersionName;
@@ -175,12 +190,12 @@
         return;
       }
 
-      const formattedSize = apkAsset.size
+      const formattedSize = apkAsset && apkAsset.size
         ? `${(apkAsset.size / (1024 * 1024)).toFixed(1)} MB`
         : RELEASE_CONFIG.defaultApkSize;
 
       let sha256 = RELEASE_CONFIG.defaultSha256;
-      if (apkAsset.digest && apkAsset.digest.startsWith('sha256:')) {
+      if (apkAsset && apkAsset.digest && apkAsset.digest.startsWith('sha256:')) {
         sha256 = apkAsset.digest.substring(7).trim();
       }
 
@@ -188,14 +203,24 @@
         ? new Date(releaseData.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
         : RELEASE_CONFIG.defaultReleaseDate;
 
+      const ipaFormattedSize = ipaAsset && ipaAsset.size
+        ? `${(ipaAsset.size / (1024 * 1024)).toFixed(1)} MB`
+        : RELEASE_CONFIG.iosIpaSize;
+
       updateReleaseUiElements({
         versionName: versionName,
-        downloadUrl: apkAsset.browser_download_url || RELEASE_CONFIG.defaultDownloadUrl,
+        downloadUrl: (apkAsset && apkAsset.browser_download_url) || RELEASE_CONFIG.defaultDownloadUrl,
         sha256: sha256,
-        sizeBytes: apkAsset.size,
+        sizeBytes: (apkAsset && apkAsset.size) || 4625000,
         formattedSize: formattedSize,
         publishedAt: publishedDate,
-        fileName: apkAsset.name
+        fileName: (apkAsset && apkAsset.name) || RELEASE_CONFIG.defaultApkFileName,
+        // iOS
+        iosVersionName: versionName,
+        iosDownloadUrl: (ipaAsset && ipaAsset.browser_download_url) || RELEASE_CONFIG.iosDownloadUrl,
+        iosSha256: RELEASE_CONFIG.iosSha256,
+        iosFormattedSize: ipaFormattedSize,
+        iosFileName: (ipaAsset && ipaAsset.name) || RELEASE_CONFIG.iosIpaFileName
       });
     } catch (_err) {
       // Graceful silent fallback
@@ -230,6 +255,28 @@
     document.querySelectorAll('.dynamic-filename').forEach(el => {
       el.textContent = data.fileName;
     });
+
+    // iOS Elements
+    if (data.iosDownloadUrl) {
+      document.querySelectorAll('.dynamic-ipa-download-link').forEach(el => {
+        el.setAttribute('href', data.iosDownloadUrl);
+      });
+    }
+    if (data.iosFormattedSize) {
+      document.querySelectorAll('.dynamic-ipa-size').forEach(el => {
+        el.textContent = data.iosFormattedSize;
+      });
+    }
+    if (data.iosSha256) {
+      document.querySelectorAll('.dynamic-ipa-sha256').forEach(el => {
+        el.textContent = data.iosSha256;
+      });
+    }
+    if (data.iosFileName) {
+      document.querySelectorAll('.dynamic-ipa-filename').forEach(el => {
+        el.textContent = data.iosFileName;
+      });
+    }
   }
 
   // --- Copy to Clipboard Helper ---

@@ -1088,44 +1088,57 @@
     <section class="section" id="download">
       <div class="container container-narrow">
         <div class="download-card">
-          <span class="download-version-badge">
-            <span class="hero-badge-dot" style="background: #f59e0b;"></span>
-            <span>Release Target: <strong>v1.1.4</strong> (Build 16) — Signing in Preparation</span>
+          <span class="download-version-badge badge-stable">
+            <span class="hero-badge-dot"></span>
+            <span>Official Stable Release • <strong class="dynamic-version">v1.1.4</strong> (Build 16)</span>
           </span>
 
           <h2 style="font-size: clamp(1.85rem, 4vw, 2.3rem); margin-bottom: 0.75rem;">Get Leaf for Android</h2>
           <p
             style="font-size: clamp(0.95rem, 1.8vw, 1.05rem); color: var(--text-secondary); max-width: 580px; margin: 0 auto 1.5rem;">
-            Leaf v1.1.4 source code is fully compiled and verified. The signed production APK is currently in preparation pending release signing. You can download the current verified stable release (v1.1.3) or view release updates on GitHub.
+            Leaf v1.1.4 is now available! Featuring separate Cash &amp; Account ledgers, home-screen widgets, Split 2.0 itemized custom splitting, and 100% offline privacy.
           </p>
 
+          <!-- Migration Warning Box in Homepage Download -->
+          <div style="background: #f0fdf4; border: 1px solid #86efac; border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 0.9rem 1.15rem; margin: 0 auto 1.5rem; max-width: 600px; text-align: left; font-size: 0.88rem; color: #1e3a34; line-height: 1.55;">
+            <strong style="color: #065f46; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+              Updating from an earlier version?
+            </strong>
+            Please take a local backup before updating (<strong>Settings &rarr; Data &amp; Tools &rarr; Local &amp; Cloud Backup</strong>). Because v1.1.4 introduces a permanent production signing identity, Android may report an update conflict. <a href="download.html#migration-notice" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Read our safe backup &amp; migration guide &rarr;</a>
+          </div>
+
           <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.1.3/Leaf_v1.1.3.apk"
-              class="btn btn-primary btn-lg" download>
+            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk"
+              class="btn btn-primary btn-lg dynamic-download-link" download>
               <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                 <path
                   d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
               </svg>
-              <span>Download Stable APK (v1.1.3)</span>
+              <span>Download for Android (APK)</span>
             </a>
-            <a href="https://github.com/vinaynalavade/Leaf/releases"
+            <a href="https://github.com/vinaynalavade/Leaf/releases/tag/v1.1.4"
               class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">
-              <span>View Releases on GitHub</span>
+              <span>View Release Notes</span>
             </a>
           </div>
 
           <div class="download-meta">
             <div class="download-meta-item">
-              <span class="download-meta-label">Release Target</span>
-              <span class="download-meta-val">v1.1.4 (Build 16)</span>
+              <span class="download-meta-label">Version</span>
+              <span class="download-meta-val"><span class="dynamic-version">v1.1.4</span> (Build 16)</span>
             </div>
             <div class="download-meta-item">
-              <span class="download-meta-label">Current Stable</span>
-              <span class="download-meta-val">v1.1.3 (Build 15)</span>
+              <span class="download-meta-label">Status</span>
+              <span class="download-meta-val" style="color: var(--income); font-weight: 700;">Stable Release</span>
             </div>
             <div class="download-meta-item">
-              <span class="download-meta-label">v1.1.4 Status</span>
-              <span class="download-meta-val" style="color: #f59e0b; font-weight: 600;">Signing in Preparation</span>
+              <span class="download-meta-label">Package Size</span>
+              <span class="download-meta-val dynamic-apk-size">4.4 MB</span>
+            </div>
+            <div class="download-meta-item">
+              <span class="download-meta-label">Compatibility</span>
+              <span class="download-meta-val">Android 8.0+ (API 26+)</span>
             </div>
           </div>
 
@@ -1133,15 +1146,32 @@
             <div>
               <div
                 style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">
-                Verified Stable Checksum (v1.1.3) — v1.1.4 Checksum Published Upon Release Signing</div>
-              <div class="checksum-code" id="apk-sha256">
-                13220a715849d30f79e2c6b79e1bef4bb867550c64bee08d05a3b726601eec87</div>
+                Verified Checksum (SHA-256) — Leaf_v1.1.4.apk</div>
+              <div class="checksum-code dynamic-sha256" id="apk-sha256">
+                7ad7879a99c4bd1b07fb021bff5ea6627c3db4adc263297d935107e3b5d8fbf9</div>
             </div>
             <button class="copy-btn" type="button" data-copy-target="#apk-sha256">Copy</button>
           </div>
 
+          <!-- iOS Experimental Callout -->
+          <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; text-align: left;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge-experimental-tag">Experimental</span>
+                <span class="badge-unsigned-tag">UNSIGNED</span>
+                <strong style="color: var(--text-primary); font-size: 0.95rem;">Leaf for iPhone (iOS 17+)</strong>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                Sideloading package available for testing with AltStore or Sideloadly.
+              </p>
+            </div>
+            <a href="download.html#ios" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">
+              <span>Get iOS IPA &rarr;</span>
+            </a>
+          </div>
+
           <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
-            Need help installing? Check our step-by-step <a href="download.html">Installation Guide</a>.
+            Need help installing? Check our step-by-step <a href="download.html#install-guide">Installation Guide</a>.
           </p>
         </div>
       </div>
@@ -1186,7 +1216,7 @@
           <h5>Product</h5>
           <ul class="footer-links">
             <li><a href="features.html">Features</a></li>
-            <li><a href="download.html">Download APK</a></li>
+            <li><a href="download.html">Download App</a></li>
             <li><a href="download.html#updates">In-App Updates</a></li>
           </ul>
         </div>
@@ -1214,7 +1244,7 @@
 
       <div class="footer-bottom">
         <div>© 2026 Leaf. Developed by Vinay Nalavade.</div>
-        <div>Offline-first Personal Finance for Android.</div>
+        <div>Offline-first Personal Finance for Android &amp; iOS.</div>
       </div>
     </div>
   </footer>
