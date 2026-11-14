@@ -302,6 +302,13 @@ class ReminderRepositoryTest {
         override fun getTransactionsBetween(startDate: Long, endDate: Long): Flow<List<TransactionWithCategory>> = MutableStateFlow(emptyList())
         override fun getTotalIncomeSubunits(): Flow<Long> = MutableStateFlow(0L)
         override fun getTotalExpenseSubunits(): Flow<Long> = MutableStateFlow(0L)
+        override fun getCashBalanceSubunits(): Flow<Long> = MutableStateFlow(0L)
+        override fun getAccountBalanceSubunits(): Flow<Long> = MutableStateFlow(0L)
+        override fun getCashTransactionsWithCategory(): Flow<List<TransactionWithCategory>> = MutableStateFlow(emptyList())
+        override fun getAccountTransactionsWithCategory(): Flow<List<TransactionWithCategory>> = MutableStateFlow(emptyList())
+        override suspend fun getTransactionByPairId(pairId: Long): TransactionEntity? = null
+        override suspend fun updateTransferPairId(id: Long, pairId: Long) {}
+        override suspend fun getTransferCategoryId(): Long? = null
         override suspend fun updateTransaction(transaction: TransactionEntity) {}
         override suspend fun deleteTransactionById(id: Long) {}
         override suspend fun deleteAllTransactions() {}

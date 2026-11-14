@@ -599,18 +599,34 @@ class AppUpdateSystemTest {
 
     @Test
     fun testLiveGitHubReleaseFetch_ResolvesV112Successfully() {
-        val service = GitHubReleaseService()
-        val result = runBlocking { service.fetchLatestRelease() }
-        if (result is AppResult.Success) {
-            val info = result.data
-            assertEquals("1.1.2", info.latestVersionName)
-            assertEquals("Leaf_v1.1.2.apk", info.apkFileName)
-            assertTrue(info.apkDownloadUrl.contains("v1.1.2/Leaf_v1.1.2.apk"))
-            assertTrue(info.apkSizeBytes > 0L)
-        } else {
-            // Graceful error on offline/rate-limit
-            assertTrue((result as AppResult.Error).error.userMessage.isNotBlank())
+        val mockV112Json = """
+        {
+          "tag_name": "v1.1.2",
+          "name": "Leaf v1.1.2",
+          "html_url": "https://github.com/vinaynalavade/Leaf/releases/tag/v1.1.2",
+          "published_at": "2026-10-15T12:00:00Z",
+          "body": "## What's New in v1.1.2\r\n\r\n- Bug fixes and stability improvements\r\n\r\n| | |\r\n|---|---|\r\n| **Version** | `1.1.2` |\r\n| **Version Code** | `14` |\r\n",
+          "assets": [
+            {
+              "name": "Leaf_v1.1.2.apk",
+              "content_type": "application/vnd.android.package-archive",
+              "size": 5242880,
+              "browser_download_url": "https://github.com/vinaynalavade/Leaf/releases/download/v1.1.2/Leaf_v1.1.2.apk"
+            }
+          ]
         }
+        """.trimIndent()
+
+        val service = GitHubReleaseService(
+            httpFetcher = { AppResult.Success(mockV112Json) }
+        )
+        val result = runBlocking { service.fetchLatestRelease() }
+        assertTrue("Release fetch must succeed with mock fetcher", result is AppResult.Success)
+        val info = (result as AppResult.Success).data
+        assertEquals("1.1.2", info.latestVersionName)
+        assertEquals("Leaf_v1.1.2.apk", info.apkFileName)
+        assertTrue(info.apkDownloadUrl.contains("v1.1.2/Leaf_v1.1.2.apk"))
+        assertTrue(info.apkSizeBytes > 0L)
     }
 
     @Test

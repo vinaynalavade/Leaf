@@ -13,6 +13,7 @@ import com.vinaynalavade.expensetracker.domain.model.RecurringTransaction
 import com.vinaynalavade.expensetracker.domain.model.Transaction
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TransactionEntityMappingTest {
@@ -146,5 +147,33 @@ class TransactionEntityMappingTest {
 
             assertEquals(method, mappedDomain.paymentMethod)
         }
+    }
+
+    @Test
+    fun testInternalTransferEntityMapping() {
+        val domain = Transaction(
+            id = 201L,
+            amount = Amount(250000L),
+            type = TransactionType.EXPENSE,
+            category = sampleCategory,
+            paymentMethod = PaymentMethod.CASH,
+            note = "ATM Withdrawal",
+            timestamp = 1700000000000L,
+            rawPaymentMethod = "CASH",
+            transferPairId = 202L,
+            isInternalTransfer = true
+        )
+
+        val entity = TransactionEntity.fromDomainModel(domain)
+        assertEquals("CASH", entity.paymentMethod)
+        assertEquals("CASH", entity.rawPaymentMethod)
+        assertEquals(202L, entity.transferPairId)
+        assertTrue(entity.isInternalTransfer)
+
+        val mappedDomain = TransactionWithCategory(transaction = entity, category = sampleCategoryEntity).toDomainModel()
+        assertEquals(domain.id, mappedDomain.id)
+        assertEquals(domain.transferPairId, mappedDomain.transferPairId)
+        assertEquals(domain.rawPaymentMethod, mappedDomain.rawPaymentMethod)
+        assertTrue(mappedDomain.isInternalTransfer)
     }
 }

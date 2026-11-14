@@ -48,6 +48,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.CloudUpload
@@ -162,6 +163,7 @@ fun SettingsScreen(
     onNavigateToTools: () -> Unit = {},
     onNavigateToAbout: () -> Unit = {},
     onNavigateToReminders: () -> Unit = {},
+    onNavigateToLedgers: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -359,6 +361,15 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_recurring_title),
                     subtitle = stringResource(R.string.settings_recurring_subtitle),
                     onClick = onNavigateToRecurring
+                )
+
+                SettingsDivider()
+
+                SettingsNavigationTile(
+                    icon = Icons.Default.SwapHoriz,
+                    title = "Cash & Account Ledgers",
+                    subtitle = "Independent liquid balances, history and transfers",
+                    onClick = onNavigateToLedgers
                 )
             }
 

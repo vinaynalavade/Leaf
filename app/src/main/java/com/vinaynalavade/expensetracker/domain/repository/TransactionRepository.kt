@@ -1,7 +1,9 @@
 package com.vinaynalavade.expensetracker.domain.repository
 
+import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
+import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,6 +25,22 @@ interface TransactionRepository {
     fun getFinancialSummary(): Flow<FinancialSummary>
 
     fun getFinancialSummaryByDateRange(startDate: Long, endDate: Long): Flow<FinancialSummary>
+
+    // Independent Ledger Operations
+    fun getCashBalance(): Flow<Amount> = kotlinx.coroutines.flow.flowOf(Amount.ZERO)
+    fun getAccountBalance(): Flow<Amount> = kotlinx.coroutines.flow.flowOf(Amount.ZERO)
+    fun getCashTransactions(): Flow<List<Transaction>> = kotlinx.coroutines.flow.flowOf(emptyList())
+    fun getAccountTransactions(): Flow<List<Transaction>> = kotlinx.coroutines.flow.flowOf(emptyList())
+
+    suspend fun transferBetweenLedgers(
+        from: PaymentMethod,
+        to: PaymentMethod,
+        amount: Amount,
+        note: String?,
+        timestamp: Long
+    ): AppResult<Pair<Long, Long>> = AppResult.Success(Pair(0L, 0L))
+
+    suspend fun reverseTransfer(transactionId: Long): AppResult<Pair<Long, Long>> = AppResult.Success(Pair(0L, 0L))
 
     suspend fun insertTransaction(transaction: Transaction): AppResult<Long>
 

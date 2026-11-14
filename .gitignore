@@ -21,12 +21,16 @@ captures/
 # ------------------------------------------------------------------------------
 # 2. Android Signing Credentials & Local Machine Configurations (SECRETS)
 # ------------------------------------------------------------------------------
+# Leaf production signing credentials — NEVER COMMIT
+/keystore/
 *.jks
 *.keystore
 *.p12
+*.pfx
 *.pem
 signing.properties
 keystore.properties
+key.properties
 local.properties
 
 # ------------------------------------------------------------------------------

@@ -401,6 +401,14 @@ class SplitTransactionIntegrationTest {
         override fun getTotalExpenseSubunits(): Flow<Long> =
             flowOf(transactions.filter { it.type == TransactionType.EXPENSE.name }.sumOf { it.amountSubunits })
 
+        override fun getCashBalanceSubunits(): Flow<Long> = flowOf(0L)
+        override fun getAccountBalanceSubunits(): Flow<Long> = flowOf(0L)
+        override fun getCashTransactionsWithCategory(): Flow<List<TransactionWithCategory>> = flowOf(emptyList())
+        override fun getAccountTransactionsWithCategory(): Flow<List<TransactionWithCategory>> = flowOf(emptyList())
+        override suspend fun getTransactionByPairId(pairId: Long): TransactionEntity? = null
+        override suspend fun updateTransferPairId(id: Long, pairId: Long) {}
+        override suspend fun getTransferCategoryId(): Long? = null
+
         override suspend fun insertTransaction(transaction: TransactionEntity): Long {
             val assignedId = if (transaction.id != 0L) transaction.id else idCounter++
             val saved = transaction.copy(id = assignedId)

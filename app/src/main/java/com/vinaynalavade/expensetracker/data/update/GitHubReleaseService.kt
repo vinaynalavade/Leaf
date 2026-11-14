@@ -18,7 +18,8 @@ import java.time.Instant
  */
 class GitHubReleaseService(
     private val owner: String = "vinaynalavade",
-    private val repo: String = "Leaf"
+    private val repo: String = "Leaf",
+    private val httpFetcher: (suspend (String) -> AppResult<String>)? = null
 ) {
 
     companion object {
@@ -38,7 +39,7 @@ class GitHubReleaseService(
     suspend fun fetchLatestRelease(): AppResult<RemoteReleaseInfo> = withContext(Dispatchers.IO) {
         try {
             val endpoint = "$API_BASE_URL/repos/$owner/$repo/releases/latest"
-            val responseResult = httpGetText(endpoint)
+            val responseResult = httpFetcher?.invoke(endpoint) ?: httpGetText(endpoint)
 
             if (responseResult is AppResult.Error) {
                 return@withContext responseResult
@@ -85,7 +86,7 @@ class GitHubReleaseService(
         if (releaseJsonAsset != null) {
             val releaseJsonDownloadUrl = releaseJsonAsset.getString("browser_download_url") ?: ""
             if (releaseJsonDownloadUrl.isNotBlank()) {
-                val metadataResult = httpGetText(releaseJsonDownloadUrl)
+                val metadataResult = httpFetcher?.invoke(releaseJsonDownloadUrl) ?: httpGetText(releaseJsonDownloadUrl)
                 if (metadataResult is AppResult.Success) {
                     val metadataParsed = parseAndValidateReleaseMetadata(metadataResult.data, releaseObj, assetsArray)
                     if (metadataParsed is AppResult.Success) {
@@ -373,7 +374,7 @@ class GitHubReleaseService(
      * Fetches raw text from a given HTTPS URL.
      */
     suspend fun fetchPlainText(url: String): AppResult<String> = withContext(Dispatchers.IO) {
-        httpGetText(url)
+        httpFetcher?.invoke(url) ?: httpGetText(url)
     }
 
     private fun httpGetText(urlString: String): AppResult<String> {

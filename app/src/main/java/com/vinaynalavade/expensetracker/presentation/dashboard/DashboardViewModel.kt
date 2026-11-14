@@ -41,6 +41,8 @@ data class DashboardUiState(
     val unsettledSplits: List<SplitExpense> = emptyList(),
     val upcomingPayments: List<UpcomingPaymentItem> = emptyList(),
     val recentTransactions: List<Transaction> = emptyList(),
+    val cashBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
+    val accountBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
     val isBalanceVisible: Boolean = true,
     val isLoading: Boolean = false,
     val error: String? = null
@@ -83,8 +85,10 @@ class DashboardViewModel(
             DashboardData(summary, analysis, budgets, goals, splits, emptyList(), emptyList())
         }
 
-        val enrichedDataFlow = combine(baseDataFlow, upcomingFlow, recentTxFlow) { base, upcoming, recent ->
-            base.copy(upcoming = upcoming, recent = recent)
+        val ledgersFlow = getFinancialSummaryUseCase.executeForLedgers()
+
+        val enrichedDataFlow = combine(baseDataFlow, upcomingFlow, recentTxFlow, ledgersFlow) { base, upcoming, recent, ledgers ->
+            base.copy(upcoming = upcoming, recent = recent, ledgers = ledgers)
         }
 
         combine(
@@ -112,6 +116,8 @@ class DashboardViewModel(
                 unsettledSplits = unsettledSplits,
                 upcomingPayments = data.upcoming,
                 recentTransactions = data.recent,
+                cashBalance = data.ledgers?.first,
+                accountBalance = data.ledgers?.second,
                 isBalanceVisible = prefs.isBalanceVisible,
                 isLoading = false
             )
@@ -180,6 +186,7 @@ private data class DashboardData(
     val goals: List<SavingsGoal>,
     val splits: List<SplitExpense>,
     val upcoming: List<UpcomingPaymentItem>,
-    val recent: List<Transaction>
+    val recent: List<Transaction>,
+    val ledgers: Pair<com.vinaynalavade.expensetracker.core.model.Amount, com.vinaynalavade.expensetracker.core.model.Amount>? = null
 )
 

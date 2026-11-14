@@ -26,7 +26,10 @@ import com.vinaynalavade.expensetracker.domain.model.TransactionType
     indices = [
         Index(value = ["category_id"]),
         Index(value = ["timestamp"]),
-        Index(value = ["type"])
+        Index(value = ["type"]),
+        Index(value = ["payment_method"]),
+        Index(value = ["transfer_pair_id"]),
+        Index(value = ["is_internal_transfer"])
     ]
 )
 data class TransactionEntity(
@@ -56,7 +59,16 @@ data class TransactionEntity(
     val createdAt: Long = timestamp,
 
     @ColumnInfo(name = "updated_at")
-    val updatedAt: Long = timestamp
+    val updatedAt: Long = timestamp,
+
+    @ColumnInfo(name = "raw_payment_method")
+    val rawPaymentMethod: String? = null,
+
+    @ColumnInfo(name = "transfer_pair_id")
+    val transferPairId: Long? = null,
+
+    @ColumnInfo(name = "is_internal_transfer", defaultValue = "0")
+    val isInternalTransfer: Boolean = false
 ) {
     companion object {
         fun fromDomainModel(transaction: Transaction): TransactionEntity {
@@ -69,7 +81,10 @@ data class TransactionEntity(
                 note = transaction.note,
                 timestamp = transaction.timestamp,
                 createdAt = transaction.createdAt,
-                updatedAt = transaction.updatedAt
+                updatedAt = transaction.updatedAt,
+                rawPaymentMethod = transaction.rawPaymentMethod ?: transaction.paymentMethod.name,
+                transferPairId = transaction.transferPairId,
+                isInternalTransfer = transaction.isInternalTransfer
             )
         }
     }
@@ -98,7 +113,10 @@ data class TransactionWithCategory(
             note = transaction.note,
             timestamp = transaction.timestamp,
             createdAt = transaction.createdAt,
-            updatedAt = transaction.updatedAt
+            updatedAt = transaction.updatedAt,
+            rawPaymentMethod = transaction.rawPaymentMethod,
+            transferPairId = transaction.transferPairId,
+            isInternalTransfer = transaction.isInternalTransfer
         )
     }
 }

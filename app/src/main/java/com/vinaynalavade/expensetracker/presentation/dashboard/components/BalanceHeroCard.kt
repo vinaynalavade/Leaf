@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
@@ -61,7 +62,10 @@ import com.vinaynalavade.expensetracker.presentation.theme.financialColors
 fun BalanceHeroCard(
     summary: FinancialSummary,
     isBalanceVisible: Boolean = true,
+    cashBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
+    accountBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
     onToggleBalanceVisibility: () -> Unit = {},
+    onLedgerClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
@@ -157,6 +161,67 @@ fun BalanceHeroCard(
                         letterSpacing = 2.sp
                     )
                 )
+            }
+
+            // Cash & Account Ledger Breakdown Pills
+            if (cashBalance != null && accountBalance != null) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(PillShape)
+                        .clickable { onLedgerClick() }
+                        .background(Color.White.copy(alpha = 0.10f))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Cash Pill
+                        Box(
+                            modifier = Modifier
+                                .clip(PillShape)
+                                .background(Color.White.copy(alpha = 0.16f))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = if (isBalanceVisible) "Cash: ${cashBalance.format()}" else "Cash: ••••",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = Color.White
+                            )
+                        }
+
+                        // Account Pill
+                        Box(
+                            modifier = Modifier
+                                .clip(PillShape)
+                                .background(Color.White.copy(alpha = 0.16f))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = if (isBalanceVisible) "Account: ${accountBalance.format()}" else "Account: ••••",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = Color.White
+                            )
+                        }
+                    }
+
+                    Icon(
+                        imageVector = Icons.Default.ChevronRight,
+                        contentDescription = "View Ledgers",
+                        tint = Color.White.copy(alpha = 0.80f),
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(18.dp))

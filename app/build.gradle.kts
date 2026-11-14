@@ -15,8 +15,8 @@ android {
         applicationId = "com.vinaynalavade.expensetracker"
         minSdk = 26
         targetSdk = 35
-        versionCode = 15
-        versionName = "1.1.3"
+        versionCode = 16
+        versionName = "1.1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -26,38 +26,49 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystorePropertiesFile = rootProject.file("signing.properties")
-            val userHomeLeafProperties = File(System.getProperty("user.home"), ".android/leaf-signing.properties")
-            val userHomeLegacyProperties = File(System.getProperty("user.home"), ".android/kharchaflow-signing.properties")
+            val primaryKeystoreProps = rootProject.file("keystore/signing.properties")
+            val rootKeystoreProps = rootProject.file("signing.properties")
+            val userHomeLeafProps = File(System.getProperty("user.home"), ".android/leaf-signing.properties")
+            val userHomeLegacyProps = File(System.getProperty("user.home"), ".android/kharchaflow-signing.properties")
 
             val props = Properties()
-            if (keystorePropertiesFile.exists()) {
-                keystorePropertiesFile.inputStream().use { props.load(it) }
-            } else if (userHomeLeafProperties.exists()) {
-                userHomeLeafProperties.inputStream().use { props.load(it) }
-            } else if (userHomeLegacyProperties.exists()) {
-                userHomeLegacyProperties.inputStream().use { props.load(it) }
+            if (primaryKeystoreProps.exists()) {
+                primaryKeystoreProps.inputStream().use { props.load(it) }
+            } else if (rootKeystoreProps.exists()) {
+                rootKeystoreProps.inputStream().use { props.load(it) }
+            } else if (userHomeLeafProps.exists()) {
+                userHomeLeafProps.inputStream().use { props.load(it) }
+            } else if (userHomeLegacyProps.exists()) {
+                userHomeLegacyProps.inputStream().use { props.load(it) }
             }
 
+            val defaultProjectKeystore = rootProject.file("keystore/leaf-release-key.jks")
             val defaultLeafKeystore = File(System.getProperty("user.home"), ".android/leaf-upload-key.jks")
             val defaultLegacyKeystore = File(System.getProperty("user.home"), ".android/kharchaflow-upload-key.jks")
 
             val storeFilePath = System.getenv("LEAF_KEYSTORE_PATH")
                 ?: System.getenv("KHARCHAFLOW_KEYSTORE_PATH")
+                ?: props.getProperty("storeFile")
                 ?: props.getProperty("STORE_FILE")
-                ?: if (defaultLeafKeystore.exists()) defaultLeafKeystore.absolutePath else if (defaultLegacyKeystore.exists()) defaultLegacyKeystore.absolutePath else null
+                ?: if (defaultProjectKeystore.exists()) defaultProjectKeystore.absolutePath
+                else if (defaultLeafKeystore.exists()) defaultLeafKeystore.absolutePath
+                else if (defaultLegacyKeystore.exists()) defaultLegacyKeystore.absolutePath
+                else null
 
             val keyAliasVal = System.getenv("LEAF_KEY_ALIAS")
                 ?: System.getenv("KHARCHAFLOW_KEY_ALIAS")
+                ?: props.getProperty("keyAlias")
                 ?: props.getProperty("KEY_ALIAS")
-                ?: if (defaultLeafKeystore.exists()) "leaf-upload" else "kharchaflow-upload"
+                ?: "leaf-upload"
 
             val storePasswordVal = System.getenv("LEAF_KEYSTORE_PASSWORD")
                 ?: System.getenv("KHARCHAFLOW_KEYSTORE_PASSWORD")
+                ?: props.getProperty("storePassword")
                 ?: props.getProperty("STORE_PASSWORD")
 
             val keyPasswordVal = System.getenv("LEAF_KEY_PASSWORD")
                 ?: System.getenv("KHARCHAFLOW_KEY_PASSWORD")
+                ?: props.getProperty("keyPassword")
                 ?: props.getProperty("KEY_PASSWORD")
                 ?: storePasswordVal
 
@@ -67,7 +78,7 @@ android {
                 !keyPasswordVal.isNullOrBlank()
 
             if (isConfigComplete) {
-                val resolvedStoreFile = file(storeFilePath)
+                val resolvedStoreFile = if (File(storeFilePath).isAbsolute) File(storeFilePath) else rootProject.file(storeFilePath)
                 if (!resolvedStoreFile.exists()) {
                     throw org.gradle.api.GradleException(
                         "Leaf release keystore file does not exist at specified path: ${resolvedStoreFile.absolutePath}"
@@ -83,14 +94,14 @@ android {
                 }
                 if (isReleaseBuildRequested) {
                     val missingKeys = buildList {
-                        if (storeFilePath.isNullOrBlank()) add("Keystore path (STORE_FILE / ~/.android/leaf-upload-key.jks)")
-                        if (storePasswordVal.isNullOrBlank()) add("STORE_PASSWORD")
-                        if (keyAliasVal.isNullOrBlank()) add("KEY_ALIAS")
-                        if (keyPasswordVal.isNullOrBlank()) add("KEY_PASSWORD")
+                        if (storeFilePath.isNullOrBlank()) add("Keystore path (storeFile in keystore/signing.properties / leaf-release-key.jks)")
+                        if (storePasswordVal.isNullOrBlank()) add("storePassword / STORE_PASSWORD")
+                        if (keyAliasVal.isNullOrBlank()) add("keyAlias / KEY_ALIAS")
+                        if (keyPasswordVal.isNullOrBlank()) add("keyPassword / KEY_PASSWORD")
                     }
                     throw org.gradle.api.GradleException(
                         "Release signing configuration is incomplete for Leaf release build. Missing: ${missingKeys.joinToString(", ")}. " +
-                        "Please configure signing.properties in the project root or ~/.android/leaf-signing.properties."
+                        "Please configure keystore/signing.properties or signing.properties in the project root."
                     )
                 }
             }

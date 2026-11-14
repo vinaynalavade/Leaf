@@ -1,8 +1,8 @@
 # Leaf
 
-> **Offline-First Personal Finance & Ledger Suite for Android and iOS**
+> **Offline-First Personal Finance & Ledger Suite for Android (v1.1.4) and iOS (v1.0.0)**
 
-Leaf is a modern, privacy-first personal finance and expense management platform containing native implementations for both **Android** and Apple **iOS**. Designed around strict financial precision, zero proprietary servers, zero advertising, and zero user telemetry, Leaf empowers individuals to manage personal expenses, dual-ledger cash/bank accounts, budgets, debt settlements, and recurring obligations with complete confidentiality.
+Leaf is a modern, privacy-first personal finance and expense management platform containing native implementations for both **Android** (v1.1.4, Build 16) and Apple **iOS** (v1.0.0, Build 2). Designed around strict financial precision, zero proprietary servers, zero advertising, and zero user telemetry, Leaf empowers individuals to manage personal expenses, dual-ledger cash/bank accounts, budgets, debt settlements, and recurring obligations with complete confidentiality.
 
 ---
 
@@ -96,7 +96,10 @@ Leaf takes an uncompromising engineering approach:
 - **RFC 4180 CSV Export:** Export clean CSV files with standard headers for spreadsheet auditing.
 
 ### Home Screen Widgets
-- **Android Widgets:** Glanceable financial overview with real-time balance and 1-tap quick action launcher.
+- **Android Widgets (AppWidgetProvider):** Complete native widget suite offering full feature parity with iOS:
+  - **Small (2x2 / 2x1):** Glanceable Current Balance & Today's Expense widgets (`ExpenseTrackerWidgetProvider`, `TodayExpenseWidgetProvider`) with instant touch triggers and eye balance privacy toggle.
+  - **Medium (4x2):** Matches iOS `LeafMediumWidgetView` with Total Balance, eye privacy toggle, cash flow wells (Income & Spent), Monthly Budget progress bar with percentage indicator, and 2 quick actions (`+ Add Expense`, `Split & Collect`).
+  - **Large (4x4):** Matches iOS `LeafLargeWidgetView` with Total Balance, privacy toggle, monthly inflow/outflow, monthly budget progress bar, update timestamp, and 3 quick action buttons (`+ Expense`, `Split Bill`, `Planning`).
 - **iOS Widgets (WidgetKit):** Small, Medium, and Large widgets powered by iOS 17+ App Intents (`ToggleWidgetBalancePrivacyIntent`) and App Group data sharing (`group.com.vinaynalavade.Leaf`). Includes interactive balance concealment and an in-app Widget Showcase.
 
 ### Cryptographic Security & Privacy Shield
@@ -170,7 +173,7 @@ Leaf-GitHub-Ready/
 | :--- | :--- | :--- |
 | **Language** | Kotlin 2.0+ | Modern Kotlin idioms, value classes (`@JvmInline`), Coroutines, Flow |
 | **UI Framework** | Jetpack Compose | Material Design 3, dynamic theme tokens, Compose Navigation |
-| **Persistence** | Room (SQLite) | Room 2.6+, SQLite Schema v10, deterministic migration tests, KSP |
+| **Persistence** | Room (SQLite) | Room 2.6+, SQLite Schema v11 (Separate Ledgers & Transfers), deterministic migration tests, KSP |
 | **Preferences** | Jetpack DataStore | DataStore Preferences for user settings and security flags |
 | **Asynchronous Engine** | Kotlin Coroutines | `StateFlow`, `SharedFlow`, structured concurrency |
 | **Architecture** | Clean 4-Layer | Core, Domain, Data, Presentation with manual DI (`AppContainer`) |
