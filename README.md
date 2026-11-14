@@ -1,8 +1,8 @@
 # Leaf
 
-> **Offline-First Personal Finance & Ledger Suite for Android (v1.1.4) and iOS (v1.0.0)**
+> **Offline-First Personal Finance & Ledger Suite for Android (v1.1.4) and iOS (v1.1.4)**
 
-Leaf is a modern, privacy-first personal finance and expense management platform containing native implementations for both **Android** (v1.1.4, Build 16) and Apple **iOS** (v1.0.0, Build 2). Designed around strict financial precision, zero proprietary servers, zero advertising, and zero user telemetry, Leaf empowers individuals to manage personal expenses, dual-ledger cash/bank accounts, budgets, debt settlements, and recurring obligations with complete confidentiality.
+Leaf is a modern, privacy-first personal finance and expense management platform containing native implementations for both **Android** (v1.1.4, Build 16) and Apple **iOS** (v1.1.4, Build 3). Designed around strict financial precision, zero proprietary servers, zero advertising, and zero user telemetry, Leaf empowers individuals to manage personal expenses, dual-ledger cash/bank accounts, budgets, debt settlements, and recurring obligations with complete confidentiality.
 
 ---
 
@@ -144,7 +144,7 @@ Leaf-GitHub-Ready/
 │   ├── docs/                     # iOS frozen specification copy
 │   ├── Package.swift             # Swift Package Manager manifest (LeafCore library target)
 │   ├── Package.resolved          # SPM dependency lockfile (GRDB.swift 6.29.3)
-│   ├── RELEASE_NOTES.md          # iOS release notes (v1.0.0 Build 2)
+│   ├── RELEASE_NOTES.md          # iOS release notes (v1.1.4 Build 3)
 │   ├── README.md                 # iOS workspace development guide
 │   └── .gitignore                # iOS-specific git ignore rules
 ├── docs/                         # Authoritative Project Documentation
@@ -322,7 +322,7 @@ The `docs/` folder contains comprehensive specifications, schemas, and architect
 - **[`docs/RELEASE_UPDATE_SPEC.md`](docs/RELEASE_UPDATE_SPEC.md)**: In-app release notes and update notification engine specification.
 - **[`docs/shared-docs/`](docs/shared-docs/)**: Original 61-document technical breakdown covering feature-by-feature specifications, user flows, database migrations, and testing matrices.
 - **[`docs/ANDROID_README.md`](docs/ANDROID_README.md)**: Original standalone Android application documentation.
-- **[`ios/README.md`](ios/README.md)** & **[`ios/RELEASE_NOTES.md`](ios/RELEASE_NOTES.md)**: iOS workspace development documentation and release notes for v1.0.0 (Build 2).
+- **[`ios/README.md`](ios/README.md)** & **[`ios/RELEASE_NOTES.md`](ios/RELEASE_NOTES.md)**: iOS workspace development documentation and release notes for v1.1.4 (Build 3).
 
 ---
 

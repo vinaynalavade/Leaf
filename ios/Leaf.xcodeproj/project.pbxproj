@@ -681,6 +681,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
+		9504 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6001;
+			remoteInfo = Leaf;
+		};
 		9502 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0001 /* Project object */;
@@ -1491,6 +1498,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9503 /* PBXTargetDependency */,
 			);
 			name = LeafTests;
 			packageProductDependencies = (
@@ -1520,6 +1528,11 @@
 /* End PBXNativeTarget section */
 
 /* Begin PBXTargetDependency section */
+		9503 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6001 /* Leaf */;
+			targetProxy = 9504 /* PBXContainerItemProxy */;
+		};
 		9501 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6003 /* LeafWidgetsExtension */;
@@ -1949,7 +1962,7 @@
 				CODE_SIGN_ENTITLEMENTS = Leaf/Leaf.entitlements;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -1957,12 +1970,14 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Leaf;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				DEFINES_MODULE = YES;
+				ENABLE_TESTABILITY = YES;
 			};
 			name = Debug;
 		};
@@ -1973,7 +1988,7 @@
 				CODE_SIGN_ENTITLEMENTS = Leaf/Leaf.entitlements;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -1981,12 +1996,14 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Leaf;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				DEFINES_MODULE = YES;
+				ENABLE_TESTABILITY = YES;
 			};
 			name = Release;
 		};
@@ -2046,15 +2063,15 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.LeafTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leaf";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/Leaf";
 			};
 			name = Debug;
 		};
@@ -2063,15 +2080,15 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.LeafTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Leaf";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/Leaf";
 			};
 			name = Release;
 		};
@@ -2081,13 +2098,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LeafWidgetsExtension/LeafWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LeafWidgetsExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Leaf Widgets";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf.LeafWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2103,13 +2120,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LeafWidgetsExtension/LeafWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LeafWidgetsExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Leaf Widgets";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf.LeafWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2119,6 +2136,94 @@
 			};
 			name = Release;
 		};
+		7109 /* Release-Sideloading */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Leaf/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Leaf;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.1.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				DEFINES_MODULE = YES;
+				ENABLE_TESTABILITY = YES;
+			};
+			name = "Release-Sideloading";
+		};
+		7110 /* Release-Sideloading */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.1.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.LeafTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Leaf.app/Leaf";
+			};
+			name = "Release-Sideloading";
+		};
+		7111 /* Release-Sideloading */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Sideloading";
+		};
+		7112 /* Release-Sideloading */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LeafWidgetsExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Leaf Widgets";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.1.4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinaynalavade.Leaf.LeafWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release-Sideloading";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2127,6 +2232,7 @@
 			buildConfigurations = (
 				7101 /* Debug */,
 				7102 /* Release */,
+				7109 /* Release-Sideloading */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2136,6 +2242,7 @@
 			buildConfigurations = (
 				7105 /* Debug */,
 				7106 /* Release */,
+				7110 /* Release-Sideloading */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2145,6 +2252,7 @@
 			buildConfigurations = (
 				7103 /* Debug */,
 				7104 /* Release */,
+				7111 /* Release-Sideloading */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2154,6 +2262,7 @@
 			buildConfigurations = (
 				7107 /* Debug */,
 				7108 /* Release */,
+				7112 /* Release-Sideloading */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
