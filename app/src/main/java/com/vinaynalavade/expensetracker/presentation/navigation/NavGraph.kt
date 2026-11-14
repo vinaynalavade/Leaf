@@ -233,6 +233,9 @@ fun NavGraph(
                 onProfileClick = {
                     navigateToPrimary(Screen.Settings.route)
                 },
+                onNavigateToLedgers = {
+                    navController.navigate(Screen.LedgersHub.route)
+                },
                 onOpenQuickAdd = onOpenQuickAdd
             )
         }
@@ -410,7 +413,8 @@ fun NavGraph(
                 onNavigateToChangePin = { navController.navigate(Screen.ChangePin.route) },
                 onNavigateToTools = { navController.navigate(Screen.Tools.route) },
                 onNavigateToAbout = { navController.navigate(Screen.About.route) },
-                onNavigateToReminders = { navController.navigate(Screen.Reminders.route) }
+                onNavigateToReminders = { navController.navigate(Screen.Reminders.route) },
+                onNavigateToLedgers = { navController.navigate(Screen.LedgersHub.route) }
             )
         }
 
@@ -869,6 +873,16 @@ fun NavGraph(
             GstCalculatorScreen(
                 currency = userPrefs.currency,
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.LedgersHub.route) {
+            com.vinaynalavade.expensetracker.presentation.ledgers.LedgersHubScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToTransactionDetail = { transactionId ->
+                    navController.navigate(Screen.TransactionDetail.createRoute(transactionId))
+                },
+                container = container
             )
         }
     }

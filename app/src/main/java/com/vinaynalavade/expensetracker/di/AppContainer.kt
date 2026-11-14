@@ -52,6 +52,8 @@ interface AppContainer {
     val deleteCategoryUseCase: DeleteCategoryUseCase
 
     val getFinancialSummaryUseCase: GetFinancialSummaryUseCase
+    val transferFundsUseCase: com.vinaynalavade.expensetracker.domain.usecase.TransferFundsUseCase
+    val reverseTransferUseCase: com.vinaynalavade.expensetracker.domain.usecase.ReverseTransferUseCase
     val getWidgetFinancialSummaryUseCase: GetWidgetFinancialSummaryUseCase
     val getTodayExpenseUseCase: GetTodayExpenseUseCase
     val getMonthlyLedgerUseCase: GetMonthlyLedgerUseCase
@@ -227,6 +229,14 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val getFinancialSummaryUseCase: GetFinancialSummaryUseCase by lazy {
         GetFinancialSummaryUseCase(transactionRepository, userPreferencesRepository)
+    }
+
+    override val transferFundsUseCase: com.vinaynalavade.expensetracker.domain.usecase.TransferFundsUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.TransferFundsUseCase(transactionRepository)
+    }
+
+    override val reverseTransferUseCase: com.vinaynalavade.expensetracker.domain.usecase.ReverseTransferUseCase by lazy {
+        com.vinaynalavade.expensetracker.domain.usecase.ReverseTransferUseCase(transactionRepository)
     }
 
     override val getWidgetFinancialSummaryUseCase: GetWidgetFinancialSummaryUseCase by lazy {

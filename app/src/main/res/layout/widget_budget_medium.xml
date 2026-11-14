@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/medium_widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/bg_widget_card">
+
+    <!-- Top Row: Balance Header (Left) & Cashflow Wells (Right) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Left Column: Branding, Privacy Toggle & Total Balance -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_leaf_logo"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Leaf"
+                    android:layout_marginEnd="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LEAF BALANCE"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/widget_text_secondary"
+                    android:letterSpacing="0.06"
+                    android:layout_marginEnd="6dp" />
+
+                <ImageView
+                    android:id="@+id/medium_widget_btn_toggle_visibility"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_visibility"
+                    android:contentDescription="Toggle Balance Visibility"
+                    android:padding="2dp"
+                    android:layout_marginEnd="4dp" />
+
+                <ImageView
+                    android:id="@+id/medium_widget_btn_refresh"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_widget_refresh"
+                    android:contentDescription="Refresh Widget"
+                    android:padding="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/medium_widget_total_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹0.00"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/widget_text_primary"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Right Column: Income & Spent Wells -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Income"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/widget_text_secondary" />
+
+                <TextView
+                    android:id="@+id/medium_widget_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+₹0.00"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/widget_income_text"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spent"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/widget_text_secondary" />
+
+                <TextView
+                    android:id="@+id/medium_widget_expense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-₹0.00"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/widget_expense_text"
+                    android:maxLines="1" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Middle Row: Budget Progress Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/medium_widget_budget_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Budget remaining: ₹0"
+                android:textSize="10sp"
+                android:textColor="@color/widget_text_secondary" />
+
+            <TextView
+                android:id="@+id/medium_widget_budget_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/widget_btn_expense_bg" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/medium_widget_budget_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="@color/widget_btn_expense_bg"
+            android:progressBackgroundTint="@color/widget_pill_bg"
+            android:layout_marginTop="3dp" />
+    </LinearLayout>
+
+    <!-- Spacer Frame -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Bottom Row: 2 Quick Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/medium_widget_btn_add_expense"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="+ Add Expense"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:background="@drawable/bg_widget_btn_expense"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/medium_widget_btn_split"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="Split &amp; Collect"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/widget_text_primary"
+            android:gravity="center"
+            android:background="@drawable/bg_widget_stat_pill" />
+    </LinearLayout>
+</LinearLayout>

@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.combine
 
 /**
  * UseCase to retrieve overall and date-ranged financial summaries.
- * Includes the user's starting balance in the current balance calculation.
+ * Accurately differentiates checking account liquid cash movements from ordinary earned income and expenses:
+ * - Liquid checking balance includes all cash flows (earned income, ordinary expenses, and internal transfers).
+ * - Income and Expense metrics strictly reflect ordinary economic transactions (excluding internal transfers).
  */
 class GetFinancialSummaryUseCase(
     private val transactionRepository: TransactionRepository,
@@ -22,19 +24,28 @@ class GetFinancialSummaryUseCase(
             userPreferencesRepository.getUserPreferences()
         ) { transactions, preferences ->
             val startingBalance = preferences.openingBalance
-            var incomeSubunits = 0L
-            var expenseSubunits = 0L
+            var earnedIncomeSubunits = 0L
+            var ordinaryExpenseSubunits = 0L
+            var totalInflowSubunits = 0L
+            var totalOutflowSubunits = 0L
+
             for (tx in transactions) {
                 if (tx.type == TransactionType.INCOME) {
-                    incomeSubunits += tx.amount.subunits
+                    totalInflowSubunits += tx.amount.subunits
+                    if (!tx.isInternalTransfer) {
+                        earnedIncomeSubunits += tx.amount.subunits
+                    }
                 } else {
-                    expenseSubunits += tx.amount.subunits
+                    totalOutflowSubunits += tx.amount.subunits
+                    if (!tx.isInternalTransfer) {
+                        ordinaryExpenseSubunits += tx.amount.subunits
+                    }
                 }
             }
-            val totalIncome = Amount(incomeSubunits)
-            val totalExpense = Amount(expenseSubunits)
-            val netChange = Amount(incomeSubunits - expenseSubunits)
-            val currentBalance = startingBalance + netChange
+            val totalIncome = Amount(earnedIncomeSubunits)
+            val totalExpense = Amount(ordinaryExpenseSubunits)
+            val netChange = totalIncome - totalExpense
+            val currentBalance = startingBalance + Amount(totalInflowSubunits - totalOutflowSubunits)
 
             FinancialSummary(
                 openingBalance = startingBalance,
@@ -52,26 +63,50 @@ class GetFinancialSummaryUseCase(
             userPreferencesRepository.getUserPreferences()
         ) { transactions, preferences ->
             val startingBalance = preferences.openingBalance
-            var incomeSubunits = 0L
-            var expenseSubunits = 0L
+            var earnedIncomeSubunits = 0L
+            var ordinaryExpenseSubunits = 0L
+            var totalInflowSubunits = 0L
+            var totalOutflowSubunits = 0L
+
             for (tx in transactions) {
                 if (tx.type == TransactionType.INCOME) {
-                    incomeSubunits += tx.amount.subunits
+                    totalInflowSubunits += tx.amount.subunits
+                    if (!tx.isInternalTransfer) {
+                        earnedIncomeSubunits += tx.amount.subunits
+                    }
                 } else {
-                    expenseSubunits += tx.amount.subunits
+                    totalOutflowSubunits += tx.amount.subunits
+                    if (!tx.isInternalTransfer) {
+                        ordinaryExpenseSubunits += tx.amount.subunits
+                    }
                 }
             }
-            val totalIncome = Amount(incomeSubunits)
-            val totalExpense = Amount(expenseSubunits)
-            val netChange = Amount(incomeSubunits - expenseSubunits)
+            val totalIncome = Amount(earnedIncomeSubunits)
+            val totalExpense = Amount(ordinaryExpenseSubunits)
+            val netChange = totalIncome - totalExpense
+            val currentBalance = startingBalance + Amount(totalInflowSubunits - totalOutflowSubunits)
 
             FinancialSummary(
                 openingBalance = startingBalance,
                 totalIncome = totalIncome,
                 totalExpense = totalExpense,
                 netChange = netChange,
-                currentBalance = startingBalance + netChange,
+                currentBalance = currentBalance,
                 transactionCount = transactions.size
             )
+        }
+
+    /**
+     * Computes segregated Cash and Account ledger balances.
+     * Combined total strictly equals `currentBalance` without double counting.
+     */
+    fun executeForLedgers(): Flow<Pair<Amount, Amount>> =
+        combine(
+            transactionRepository.getCashBalance(),
+            transactionRepository.getAccountBalance(),
+            userPreferencesRepository.getUserPreferences()
+        ) { cashBalance, accountBalance, preferences ->
+            val startingBalance = preferences.openingBalance
+            Pair(cashBalance, accountBalance + startingBalance)
         }
 }

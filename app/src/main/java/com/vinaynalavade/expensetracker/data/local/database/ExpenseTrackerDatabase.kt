@@ -39,7 +39,7 @@ import com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity
         SavingsGoalContributionEntity::class,
         ReminderEntity::class
     ],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 abstract class ExpenseTrackerDatabase : RoomDatabase() {
@@ -251,6 +251,54 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // 1. Safe schema extension: preserve historical original payment method before normalization
+                db.execSQL("ALTER TABLE `transactions` ADD COLUMN `raw_payment_method` TEXT")
+                db.execSQL("UPDATE `transactions` SET `raw_payment_method` = `payment_method` WHERE `raw_payment_method` IS NULL")
+
+                // 2. Atomic transfer pairing column
+                db.execSQL("ALTER TABLE `transactions` ADD COLUMN `transfer_pair_id` INTEGER")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_transactions_transfer_pair_id` ON `transactions` (`transfer_pair_id`)")
+
+                // 3. Mark internal transfer flag
+                db.execSQL("ALTER TABLE `transactions` ADD COLUMN `is_internal_transfer` INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_transactions_is_internal_transfer` ON `transactions` (`is_internal_transfer`)")
+
+                // 4. Map explicitly recognized electronic/account methods to 'ACCOUNT'
+                db.execSQL("""
+                    UPDATE `transactions`
+                    SET `payment_method` = 'ACCOUNT'
+                    WHERE UPPER(`payment_method`) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE')
+                """.trimIndent())
+
+                // 5. Map explicitly recognized cash methods to 'CASH'
+                db.execSQL("""
+                    UPDATE `transactions`
+                    SET `payment_method` = 'CASH'
+                    WHERE UPPER(`payment_method`) = 'CASH'
+                """.trimIndent())
+
+                // 6. High-speed ledger indexes for independent accounting
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_transactions_payment_method` ON `transactions` (`payment_method`)")
+
+                // 7. Backfill transfer_pair_id for existing internal transfers
+                db.execSQL("""
+                    UPDATE `transactions`
+                    SET `transfer_pair_id` = (
+                        SELECT t2.`id` FROM `transactions` t2
+                        WHERE t2.`is_internal_transfer` = 1
+                          AND t2.`id` != `transactions`.`id`
+                          AND t2.`type` != `transactions`.`type`
+                          AND t2.`amount_subunits` = `transactions`.`amount_subunits`
+                          AND ABS(t2.`timestamp` - `transactions`.`timestamp`) <= 2000
+                        LIMIT 1
+                    )
+                    WHERE `is_internal_transfer` = 1 AND `transfer_pair_id` IS NULL
+                """.trimIndent())
+            }
+        }
+
         fun getInstance(context: Context): ExpenseTrackerDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -258,7 +306,7 @@ abstract class ExpenseTrackerDatabase : RoomDatabase() {
                     ExpenseTrackerDatabase::class.java,
                     AppConstants.DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
                     .addCallback(DatabaseCallback())
                     .build()
                 INSTANCE = instance

@@ -14,5 +14,8 @@ data class Transaction(
     val note: String? = null,
     val timestamp: Long,
     val createdAt: Long = timestamp,
-    val updatedAt: Long = timestamp
+    val updatedAt: Long = timestamp,
+    val rawPaymentMethod: String? = null,
+    val transferPairId: Long? = null,
+    val isInternalTransfer: Boolean = false
 )

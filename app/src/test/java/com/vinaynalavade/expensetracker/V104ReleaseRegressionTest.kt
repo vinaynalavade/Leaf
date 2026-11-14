@@ -477,6 +477,13 @@ class V104ReleaseRegressionTest {
         override fun getTransactionsBetween(startDate: Long, endDate: Long) = flowOf(emptyList<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>())
         override fun getTotalIncomeSubunits() = flowOf(0L)
         override fun getTotalExpenseSubunits() = flowOf(0L)
+        override fun getCashBalanceSubunits() = flowOf(0L)
+        override fun getAccountBalanceSubunits() = flowOf(0L)
+        override fun getCashTransactionsWithCategory() = flowOf(emptyList<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>())
+        override fun getAccountTransactionsWithCategory() = flowOf(emptyList<com.vinaynalavade.expensetracker.data.local.entity.TransactionWithCategory>())
+        override suspend fun getTransactionByPairId(pairId: Long): com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity? = null
+        override suspend fun updateTransferPairId(id: Long, pairId: Long) {}
+        override suspend fun getTransferCategoryId(): Long? = null
         override suspend fun insertTransaction(transaction: com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity) = 1L
         override suspend fun insertTransactions(transactions: List<com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity>) {}
         override suspend fun updateTransaction(transaction: com.vinaynalavade.expensetracker.data.local.entity.TransactionEntity) {}

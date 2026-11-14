@@ -426,12 +426,15 @@ def test_dashboard_business_logic():
 
 def test_xcode_and_spm_consistency():
     print("[6/6] Verifying Xcode Project & Package.swift Consistency...")
-    with open("Leaf.xcodeproj/project.pbxproj", "r", encoding="utf-8") as f:
+    ios_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pbx_path = os.path.join(ios_dir, "Leaf.xcodeproj", "project.pbxproj")
+    with open(pbx_path, "r", encoding="utf-8") as f:
         pbx = f.read()
 
     # 1. Verify 100% of Swift files in Leaf/ are compiled in target Leaf (or LeafWidgetsExtension)
     disk_leaf_files = set()
-    for root, dirs, files in os.walk("Leaf"):
+    leaf_dir = os.path.join(ios_dir, "Leaf")
+    for root, dirs, files in os.walk(leaf_dir):
         for f in files:
             if f.endswith(".swift"):
                 disk_leaf_files.add(f)
@@ -449,7 +452,8 @@ def test_xcode_and_spm_consistency():
 
     # 2. Verify 100% of Swift files in LeafTests/ are compiled in target LeafTests
     disk_test_files = set()
-    for root, dirs, files in os.walk("LeafTests"):
+    test_dir = os.path.join(ios_dir, "LeafTests")
+    for root, dirs, files in os.walk(test_dir):
         for f in files:
             if f.endswith(".swift"):
                 disk_test_files.add(f)
@@ -461,7 +465,8 @@ def test_xcode_and_spm_consistency():
     assert len(diff_tests) == 0, f"Files missing from LeafTests target in pbxproj: {diff_tests}"
 
     # 3. Verify Package.swift excludes LeafApp.swift from LeafCore and compiles Leaf/
-    with open("Package.swift", "r", encoding="utf-8") as f:
+    pkg_path = os.path.join(ios_dir, "Package.swift")
+    with open(pkg_path, "r", encoding="utf-8") as f:
         pkg = f.read()
     assert 'path: "Leaf"' in pkg
     assert '"App/LeafApp.swift"' in pkg

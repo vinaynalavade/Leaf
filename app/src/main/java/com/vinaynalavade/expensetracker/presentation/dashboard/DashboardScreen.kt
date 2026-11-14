@@ -74,6 +74,7 @@ fun DashboardScreen(
     onNavigateToReminders: () -> Unit = {},
     onNavigateToCategoryTransactions: (YearMonth, String, TransactionType) -> Unit = { _, _, _ -> },
     onNavigateToTransactionDetail: (Long) -> Unit = {},
+    onNavigateToLedgers: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
     modifier: Modifier = Modifier
@@ -124,7 +125,10 @@ fun DashboardScreen(
                     BalanceHeroCard(
                         summary = uiState.summary,
                         isBalanceVisible = uiState.isBalanceVisible,
-                        onToggleBalanceVisibility = { viewModel.toggleBalanceVisibility() }
+                        cashBalance = uiState.cashBalance,
+                        accountBalance = uiState.accountBalance,
+                        onToggleBalanceVisibility = { viewModel.toggleBalanceVisibility() },
+                        onLedgerClick = onNavigateToLedgers
                     )
                 }
 

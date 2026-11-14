@@ -20,6 +20,7 @@
     <string name="nav_add_income">Add Income</string>
     <string name="nav_budgets">Budgets</string>
     <string name="nav_statistics">Statistics</string>
+    <string name="ledgers_hub_title">Cash &amp; Account Ledgers</string>
     <string name="action_add_transaction">Add Transaction</string>
 
     <!-- Common Actions & Buttons -->
@@ -88,6 +89,8 @@
     <string name="widget_overview_description">See total balance, monthly spending summary, and quick transaction shortcuts.</string>
     <string name="widget_today_expense_description">Glanceable daily expense spending total.</string>
     <string name="widget_quick_add_description">Quick shortcut buttons to instantly record income or expense.</string>
+    <string name="widget_medium_budget_description">Compact balance overview, monthly budget progress, and quick expense and bill splitting actions.</string>
+    <string name="widget_budget_hub_description">Large financial snapshot with monthly budget progress and quick action hub.</string>
 
     <!-- Reminders & Notifications -->
     <string name="reminder_daily_title">Track today\'s expenses</string>

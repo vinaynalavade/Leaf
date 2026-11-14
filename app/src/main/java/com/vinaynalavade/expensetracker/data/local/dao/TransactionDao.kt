@@ -32,11 +32,52 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE timestamp >= :startDate AND timestamp <= :endDate ORDER BY timestamp DESC, id DESC")
     fun getTransactionsBetween(startDate: Long, endDate: Long): Flow<List<TransactionWithCategory>>
 
-    @Query("SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'INCOME'")
+    @Query("SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'INCOME' AND is_internal_transfer = 0")
     fun getTotalIncomeSubunits(): Flow<Long>
 
-    @Query("SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'EXPENSE'")
+    @Query("SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'EXPENSE' AND is_internal_transfer = 0")
     fun getTotalExpenseSubunits(): Flow<Long>
+
+    @Query("""
+        SELECT 
+            (SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'INCOME' AND (UPPER(COALESCE(payment_method, '')) IN ('CASH', 'WALLET') OR UPPER(COALESCE(raw_payment_method, '')) IN ('CASH', 'WALLET')))
+            -
+            (SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'EXPENSE' AND (UPPER(COALESCE(payment_method, '')) IN ('CASH', 'WALLET') OR UPPER(COALESCE(raw_payment_method, '')) IN ('CASH', 'WALLET')))
+    """)
+    fun getCashBalanceSubunits(): Flow<Long>
+
+    @Query("""
+        SELECT 
+            (SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'INCOME' AND (UPPER(COALESCE(payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE') OR UPPER(COALESCE(raw_payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE')))
+            -
+            (SELECT COALESCE(SUM(amount_subunits), 0) FROM transactions WHERE type = 'EXPENSE' AND (UPPER(COALESCE(payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE') OR UPPER(COALESCE(raw_payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE')))
+    """)
+    fun getAccountBalanceSubunits(): Flow<Long>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM transactions 
+        WHERE (UPPER(COALESCE(payment_method, '')) IN ('CASH', 'WALLET') OR UPPER(COALESCE(raw_payment_method, '')) IN ('CASH', 'WALLET'))
+        ORDER BY timestamp DESC, id DESC
+    """)
+    fun getCashTransactionsWithCategory(): Flow<List<TransactionWithCategory>>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM transactions 
+        WHERE (UPPER(COALESCE(payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE') OR UPPER(COALESCE(raw_payment_method, '')) IN ('ACCOUNT', 'BANK_ACCOUNT', 'UPI', 'BANK', 'CARD', 'NET_BANKING', 'ONLINE', 'CHEQUE'))
+        ORDER BY timestamp DESC, id DESC
+    """)
+    fun getAccountTransactionsWithCategory(): Flow<List<TransactionWithCategory>>
+
+    @Query("SELECT * FROM transactions WHERE transfer_pair_id = :pairId LIMIT 1")
+    suspend fun getTransactionByPairId(pairId: Long): TransactionEntity?
+
+    @Query("UPDATE transactions SET transfer_pair_id = :pairId WHERE id = :id")
+    suspend fun updateTransferPairId(id: Long, pairId: Long)
+
+    @Query("SELECT id FROM categories WHERE name LIKE '%Transfer%' OR name LIKE '%General%' OR name LIKE '%Other%' LIMIT 1")
+    suspend fun getTransferCategoryId(): Long?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity): Long

@@ -368,7 +368,12 @@
             <p class="leaf-modal-subtitle">From a local personal utility in Pune to a calm, polished offline-first finance companion.</p>
             <div class="leaf-timeline">
               <div class="leaf-timeline-item current">
-                <div class="leaf-tl-ver">v1.1.3 <span>Latest</span></div>
+                <div class="leaf-tl-ver">v1.1.4 <span>Latest</span></div>
+                <div class="leaf-tl-title">Separate Cash &amp; Account Ledgers &amp; Home-Screen Widgets</div>
+                <div class="leaf-tl-desc">Full feature parity with iOS reference: separate Cash and Account ledgers with neutral internal transfers, hero breakdown pills, and native Small, Medium, and Large AppWidgets.</div>
+              </div>
+              <div class="leaf-timeline-item">
+                <div class="leaf-tl-ver">v1.1.3</div>
                 <div class="leaf-tl-title">Easter Eggs, System Polish &amp; Split 2.0 Refinements</div>
                 <div class="leaf-tl-desc">Introduced rich cross-platform Easter eggs, resilient tag-based update checker fallbacks, and polished bill sharing and stability.</div>
               </div>
