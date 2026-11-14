@@ -1,160 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaf — Simple, Private Personal Finance for Android</title>
-  <meta name="description"
-    content="Leaf helps you understand where your money went, where it is going, and what you need to prepare for next. 100% offline-first, private personal finance for Android with expense tracking, budgets, savings goals, and smart payment reminders.">
-  <meta name="keywords"
-    content="Leaf, Android expense tracker, offline personal finance, money manager, budgeting app, payment reminders, upcoming dues, financial calendar, offline finance, private expense manager, Google Drive backup">
-  <meta name="author" content="Vinay Nalavade">
+  <title>Leaf — Simple, Private Personal Expense Tracker</title>
+  <meta name="description" content="Track daily expenses, manage shared bills, plan budgets, and reach savings goals with Leaf. 100% offline, private, and free of ads.">
 
-  <!-- Open Graph / Facebook -->
+  <!-- Open Graph / Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://vinaynalavade.github.io/Leaf/">
-  <meta property="og:title" content="Leaf — Simple, Private Personal Finance for Android">
-  <meta property="og:description"
-    content="Leaf helps you understand where your money went, where it is going, and what you need to prepare for next. 100% offline-first, zero ads, optional Google Drive backup.">
+  <meta property="og:title" content="Leaf — Simple, Private Personal Expense Tracker">
+  <meta property="og:description" content="Track daily expenses, manage shared bills, plan budgets, and reach savings goals. 100% offline and private.">
   <meta property="og:image" content="assets/images/logo.png">
-  
-  <!-- Google Verification -->
-  <meta name="google-site-verification" content="v0HWoEkBjrXUGFE9a4QpVNyG86gUXKw7U_AkWco17CI" />
-  
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Leaf — Simple, Private Personal Finance for Android">
-  <meta name="twitter:description"
-    content="Leaf helps you understand where your money went, where it is going, and what you need to prepare for next. 100% offline-first, zero ads, optional Google Drive backup.">
-  <meta name="twitter:image" content="assets/images/logo.png">
 
-  <!-- Favicons -->
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="apple-touch-icon" href="assets/images/favicon.png">
   <meta name="theme-color" content="#028166">
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
 
-  <!-- Top Sticky Navigation Header -->
+  <!-- Top Navigation Header -->
   <header class="header">
     <div class="container header-inner">
       <a href="index.html" class="logo" aria-label="Leaf Home">
         <img src="assets/images/logo.png" alt="Leaf Logo" class="logo-img" width="34" height="34">
         <span>Leaf</span>
       </a>
+
       <nav class="nav" id="main-nav" aria-label="Primary Navigation">
         <ul class="nav-links">
-          <li><a href="features.html" class="nav-link">Features</a></li>
-          <li><a href="download.html" class="nav-link">Download</a></li>
-          <li><a href="privacy.html" class="nav-link">Privacy</a></li>
+          <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#download" class="nav-link">Download</a></li>
           <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
-        <a href="download.html"
-          class="btn btn-primary btn-sm">
-          <span>Get Leaf</span>
+        <a href="#download" class="btn btn-primary btn-sm">
+          <span>Download</span>
           <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-              clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </a>
       </nav>
 
-      <button class="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="main-nav"
-        aria-label="Open navigation menu">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-        </svg>
+      <button class="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation menu">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
       </button>
     </div>
   </header>
 
   <main>
-    <!-- Hero Section -->
+    <!-- 1. Hero Section -->
     <section class="section section-hero">
       <div class="container">
         <div class="hero-grid">
           <div class="hero-content">
-            <div class="hero-badge">
-              <span class="hero-badge-dot"></span>
-              <span>Official Android Release • <span class="dynamic-version">v1.1.4</span></span>
-            </div>
-            <h1 class="hero-title">Your money.<br><span>Under control.</span></h1>
-            <p class="hero-lead">
-              Leaf helps you understand where your money went, where it is going, and what you need to prepare for next. A private, beautifully crafted personal finance app featuring separate Cash &amp; Account ledgers, home-screen widgets, Split 2.0 itemized custom bill splitting, an iPhone-inspired floating navigation capsule dock, monthly budgets, savings goals, and smart payment reminders.
+            <h1 class="hero-title" style="margin-bottom: 1rem;">Your money.<br><span>Your clarity.</span></h1>
+            <p class="hero-lead" style="max-width: 520px; margin-bottom: 1.75rem;">
+              Track expenses, manage shared bills, plan your budget and understand your spending — all in one place.
             </p>
-            <div class="hero-cta">
-              <a href="download.html"
-                class="btn btn-primary btn-lg">
+
+            <div class="hero-cta" style="margin-bottom: 1.25rem;">
+              <a href="#download" class="btn btn-primary btn-lg">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                  <path
-                    d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
+                  <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
                 </svg>
-                <span>Get Leaf</span>
+                <span>Download Leaf</span>
               </a>
-              <a href="features.html" class="btn btn-secondary btn-lg">
+              <a href="#features" class="btn btn-secondary btn-lg">
                 <span>Explore Features</span>
                 <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>
               </a>
             </div>
-            <ul class="hero-trust-list">
+
+            <!-- Platform Availability -->
+            <div class="hero-platforms">
+              <span class="platform-pill android">
+                <span class="platform-pill-dot"></span>
+                <span>Android</span>
+                <span class="platform-pill-status">Available</span>
+              </span>
+              <span class="platform-pill ios">
+                <span class="platform-pill-dot"></span>
+                <span>iPhone</span>
+                <span class="platform-pill-status">Experimental</span>
+              </span>
+            </div>
+
+            <!-- Trust Highlights -->
+            <ul class="hero-trust-list" style="margin-top: 2rem;">
               <li class="hero-trust-item">
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Works 100% Offline</span>
+                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>100% Offline &amp; Private</span>
               </li>
               <li class="hero-trust-item">
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
+                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 <span>Zero Ads or Trackers</span>
               </li>
               <li class="hero-trust-item">
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Optional Google Drive Backup</span>
-              </li>
-              <li class="hero-trust-item">
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>iPhone-Inspired Polish</span>
+                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Free &amp; Open Source</span>
               </li>
             </ul>
           </div>
 
-          <!-- Product Showcase / UI Mockup (Authentic to Android App) -->
+          <!-- Product Preview Mockup -->
           <div class="hero-visual">
-            <div class="phone-mockup" aria-label="Leaf Android App Preview">
-              <!-- Physical Display Punch-Hole Camera Lens -->
+            <div class="phone-mockup" aria-label="Leaf App Preview">
               <div class="phone-camera-lens" aria-hidden="true"></div>
-
               <div class="phone-screen">
-                <!-- Android Status Bar -->
+                <!-- Status Bar -->
                 <div class="mockup-statusbar" aria-hidden="true">
                   <div class="mockup-status-left">
                     <span class="mockup-status-time">9:41</span>
-                    <span class="mockup-status-glyph" title="Leaf Smart Reminders Active">
-                      <svg viewBox="0 0 24 24"><path d="M6.8,5.2 L13.2,2.0 C13.7,1.8 14.3,2.1 14.6,2.6 L15.4,5.4 L8.0,7.2 Z M9.6,5.2 L16.0,3.2 C16.5,3.0 17.0,3.3 17.2,3.8 L17.7,6.4 L10.6,7.5 Z"/><path fill-rule="evenodd" d="M5.5,7.2 L16.2,7.2 C17.2,7.2 18.0,8.0 18.0,9.0 L18.0,9.8 L19.2,9.8 C20.2,9.8 20.8,10.4 20.8,11.2 C20.8,12.0 20.2,12.4 19.2,12.4 L18.0,12.4 L18.0,12.6 A4.8,4.8 0 0 0 13.5,20.8 L5.5,20.8 C4.4,20.8 3.5,19.9 3.5,18.8 L3.5,9.2 C3.5,8.1 4.4,7.2 5.5,7.2 Z M18.6,10.4 A0.7,0.7 0 1 0 18.6,11.8 A0.7,0.7 0 1 0 18.6,10.4 Z M5.6,9.8 L10.8,9.8 L10.8,10.8 L8.0,10.8 L8.0,11.6 L10.0,11.6 L10.0,12.5 L8.0,12.5 C9.6,12.5 11.0,13.0 11.0,13.8 C11.0,14.6 9.8,15.2 8.4,15.2 L10.6,18.0 L9.2,18.0 L7.2,15.4 L6.8,15.4 L6.8,12.5 L5.6,12.5 L5.6,11.6 L6.8,11.6 L6.8,10.8 L5.6,10.8 Z"/><path d="M15.9,16.5 L15.9,12.7 A3.8,3.8 0 0 0 15.9,20.3 Z M16.5,16.3 L16.5,12.7 A3.8,3.8 0 0 1 20.1,16.3 Z M16.5,16.8 L20.1,16.8 A3.8,3.8 0 0 1 16.5,20.3 Z"/></svg>
+                    <span class="mockup-status-glyph" title="Leaf Reminders">
+                      <svg viewBox="0 0 24 24"><path d="M6.8,5.2 L13.2,2.0 C13.7,1.8 14.3,2.1 14.6,2.6 L15.4,5.4 L8.0,7.2 Z"/><path fill-rule="evenodd" d="M5.5,7.2 L16.2,7.2 C17.2,7.2 18.0,8.0 18.0,9.0 L18.0,9.8 L19.2,9.8 C20.2,9.8 20.8,10.4 20.8,11.2 C20.8,12.0 20.2,12.4 19.2,12.4 L18.0,12.4 L18.0,12.6 A4.8,4.8 0 0 0 13.5,20.8 L5.5,20.8 C4.4,20.8 3.5,19.9 3.5,18.8 L3.5,9.2 C3.5,8.1 4.4,7.2 5.5,7.2 Z"/></svg>
                     </span>
                   </div>
                   <div class="mockup-status-icons">
@@ -164,20 +126,18 @@
                   </div>
                 </div>
 
-                <!-- Leaf App Bar -->
+                <!-- App Bar -->
                 <div class="mockup-appbar">
                   <div>
                     <div class="mockup-greeting">Welcome back</div>
                     <div class="mockup-user">Vinay Nalavade</div>
                   </div>
-                  <!-- Official Logo in app bar -->
                   <div class="mockup-logo-badge">
-                    <img src="assets/images/logo.png" alt="Leaf App Logo" class="mockup-logo-img" width="32"
-                      height="32">
+                    <img src="assets/images/logo.png" alt="Leaf Logo" class="mockup-logo-img" width="32" height="32">
                   </div>
                 </div>
 
-                <!-- Hero Balance Card (Matching Android BalanceHeroCard) -->
+                <!-- Hero Balance Card -->
                 <div class="mockup-balance-card">
                   <div class="mockup-balance-label">Total Balance</div>
                   <div class="mockup-balance-amount">₹ 42,850.00</div>
@@ -193,7 +153,7 @@
                   </div>
                 </div>
 
-                <!-- Upcoming Payment Alert Horizon -->
+                <!-- Upcoming Payment Alert -->
                 <div class="mockup-upcoming-banner">
                   <div class="mockup-upcoming-left">
                     <div class="mockup-upcoming-icon">⏰</div>
@@ -205,7 +165,7 @@
                   <span class="mockup-upcoming-btn">Mark Paid ✓</span>
                 </div>
 
-                <!-- Recent Transactions (Matching Android TransactionItem) -->
+                <!-- Recent Transactions -->
                 <div class="mockup-tx-list">
                   <div class="mockup-tx-item">
                     <div class="mockup-tx-left">
@@ -241,32 +201,25 @@
                   </div>
                 </div>
 
-                <!-- Floating Capsule Navigation Dock -->
+                <!-- Floating Navigation Capsule -->
                 <div class="mockup-bottom-nav" aria-hidden="true">
                   <div class="mockup-nav-tab active">
                     <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                     <span>Home</span>
                   </div>
                   <div class="mockup-nav-tab">
-                    <svg viewBox="0 0 24 24"><path d="M3 17h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-                    <span>Txns</span>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"/></svg>
+                    <span>Budgets</span>
                   </div>
                   <div class="mockup-nav-tab">
-                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                     <span>Split</span>
                   </div>
                   <div class="mockup-nav-tab">
-                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                    <span>Planning</span>
-                  </div>
-                  <div class="mockup-nav-tab">
-                    <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-                    <span>Insights</span>
+                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <span>Settings</span>
                   </div>
                 </div>
-
-                <!-- Gesture Indicator -->
-                <div class="mockup-gesture-bar" aria-hidden="true"></div>
               </div>
             </div>
           </div>
@@ -274,927 +227,338 @@
       </div>
     </section>
 
-    <!-- Core Pillars / Why Leaf -->
-    <section class="section section-muted">
+    <!-- 2. Main Features Section -->
+    <section class="section section-muted" id="features">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag">Core Principles</span>
-          <h2 class="section-title">Built for clarity, privacy and reliability</h2>
-          <p class="section-desc">Personal finance software should help you manage your money without complicating your
-            life.</p>
+          <span class="section-tag">Features</span>
+          <h2 class="section-title">Everything you need to manage your money</h2>
+          <p class="section-desc">
+            Designed to give you effortless control over daily expenses, shared tabs, and long-term financial goals.
+          </p>
         </div>
 
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2v-2zm0-10h2v8h-2V6z" />
-              </svg>
-            </div>
-            <h3 class="card-title">100% Offline-First</h3>
-            <p class="card-desc">All your transactions, custom categories, and balances stay safely on your device.
-              Track spending anywhere without needing internet access or online accounts.</p>
+        <div class="features-grid-consumer">
+          <!-- Feature 1: Expense Tracking -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">💳</div>
+            <h3>Expense Tracking</h3>
+            <p>Keep track of your daily spending without the confusion. Record transactions in seconds with separate cash and account balances.</p>
           </div>
 
-          <div class="card">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z" />
-              </svg>
-            </div>
-            <h3 class="card-title">Past, Present &amp; Future</h3>
-            <p class="card-desc">Understand where your money went with transaction tracking, manage where it goes with budgets, and prepare for what's next with upcoming payment reminders.</p>
+          <!-- Feature 2: Split Expenses -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">🤝</div>
+            <h3>Split Expenses</h3>
+            <p>Share bills and keep track of who owes what. Split equally or assign specific items to friends and roommates with instant WhatsApp sharing.</p>
           </div>
 
-          <div class="card">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z" />
-              </svg>
-            </div>
-            <h3 class="card-title">Exact Financial Math</h3>
-            <p class="card-desc">Built with precision arithmetic, guaranteeing zero rounding errors or discrepancies
-              across your monthly ledgers, totals, and exported reports.</p>
+          <!-- Feature 3: Budget Planning -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">🎯</div>
+            <h3>Budget Planning</h3>
+            <p>Set spending limits and stay within your budget. See at a glance how much you have left for the rest of the month with calm progress indicators.</p>
           </div>
+
+          <!-- Feature 4: Savings Goals -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">🌱</div>
+            <h3>Savings Goals</h3>
+            <p>Plan ahead and work towards your savings goals. Watch your money grow with clear, visual progress trackers for emergency funds, travel, or gadgets.</p>
+          </div>
+
+          <!-- Feature 5: Insights -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">📊</div>
+            <h3>Insights</h3>
+            <p>Understand your spending habits with clear summaries. Spot trends and category breakdowns without complicated financial spreadsheets.</p>
+          </div>
+
+          <!-- Feature 6: Additional Tools -->
+          <div class="feature-card-consumer">
+            <div class="feature-icon-wrapper">⚡</div>
+            <h3>Additional Tools</h3>
+            <p>Useful tools to make managing money easier. Includes smart payment reminders, separate cash &amp; bank ledgers, and home-screen widgets.</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="features.html" class="btn btn-secondary btn-lg">
+            <span>Explore All Feature Details</span>
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Product Feature Stories -->
+    <!-- 3. Why Leaf / Value Props Section -->
     <section class="section">
       <div class="container">
-        <!-- Story 0: Floating Navigation Dock & Soulful Audio -->
-        <div class="feature-story">
-          <div class="feature-story-content">
-            <span class="section-tag" style="background: var(--primary-light); color: var(--primary);">Flagship Interface &amp; Polish</span>
-            <h3>iPhone-quality polish meets native Android power</h3>
-            <p>
-              Leaf elevates your day-to-day financial experience to flagship standards. Navigate effortlessly with a floating capsule navigation dock featuring spring-animated sliding pill motion, feel tactile haptic confirmations, hear our custom acoustic notification chime, and recognize alerts instantly with our official brand monochrome status bar glyph.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                <span><strong>Floating Capsule Navigation Dock:</strong> Elevated 66dp translucent capsule with 32dp corner curvature, spring physics, and dynamic edge-to-edge scroll clearance</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                <span><strong>Custom Notification Audio Chime:</strong> A soulful, original 2-note musical chime (<code>leaf_chime.wav</code>) tailored for reminders, bill dues, and goal milestones</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                <span><strong>Official Monochrome Status Bar Icon:</strong> Pure monochrome status-bar vector glyph retaining Leaf's iconic wallet, payment cards, ₹ symbol, and pie chart badge</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                <span><strong>Notification Channels v2:</strong> High-reliability AlarmManager scheduling, auto-suppression when transactions are logged, and graceful channel migration</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="dock-showcase-card">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary);">✨ Flagship Interface</span>
-                <span class="dock-badge primary">Signature Dock</span>
-              </div>
-
-              <!-- Interactive Dock Preview -->
-              <div class="dock-preview-bar">
-                <div class="dock-preview-item active">
-                  <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                  <span>Home</span>
-                </div>
-                <div class="dock-preview-item">
-                  <svg viewBox="0 0 24 24"><path d="M3 17h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-                  <span>Txns</span>
-                </div>
-                <div class="dock-preview-item">
-                  <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                  <span>Split</span>
-                </div>
-                <div class="dock-preview-item">
-                  <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                  <span>Planning</span>
-                </div>
-                <div class="dock-preview-item">
-                  <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-                  <span>Insights</span>
-                </div>
-              </div>
-
-              <!-- Audio Chime Waveform & Status Bar Badge -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs); padding: 0.65rem 0.8rem;">
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-                    <span style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--primary);">🔔 Leaf Chime</span>
-                    <span style="font-size: 0.65rem; color: var(--text-muted);">1.25s audio</span>
-                  </div>
-                  <div class="audio-waveform">
-                    <span class="waveform-bar" style="height: 10px;"></span>
-                    <span class="waveform-bar" style="height: 18px;"></span>
-                    <span class="waveform-bar" style="height: 28px;"></span>
-                    <span class="waveform-bar" style="height: 22px;"></span>
-                    <span class="waveform-bar" style="height: 32px;"></span>
-                    <span class="waveform-bar" style="height: 20px;"></span>
-                    <span class="waveform-bar" style="height: 26px;"></span>
-                    <span class="waveform-bar" style="height: 14px;"></span>
-                    <span class="waveform-bar" style="height: 22px;"></span>
-                    <span class="waveform-bar" style="height: 12px;"></span>
-                  </div>
-                </div>
-
-                <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-xs); padding: 0.65rem 0.8rem;">
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-                    <span style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary);">📱 Status Bar Icon</span>
-                    <span style="font-size: 0.65rem; color: var(--text-muted);">ic_stat_leaf</span>
-                  </div>
-                  <div class="status-bar-demo dark" style="padding: 0.4rem 0.6rem; font-size: 0.68rem;">
-                    <div class="status-bar-demo-left" style="gap: 0.35rem;">
-                      <span>9:41</span>
-                      <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff"><path d="M6.8,5.2 L13.2,2.0 C13.7,1.8 14.3,2.1 14.6,2.6 L15.4,5.4 L8.0,7.2 Z M9.6,5.2 L16.0,3.2 C16.5,3.0 17.0,3.3 17.2,3.8 L17.7,6.4 L10.6,7.5 Z"/><path fill-rule="evenodd" d="M5.5,7.2 L16.2,7.2 C17.2,7.2 18.0,8.0 18.0,9.0 L18.0,9.8 L19.2,9.8 C20.2,9.8 20.8,10.4 20.8,11.2 C20.8,12.0 20.2,12.4 19.2,12.4 L18.0,12.4 L18.0,12.6 A4.8,4.8 0 0 0 13.5,20.8 L5.5,20.8 C4.4,20.8 3.5,19.9 3.5,18.8 L3.5,9.2 C3.5,8.1 4.4,7.2 5.5,7.2 Z M18.6,10.4 A0.7,0.7 0 1 0 18.6,11.8 A0.7,0.7 0 1 0 18.6,10.4 Z M5.6,9.8 L10.8,9.8 L10.8,10.8 L8.0,10.8 L8.0,11.6 L10.0,11.6 L10.0,12.5 L8.0,12.5 C9.6,12.5 11.0,13.0 11.0,13.8 C11.0,14.6 9.8,15.2 8.4,15.2 L10.6,18.0 L9.2,18.0 L7.2,15.4 L6.8,15.4 L6.8,12.5 L5.6,12.5 L5.6,11.6 L6.8,11.6 L6.8,10.8 L5.6,10.8 Z"/><path d="M15.9,16.5 L15.9,12.7 A3.8,3.8 0 0 0 15.9,20.3 Z M16.5,16.3 L16.5,12.7 A3.8,3.8 0 0 1 20.1,16.3 Z M16.5,16.8 L20.1,16.8 A3.8,3.8 0 0 1 16.5,20.3 Z"/></svg>
-                    </div>
-                    <span>100%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="dock-feature-badges">
-                <span class="dock-badge">Spring Motion</span>
-                <span class="dock-badge">32dp Curvature</span>
-                <span class="dock-badge">Haptic Feedback</span>
-                <span class="dock-badge">Edge-to-Edge Bleed</span>
-              </div>
-            </div>
-          </div>
+        <div class="section-header">
+          <span class="section-tag">Why Leaf</span>
+          <h2 class="section-title">Built for clarity, privacy, and peace of mind</h2>
+          <p class="section-desc">
+            Most finance apps sell your data, show ads, or charge monthly subscriptions. Leaf takes a fundamentally different path.
+          </p>
         </div>
 
-        <!-- Story 1 -->
-        <div class="feature-story reversed">
-          <div class="feature-story-content">
-            <span class="section-tag">Fast Recording</span>
-            <h3>Track every expense with effortless clarity</h3>
-            <p>
-              Adding and editing expenses and income is fast and intuitive. Choose between Cash and Account sources,
-              adjust transaction date and time with precision, type amounts with automated comma formatting, and use
-              Quick Add for frictionless transaction entry on the go.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Independent default sources for Income and Expenses</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Edit transaction date and time with native Material time picker</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Quick Add dialog with intuitive category shortcuts</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span>Instant 1-tap Undo protection for deleted entries</span>
-              </li>
-            </ul>
+        <div class="trust-grid-consumer">
+          <div class="trust-card-consumer">
+            <div class="trust-icon">🔒</div>
+            <h4>100% Private &amp; Offline</h4>
+            <p>Your financial records stay on your device. Leaf never uploads your data to remote servers or requires account registrations.</p>
           </div>
-          <div class="feature-story-visual">
-            <div class="card" style="background: var(--bg-surface-elevated);">
-              <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Quick Add Transaction</h4>
-              <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                <span
-                  style="background: var(--expense-bg); color: var(--expense); padding: 0.4rem 0.8rem; border-radius: var(--radius-xs); font-weight: 700; font-size: 0.85rem;">Expense</span>
-                <span
-                  style="background: var(--bg-surface-subtle); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: var(--radius-xs); font-weight: 600; font-size: 0.85rem;">Income</span>
-              </div>
-              <div
-                style="font-family: var(--font-sans); font-size: 1.75rem; font-weight: 800; color: var(--expense); margin-bottom: 1rem;">
-                ₹ 450.00</div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
-                <div
-                  style="background: var(--bg-surface); padding: 0.6rem 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <span
-                    style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; font-weight: 600;">Source</span>
-                  <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">💵 Cash</div>
-                </div>
-                <div
-                  style="background: var(--bg-surface); padding: 0.6rem 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <span
-                    style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; font-weight: 600;">Category</span>
-                  <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">🍔 Dining Out</div>
-                </div>
-              </div>
-            </div>
+
+          <div class="trust-card-consumer">
+            <div class="trust-icon">✨</div>
+            <h4>Zero Ads, Zero Distractions</h4>
+            <p>Enjoy a calm, distraction-free environment. No sponsored credit cards, no popup promotions, and no clutter.</p>
           </div>
-        </div>
 
-        <!-- Story 2: Payment Reminders & Upcoming Obligations -->
-        <div class="feature-story reversed">
-          <div class="feature-story-content">
-            <span class="section-tag" style="background: #fef3c7; color: #92400e;">Upcoming Obligations</span>
-            <h3>Never miss a due date with smart financial reminders</h3>
-            <p>
-              Prepare for what's coming next before your bank account is caught off-guard. Leaf helps you schedule and track loan EMIs, credit card bills, utility charges, rent, insurance premiums, and subscriptions with configurable reminder times, flexible advance alert offsets, a 14-day cash flow horizon, and instant 1-tap "Mark Paid" actions.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Comprehensive Reminder Categories:</strong> Dedicated support for Loan/EMI, Credit Card, Utility Bills, Rent, Insurance, Subscriptions, and Custom obligations</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Flexible Advance Alert Offsets:</strong> Choose your exact alert time (hour/minute) and alert days (on due date, 1, 2, 3, 5, 7 days before, or custom offset)</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>14-Day Upcoming Cash Flow Horizon:</strong> Dedicated view on Dashboard and Planning Hub with instant 1-tap "Mark Paid" (and optional ledger record)</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Month-End Recurrence &amp; Exact Alarms:</strong> Intelligent handling for month-end dates (28th–31st) with high-reliability AlarmManager system notifications</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="reminder-mockup-card">
-              <div class="reminder-header-row">
-                <div>
-                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #92400e;">⏰ Next 14 Days</span>
-                  <h4 style="color: var(--text-primary); margin-top: 2px;">Upcoming Payments</h4>
-                </div>
-                <span class="reminder-horizon-badge">3 Scheduled</span>
-              </div>
-
-              <div class="reminder-item-row">
-                <div class="reminder-item-left">
-                  <div class="reminder-icon-box" style="background: #eff6ff; color: #1d4ed8;">🏦</div>
-                  <div>
-                    <div class="reminder-item-title">Home Loan EMI • ₹ 12,500</div>
-                    <div class="reminder-item-meta">
-                      <span>Oct 3 (in 3 days)</span>
-                      <span class="reminder-alert-tag">Alert: 2 days before</span>
-                    </div>
-                  </div>
-                </div>
-                <button type="button" class="reminder-action-btn">Mark Paid ✓</button>
-              </div>
-
-              <div class="reminder-item-row">
-                <div class="reminder-item-left">
-                  <div class="reminder-icon-box" style="background: #fef2f2; color: #dc2626;">💳</div>
-                  <div>
-                    <div class="reminder-item-title">Credit Card Bill • ₹ 6,420</div>
-                    <div class="reminder-item-meta">
-                      <span>Oct 7 (in 7 days)</span>
-                      <span class="reminder-alert-tag">Alert: 3 days before</span>
-                    </div>
-                  </div>
-                </div>
-                <button type="button" class="reminder-action-btn">Mark Paid ✓</button>
-              </div>
-
-              <div class="reminder-item-row">
-                <div class="reminder-item-left">
-                  <div class="reminder-icon-box" style="background: #f0fdf4; color: #16a34a;">⚡</div>
-                  <div>
-                    <div class="reminder-item-title">Electricity Utility • ₹ 2,150</div>
-                    <div class="reminder-item-meta">
-                      <span>Oct 11 (in 11 days)</span>
-                      <span class="reminder-alert-tag">Alert: 1 day before</span>
-                    </div>
-                  </div>
-                </div>
-                <button type="button" class="reminder-action-btn">Mark Paid ✓</button>
-              </div>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
-                <span>Total upcoming: <strong style="color: var(--expense);">₹ 21,070</strong></span>
-                <span style="color: var(--primary); font-weight: 700;">+ Add New Reminder</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 3: Planning Hub (Budgets, Savings Goals & Reminders) -->
-        <div class="feature-story">
-          <div class="feature-story-content">
-            <span class="section-tag" style="background: var(--primary-light); color: var(--primary);">Planning Hub</span>
-            <h3>Plan budgets, reach savings goals &amp; organize obligations</h3>
-            <p>
-              Take control of future finances with Leaf's unified <strong>Planning</strong> hub featuring 3 dedicated tabs: <strong>Budgets</strong>, <strong>Savings Goals</strong>, and <strong>Payment Reminders</strong>. Define overall and category monthly spending caps with real-time threshold warnings, build milestone-based savings goals with dedicated contribution tracking, and archive completed goals with a tap.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>3 Unified Planning Tabs:</strong> Seamlessly switch between monthly Budgets, milestone Savings Goals, and active Payment Reminders</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Monthly &amp; Category Budgets:</strong> Track spending limits with dynamic 80% caution and 100% exceeded visual alerts</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Milestone Savings Goals:</strong> Target amounts, target dates, and real-time progress calculations with contribution audit trail</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Lifecycle Management:</strong> Archive finished targets and pause obligations to keep your active list focused</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="budget-mockup-card">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary);">🎯 Savings Goal</span>
-                  <h4 style="color: var(--text-primary); margin-top: 2px;">Emergency Fund</h4>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">Target: Dec 2026</span>
-                </div>
-                <div style="text-align: right;">
-                  <span style="background: var(--income-bg); color: var(--income); font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;">60% Reached</span>
-                </div>
-              </div>
-              <div class="budget-progress-track">
-                <div class="budget-progress-fill" style="width: 60%; background: var(--income);"></div>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                <span style="color: var(--text-secondary); font-weight: 600;">Saved: <strong style="color: var(--text-primary);">₹ 60,000</strong></span>
-                <span style="color: var(--text-muted);">Target: ₹ 1,00,000</span>
-              </div>
-
-              <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 0.25rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">Monthly Dining Budget</span>
-                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--expense);">₹ 4,800 / ₹ 6,000</span>
-                </div>
-                <div class="budget-progress-track">
-                  <div class="budget-progress-fill" style="width: 80%; background: #F59E0B;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">
-                  <span style="color: #D97706; font-weight: 600;">⚠️ 80% Threshold Reached</span>
-                  <span>₹ 1,200 Remaining</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 4: Insights & Spending Trends -->
-        <div class="feature-story reversed">
-          <div class="feature-story-content">
-            <span class="section-tag">Insights &amp; Calendar</span>
-            <h3>Visual analytics, Bézier trends, and payment calendar</h3>
-            <p>
-              Understand where your money goes with Leaf's 5th primary tab: <strong>Insights</strong>. Inspect month-over-month spending trends, visualize spending velocity with high-precision cubic Bézier curve charts, review carry-forward continuity ledgers, and inspect scheduled dues on the Financial Payment Calendar.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Smooth Bézier Trends Chart:</strong> Interactive visual curve plotting daily cumulative outflow trajectory</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Interactive Payment Calendar:</strong> Integrated monthly calendar view plotting daily expenditure alongside scheduled payment due dates</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Month-over-Month (MoM) Analytics:</strong> Instant percentage comparison with preceding month spending velocity</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Native PDF Export:</strong> Generate bank-grade statements with running balance directly on-device</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="trend-chart-card">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <h4 style="color: var(--text-primary); margin: 0;">Spending Velocity</h4>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">September 2026</span>
-                </div>
-                <span style="background: var(--income-bg); color: var(--income); font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;">↓ 12% vs Last Month</span>
-              </div>
-              <div class="trend-svg-container">
-                <svg viewBox="0 0 300 100" style="width: 100%; height: 100%; display: block;">
-                  <defs>
-                    <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#028166" stop-opacity="0.25" />
-                      <stop offset="100%" stop-color="#028166" stop-opacity="0.0" />
-                    </linearGradient>
-                  </defs>
-                  <line x1="0" y1="80" x2="300" y2="80" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
-                  <line x1="0" y1="40" x2="300" y2="40" stroke="var(--border-subtle)" stroke-width="1" stroke-dasharray="3,3" />
-                  <path d="M 10 75 C 60 70, 90 60, 140 45 C 190 30, 240 25, 290 15 L 290 95 L 10 95 Z" fill="url(#trendGrad)" />
-                  <path d="M 10 75 C 60 70, 90 60, 140 45 C 190 30, 240 25, 290 15" fill="none" stroke="#028166" stroke-width="3" stroke-linecap="round" />
-                  <circle cx="10" cy="75" r="4" fill="#028166" />
-                  <circle cx="140" cy="45" r="4" fill="#028166" />
-                  <circle cx="290" cy="15" r="5" fill="#028166" stroke="#fff" stroke-width="2" />
-                </svg>
-              </div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted);">
-                <span>Day 1 • ₹ 1,420</span>
-                <span>Day 15 • ₹ 18,300</span>
-                <span style="font-weight: 700; color: var(--text-primary);">Day 30 • ₹ 28,650</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 5: 6 Precision Financial Calculators -->
-        <div class="feature-story">
-          <div class="feature-story-content">
-            <span class="section-tag">Precision Calculators</span>
-            <h3>6 built-in financial calculators for instant clarity</h3>
-            <p>
-              Plan loans, investments, taxes, and shopping savings without installing extra calculation utilities. Leaf includes six precision financial calculators with real-time feedback and clean result summaries.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Loan EMI Calculator:</strong> Monthly installments, principal vs interest split, and total repayment</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>SIP &amp; Investment Planner:</strong> Monthly mutual fund compounding with estimated wealth gained</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>FD &amp; RD Calculators:</strong> Compounding deposit maturity with flexible payout intervals</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Discount &amp; GST Calculators:</strong> Instant percent/flat discounts, tax slabs (5%, 12%, 18%, 28%), and inclusive/exclusive modes</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="calc-grid-preview">
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">🏦</span>
-                <span class="calc-mini-title">Loan EMI</span>
-                <span class="calc-mini-tag">Principal &amp; Interest</span>
-              </div>
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">📈</span>
-                <span class="calc-mini-title">SIP Wealth</span>
-                <span class="calc-mini-tag">Mutual Fund Growth</span>
-              </div>
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">🔒</span>
-                <span class="calc-mini-title">Fixed Deposit</span>
-                <span class="calc-mini-tag">Compounded Returns</span>
-              </div>
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">⏳</span>
-                <span class="calc-mini-title">Recurring Dep.</span>
-                <span class="calc-mini-tag">Systematic Savings</span>
-              </div>
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">🏷️</span>
-                <span class="calc-mini-title">Discount</span>
-                <span class="calc-mini-tag">Savings &amp; Net Price</span>
-              </div>
-              <div class="calc-mini-card">
-                <span class="calc-mini-icon">📑</span>
-                <span class="calc-mini-title">GST Tax</span>
-                <span class="calc-mini-tag">Inclusive / Exclusive</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 6: Split 2.0 & Real-World Bill Splitting -->
-        <div class="feature-story reversed">
-          <div class="feature-story-content">
-            <span class="section-tag" style="background: var(--primary-light); color: var(--primary);">Split 2.0 • Bill Splitting</span>
-            <h3>Real-world custom bill splitting, in-app calculator &amp; smart WhatsApp sharing</h3>
-            <p>
-              Splitting dining and group expenses in real life isn't just dividing a single sum equally. Leaf features <strong>Split 2.0</strong> — built around an intuitive "Base Equal Share + Item Responsibility" model. Itemize dishes and drinks, assign individual or shared consumers, calculate amounts with an integrated in-app calculator, select friends via the device contact picker, and dispatch context-rich WhatsApp payment reminders directly to recipient chats.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Item-Level Custom Splitting:</strong> Itemize restaurant dishes, drinks, or tickets with explicit item costs. Assign single or multiple consumers per item with optional custom allocations.</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Base Equal Share Foundation:</strong> Common appetizers, taxes, tips, and unallocated amounts automatically distribute equally across all participants with zero double-counting.</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Integrated Financial Calculator:</strong> Access an instant keypad calculator directly on bill amounts and custom allocations with 1-tap value insertion.</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Device Contact Picker &amp; Direct WhatsApp Chat:</strong> Rapidly add friends with 1 tap from device contacts and launch WhatsApp reminders directly into their individual chat.</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>"Who Owes Whom" Net Balances:</strong> Directional debt offsetting computes the fewest possible settlement transactions across multi-person expenses.</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="split-mockup-card">
-              <div class="split-header-row">
-                <div>
-                  <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary);">🍕 Itemized Bill • Split 2.0</span>
-                  <h4 style="color: var(--text-primary); margin-top: 2px;">Team Bistro Dinner</h4>
-                  <div style="font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-top: 2px;">
-                    <span>4 Participants</span>
-                    <span class="split-calc-badge">🧮 Calculator</span>
-                    <span class="split-contact-pill">👤 Contact Linked</span>
-                  </div>
-                </div>
-                <div style="text-align: right;">
-                  <div style="font-family: var(--font-sans); font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">₹ 2,400.00</div>
-                  <span class="split-status-pill settled">Split 2.0 Active</span>
-                </div>
-              </div>
-
-              <!-- Base Equal Share Foundation Card -->
-              <div class="split-base-banner">
-                <div>
-                  <div class="split-base-title">
-                    <span>👥</span>
-                    <span>Base Equal Share Foundation</span>
-                  </div>
-                  <div class="split-base-sub">Shared starters &amp; taxes split equally across all 4</div>
-                </div>
-                <span class="split-base-amount">₹ 300 / person</span>
-              </div>
-
-              <!-- Itemized Products List -->
-              <div class="split-items-list">
-                <div class="split-item-row">
-                  <span class="split-item-name">
-                    <span>🍕</span>
-                    <span>Woodfired Pizza</span>
-                    <span class="split-item-consumers">You, Vinay, Priya</span>
-                  </span>
-                  <span class="split-item-cost">₹ 720</span>
-                </div>
-                <div class="split-item-row">
-                  <span class="split-item-name">
-                    <span>🍹</span>
-                    <span>Mocktails &amp; Shakes</span>
-                    <span class="split-item-consumers">Vinay, Priya</span>
-                  </span>
-                  <span class="split-item-cost">₹ 360</span>
-                </div>
-                <div class="split-item-row">
-                  <span class="split-item-name">
-                    <span>🍰</span>
-                    <span>Dessert Platter</span>
-                    <span class="split-item-consumers">You, Amit</span>
-                  </span>
-                  <span class="split-item-cost">₹ 480</span>
-                </div>
-              </div>
-
-              <!-- Transparent Participant Breakdown Rows -->
-              <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-                <div class="split-participant-row">
-                  <div>
-                    <span class="split-participant-name"><span>👤</span> You (Paid ₹ 2,400)</span>
-                    <span class="split-breakdown-sub">Base ₹ 300 + Pizza ₹ 240 + Dessert ₹ 240</span>
-                  </div>
-                  <span class="split-participant-amount" style="color: var(--income); font-weight: 700;">+ ₹ 1,620 net</span>
-                </div>
-                <div class="split-participant-row">
-                  <div>
-                    <span class="split-participant-name"><span>👤</span> Vinay</span>
-                    <span class="split-breakdown-sub">Base ₹ 300 + Pizza ₹ 240 + Drinks ₹ 180</span>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="split-participant-amount">₹ 720</span>
-                    <span class="split-status-pill pending">Owes ₹ 720</span>
-                  </div>
-                </div>
-                <div class="split-participant-row">
-                  <div>
-                    <span class="split-participant-name"><span>👤</span> Amit</span>
-                    <span class="split-breakdown-sub">Base ₹ 300 + Dessert ₹ 240</span>
-                  </div>
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="split-participant-amount">₹ 540</span>
-                    <span class="split-status-pill pending">Owes ₹ 540</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Direct WhatsApp Chat Reminder Action -->
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 0.25rem;">
-                <span style="font-size: 0.75rem; color: var(--text-muted);">📷 QR Code &amp; UPI ID Attached</span>
-                <span class="whatsapp-action-badge" title="Directly opens Vinay's WhatsApp chat with itemized breakdown">
-                  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z" /></svg>
-                  <span>Remind on WhatsApp</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 7: Google Drive Backup v2 -->
-        <div class="feature-story">
-          <div class="feature-story-content">
-            <span class="section-tag gold">Data Ownership</span>
-            <h3>Your data, backed up your way</h3>
-            <p>
-              Leaf features <strong>Google Drive Backup v2</strong>. Back up your transactions, recurring schedules, payment reminders, custom categories, monthly budgets, savings goals, contributions, and split groups directly to your personal Google Drive with complete backward compatibility.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Full Schema Coverage:</strong> Backs up all Leaf entities including Reminders, Budgets, Savings Goals, and Split Groups</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Backward-Compatible Restores:</strong> Effortlessly restores legacy v1 backups alongside modern v2 backups</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Private &amp; Guarded:</strong> Saved inside your private Google Drive app folder with explicit restore confirmation</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="gdrive-visual-card">
-              <h4 style="margin-bottom: 0.5rem; color: var(--text-primary);">Private Cloud Backup Flow</h4>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Direct encrypted transfer between your device and Google Drive with zero intermediary servers.</p>
-
-              <div class="gdrive-flow-diagram">
-                <div class="gdrive-flow-node">
-                  <svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z" /></svg>
-                  <h5>Your Phone</h5>
-                </div>
-                <div class="gdrive-flow-arrow">➔</div>
-                <div class="gdrive-flow-node">
-                  <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" /></svg>
-                  <h5>Backup v2</h5>
-                </div>
-                <div class="gdrive-flow-arrow">➔</div>
-                <div class="gdrive-flow-node">
-                  <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" /></svg>
-                  <h5>Your Google Drive</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Story 8: Settings 2.0 & Personal Financial Control Center -->
-        <div class="feature-story reversed">
-          <div class="feature-story-content">
-            <span class="section-tag">Settings 2.0 &amp; Control</span>
-            <h3>Personal financial control center &amp; preferences</h3>
-            <p>
-              Leaf features <strong>Settings 2.0</strong>: an intuitive personal financial control center organized into six clear categories — Personalization, Finance Defaults, Notifications &amp; Reminders, Security &amp; Privacy, Data &amp; Tools, and About Leaf. Toggle features with instant status badges, protect your data with biometric app lock, and use Leaf in English, Hindi, or Marathi.
-            </p>
-            <ul class="feature-checklist">
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Categorized Control Center:</strong> Organized preferences across Personalization, Finance, Reminders, Security, Data, and About sections</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Smart Daily Reminder:</strong> Quietly suppressed if you've already logged transactions today, with custom reminder alert times</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Biometric &amp; PIN Lock:</strong> Secured on-device with recent-app window privacy masking</span>
-              </li>
-              <li>
-                <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
-                <span><strong>Multilingual Support:</strong> Full native experience in English, Hindi (हिंदी), and Marathi (मराठी) with local number and date formatting</span>
-              </li>
-            </ul>
-          </div>
-          <div class="feature-story-visual">
-            <div class="card" style="background: var(--bg-surface-elevated);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                <h4 style="color: var(--text-primary);">Settings 2.0 Hub</h4>
-                <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Control Center</span>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.7rem 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <div style="font-weight: 600;">Personalization</div>
-                  <span style="background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem;">Vinay • ₹ INR</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.7rem 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <div style="font-weight: 600;">Finance Defaults</div>
-                  <span style="background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem;">💵 Cash / 🏦 Bank</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.7rem 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <div style="font-weight: 600;">Notifications &amp; Reminders</div>
-                  <span style="background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem;">Alerts &amp; 8:00 PM</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.7rem 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <div style="font-weight: 600;">App Language</div>
-                  <span style="background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem;">English / हिंदी / मराठी</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.7rem 0.85rem; border-radius: var(--radius-xs); border: 1px solid var(--border-subtle);">
-                  <div style="font-weight: 600;">Security &amp; App Lock</div>
-                  <span style="background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem;">Biometric Active</span>
-                </div>
-              </div>
-            </div>
+          <div class="trust-card-consumer">
+            <div class="trust-icon">💾</div>
+            <h4>You Own Your Data</h4>
+            <p>Easily save a structured backup to your phone or your private Google Drive anytime. You are always in complete control of your financial information.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Privacy Banner -->
-    <section class="section section-muted">
-      <div class="container">
-        <div class="privacy-banner">
-          <div class="privacy-banner-grid">
-            <div>
-              <span class="section-tag" style="background: var(--income-bg); color: var(--income-text);">Privacy &
-                Security</span>
-              <h2 style="margin-bottom: 1rem;">Your finances are strictly personal</h2>
-              <p style="margin-bottom: 1.5rem;">
-                Leaf was designed so you never have to trust third-party servers with your money. Everything lives
-                exclusively in your phone's encrypted SQLite database.
-              </p>
-              <a href="privacy.html" class="btn btn-outline">
-                <span>Read Privacy Architecture</span>
-                <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd" />
-                </svg>
-              </a>
-            </div>
-
-            <div class="privacy-pills">
-              <div class="privacy-pill">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
-                </svg>
-                <div class="privacy-pill-text">
-                  <h5>Biometric & PIN App Lock</h5>
-                  <p>Secured on-device with recent-app window masking.</p>
-                </div>
-              </div>
-
-              <div class="privacy-pill">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" />
-                </svg>
-                <div class="privacy-pill-text">
-                  <h5>Optional Google Drive Backup</h5>
-                  <p>Restricted to your private Google Drive. Restores require confirmation.</p>
-                </div>
-              </div>
-
-              <div class="privacy-pill">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                </svg>
-                <div class="privacy-pill-text">
-                  <h5>Zero Ad SDKs or Telemetry</h5>
-                  <p>No behavioral trackers, marketing analytics, or profiling.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Download Callout Section -->
-    <section class="section" id="download">
+    <!-- 4. Download Section -->
+    <section class="section section-muted" id="download">
       <div class="container container-narrow">
-        <div class="download-card">
-          <span class="download-version-badge badge-stable">
-            <span class="hero-badge-dot"></span>
-            <span>Official Stable Release • <strong class="dynamic-version">v1.1.4</strong> (Build 16)</span>
-          </span>
+        <div class="section-header">
+          <span class="section-tag">Download</span>
+          <h2 class="section-title">Get Leaf for your phone</h2>
+          <p class="section-desc">Start taking control of your daily expenses in seconds. Choose your platform below.</p>
+        </div>
 
-          <h2 style="font-size: clamp(1.85rem, 4vw, 2.3rem); margin-bottom: 0.75rem;">Get Leaf for Android</h2>
-          <p
-            style="font-size: clamp(0.95rem, 1.8vw, 1.05rem); color: var(--text-secondary); max-width: 580px; margin: 0 auto 1.5rem;">
-            Leaf v1.1.4 is now available! Featuring separate Cash &amp; Account ledgers, home-screen widgets, Split 2.0 itemized custom splitting, and 100% offline privacy.
-          </p>
-
-          <!-- Migration Warning Box in Homepage Download -->
-          <div style="background: #f0fdf4; border: 1px solid #86efac; border-left: 4px solid var(--primary); border-radius: var(--radius-sm); padding: 0.9rem 1.15rem; margin: 0 auto 1.5rem; max-width: 600px; text-align: left; font-size: 0.88rem; color: #1e3a34; line-height: 1.55;">
-            <strong style="color: #065f46; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
-              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-              Updating from an earlier version?
-            </strong>
-            Please take a local backup before updating (<strong>Settings &rarr; Data &amp; Tools &rarr; Local &amp; Cloud Backup</strong>). Because v1.1.4 introduces a permanent production signing identity, Android may report an update conflict. <a href="download.html#migration-notice" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Read our safe backup &amp; migration guide &rarr;</a>
-          </div>
-
-          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk"
-              class="btn btn-primary btn-lg dynamic-download-link" download>
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                <path
-                  d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
-              </svg>
-              <span>Download for Android (APK)</span>
-            </a>
-            <a href="https://github.com/vinaynalavade/Leaf/releases/tag/v1.1.4"
-              class="btn btn-secondary btn-lg" target="_blank" rel="noopener noreferrer">
-              <span>View Release Notes</span>
-            </a>
-          </div>
-
-          <div class="download-meta">
-            <div class="download-meta-item">
-              <span class="download-meta-label">Version</span>
-              <span class="download-meta-val"><span class="dynamic-version">v1.1.4</span> (Build 16)</span>
-            </div>
-            <div class="download-meta-item">
-              <span class="download-meta-label">Status</span>
-              <span class="download-meta-val" style="color: var(--income); font-weight: 700;">Stable Release</span>
-            </div>
-            <div class="download-meta-item">
-              <span class="download-meta-label">Package Size</span>
-              <span class="download-meta-val dynamic-apk-size">4.4 MB</span>
-            </div>
-            <div class="download-meta-item">
-              <span class="download-meta-label">Compatibility</span>
-              <span class="download-meta-val">Android 8.0+ (API 26+)</span>
-            </div>
-          </div>
-
-          <div class="checksum-box">
+        <!-- Updating to Leaf 1.1.4? Simplified Notice -->
+        <div class="update-notice-clean">
+          <div class="update-notice-clean-header">
+            <span style="font-size: 1.5rem; line-height: 1;">💡</span>
             <div>
-              <div
-                style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 2px;">
-                Verified Checksum (SHA-256) — Leaf_v1.1.4.apk</div>
-              <div class="checksum-code dynamic-sha256" id="apk-sha256">
-                7ad7879a99c4bd1b07fb021bff5ea6627c3db4adc263297d935107e3b5d8fbf9</div>
-            </div>
-            <button class="copy-btn" type="button" data-copy-target="#apk-sha256">Copy</button>
-          </div>
-
-          <!-- iOS Experimental Callout -->
-          <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; text-align: left;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-                <span class="badge-experimental-tag">Experimental</span>
-                <span class="badge-unsigned-tag">UNSIGNED</span>
-                <strong style="color: var(--text-primary); font-size: 0.95rem;">Leaf for iPhone (iOS 17+)</strong>
-              </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
-                Sideloading package available for testing with AltStore or Sideloadly.
+              <h3>Updating to Leaf 1.1.4?</h3>
+              <p>
+                Before updating, please save a backup of your expenses and important data. This helps keep your information safe while moving to the latest version.
               </p>
             </div>
-            <a href="download.html#ios" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">
-              <span>Get iOS IPA &rarr;</span>
-            </a>
           </div>
 
-          <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
-            Need help installing? Check our step-by-step <a href="download.html#install-guide">Installation Guide</a>.
-          </p>
+          <details class="update-details">
+            <summary class="update-summary-btn">
+              <span>How to save and restore your backup</span>
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="update-accordion-box">
+              <div class="update-steps-grid">
+                <div class="update-step-col">
+                  <h4>How to save your backup</h4>
+                  <ol>
+                    <li>Open Leaf.</li>
+                    <li>Go to <strong>Settings</strong>.</li>
+                    <li>Open <strong>Data &amp; Tools</strong>.</li>
+                    <li>Select <strong>Local &amp; Cloud Backup</strong>.</li>
+                    <li>Tap <strong>Create Local Backup</strong>.</li>
+                    <li>Make sure the backup file is safely saved before proceeding.</li>
+                  </ol>
+                </div>
+                <div class="update-step-col">
+                  <h4>How to restore your data</h4>
+                  <ol>
+                    <li>Install Leaf 1.1.4.</li>
+                    <li>Open <strong>Settings</strong>.</li>
+                    <li>Go to <strong>Data &amp; Tools</strong>.</li>
+                    <li>Open <strong>Local &amp; Cloud Backup</strong>.</li>
+                    <li>Select <strong>Restore from Local File</strong>.</li>
+                    <li>Choose your saved backup.</li>
+                  </ol>
+                </div>
+              </div>
+              <div class="update-clean-footer">
+                <div>If you're installing Leaf for the first time, you can simply download and install it.</div>
+                <div style="margin-top: 0.35rem;">If your update does not install, make sure your backup is safely saved before removing your previous version and installing Leaf 1.1.4.</div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Download Cards Grid -->
+        <div class="consumer-download-grid">
+          <!-- Android Card -->
+          <div class="consumer-download-card highlight">
+            <div class="download-platform-icon android">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <path d="M17.523 15.34c-.436 0-.79-.354-.79-.79 0-.435.354-.79.79-.79.435 0 .79.355.79.79 0 .436-.355.79-.79.79m-11.046 0c-.436 0-.79-.354-.79-.79 0-.435.354-.79.79-.79.435 0 .79.355.79.79 0 .436-.355.79-.79.79m11.405-6.02l1.997-3.46a.416.416 0 00-.152-.567.416.416 0 00-.568.152L17.13 8.95c-1.53-.7-3.26-1.09-5.13-1.09-1.87 0-3.6.39-5.13 1.09L4.838 5.445a.416.416 0 00-.568-.152.416.416 0 00-.152.567l1.997 3.46C2.688 11.23.4 14.82.4 19.04h23.2c0-4.22-2.288-7.81-5.719-9.72"/>
+              </svg>
+            </div>
+            <h3 class="download-card-title">Leaf for Android</h3>
+            <p class="download-card-subtitle">Take control of your daily expenses.</p>
+            <span class="download-card-badge available">Available • Version 1.1.4</span>
+
+            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk" class="btn btn-primary btn-lg dynamic-download-link" style="width: 100%;" download>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+              </svg>
+              <span>Download for Android</span>
+            </a>
+
+            <p class="download-note-text">
+              For devices running Android 8.0 or newer. Free and 100% offline.
+            </p>
+          </div>
+
+          <!-- iOS Card -->
+          <div class="consumer-download-card">
+            <div class="download-platform-icon ios">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.77 1.06-1.84.94-2.91-1 .04-2.15.67-2.82 1.45-.59.68-1.11 1.77-.97 2.82 1.11.09 2.22-.59 2.85-1.36z"/>
+              </svg>
+            </div>
+            <h3 class="download-card-title">Leaf for iPhone</h3>
+            <p class="download-card-subtitle">Explore Leaf on your iPhone.</p>
+            <span class="download-card-badge experimental">Experimental • Version 1.1.4</span>
+
+            <a href="https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf-v1.1.4-Sideloading-Unsigned.ipa" class="btn btn-secondary btn-lg dynamic-ipa-download-link" style="width: 100%;" download>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+              </svg>
+              <span>Download for iPhone</span>
+            </a>
+
+            <p class="download-note-text">
+              The iPhone version is currently experimental and requires a separate installation tool. It is not yet ready for direct installation.
+            </p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <a href="download.html" class="btn btn-outline btn-sm">
+            <span>View Installation Guide &amp; Details &rarr;</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Open Source / GitHub Section -->
+    <!-- 5. FAQ Section -->
+    <section class="section" id="faq">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <span class="section-tag">FAQ</span>
+          <h2 class="section-title">Frequently asked questions</h2>
+          <p class="section-desc">Quick, straightforward answers about using Leaf.</p>
+        </div>
+
+        <div class="faq-container">
+          <!-- Q1 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>What is Leaf?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Leaf is a simple, private personal finance app designed to help you track daily spending, split shared bills with friends, plan monthly budgets, and reach savings goals — all without ads, trackers, or required account sign-ups.</p>
+            </div>
+          </details>
+
+          <!-- Q2 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>Is Leaf free to use?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Yes, Leaf is completely free and open source. There are no subscriptions, in-app purchases, or locked features.</p>
+            </div>
+          </details>
+
+          <!-- Q3 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>How can I download Leaf on Android?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Tap the <strong>Download for Android</strong> button above to download the official application file. When prompted by your phone, allow permission to install from your browser or file manager, and tap <strong>Install</strong>.</p>
+            </div>
+          </details>
+
+          <!-- Q4 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>Is Leaf available on iPhone?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>An experimental iPhone version is available for testing. Because it is an experimental preview, it requires a separate installation tool (such as AltStore or Sideloadly) on a computer to install onto your phone.</p>
+            </div>
+          </details>
+
+          <!-- Q5 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>How do I back up my expenses?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Open Leaf, go to <strong>Settings</strong> &rarr; <strong>Data &amp; Tools</strong> &rarr; <strong>Local &amp; Cloud Backup</strong>, and tap <strong>Create Local Backup</strong>. This saves a copy of all your financial records directly onto your phone's storage.</p>
+            </div>
+          </details>
+
+          <!-- Q6 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>How do I restore my backup?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>In Leaf, go to <strong>Settings</strong> &rarr; <strong>Data &amp; Tools</strong> &rarr; <strong>Local &amp; Cloud Backup</strong>, tap <strong>Restore from Local File</strong>, and choose your previously saved backup file. All your transactions and settings will be restored instantly.</p>
+            </div>
+          </details>
+
+          <!-- Q7 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>What should I do if the Android update does not install?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>If the update does not install over your existing app, first ensure your data is backed up (Settings &rarr; Data &amp; Tools &rarr; Local &amp; Cloud Backup &rarr; Create Local Backup). Once you have confirmed your backup file is saved safely, remove the older version, install Leaf 1.1.4, and restore your data from Settings.</p>
+            </div>
+          </details>
+
+          <!-- Q8 -->
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>Can I install the iPhone version directly?</span>
+              <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </summary>
+            <div class="faq-answer">
+              <p>Not yet. The current iPhone package is an experimental preview that requires a sideloading tool on a computer to install. It cannot be installed simply by tapping the download link in Safari.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Bottom CTA Section -->
     <section class="section section-muted">
       <div class="container">
-        <div class="github-banner">
-          <div class="github-banner-content">
-            <h3>Explore the project source on GitHub</h3>
-            <p>Leaf is openly developed. Inspect the source code, verify privacy architecture, or build the app locally.
-            </p>
+        <div class="cta-banner-consumer">
+          <h2>Your money. Your clarity.</h2>
+          <p>
+            Join people taking control of their daily finances with a calm, offline-first companion.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+            <a href="#download" class="btn btn-primary btn-lg">
+              <span>Download Leaf</span>
+            </a>
+            <a href="about.html" class="btn btn-secondary btn-lg">
+              <span>About Leaf</span>
+            </a>
           </div>
-          <a href="https://github.com/vinaynalavade/Leaf" target="_blank" rel="noopener noreferrer"
-            class="btn btn-secondary btn-lg">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                clip-rule="evenodd" />
-            </svg>
-            <span>View on GitHub</span>
-          </a>
         </div>
       </div>
     </section>
@@ -1209,48 +573,43 @@
             <img src="assets/images/logo.png" alt="Leaf Logo" class="logo-img" width="32" height="32">
             <span>Leaf</span>
           </a>
-          <p>Simple, private, and reliable personal finance software for Android.</p>
+          <p>Simple, private, and reliable personal finance software for Android &amp; iPhone.</p>
         </div>
 
         <div class="footer-col">
           <h5>Product</h5>
           <ul class="footer-links">
             <li><a href="features.html">Features</a></li>
-            <li><a href="download.html">Download App</a></li>
-            <li><a href="download.html#updates">In-App Updates</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h5>Resources</h5>
-          <ul class="footer-links">
-            <li><a href="https://github.com/vinaynalavade/Leaf" target="_blank" rel="noopener noreferrer">GitHub
-                Repository</a></li>
-            <li><a href="https://github.com/vinaynalavade/Leaf/releases" target="_blank"
-                rel="noopener noreferrer">Releases Archive</a></li>
-            <li><a href="download.html#install-guide">Installation Guide</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h5>Project</h5>
+          <h5>About</h5>
           <ul class="footer-links">
             <li><a href="about.html">About Leaf</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="about.html#credits">Developer & Credits</a></li>
+            <li><a href="https://github.com/vinaynalavade/Leaf" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Community</h5>
+          <ul class="footer-links">
+            <li><a href="https://github.com/vinaynalavade/Leaf/releases" target="_blank" rel="noopener noreferrer">Release History</a></li>
+            <li><a href="download.html#install-guide">Installation Help</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div>© 2026 Leaf. Developed by Vinay Nalavade.</div>
-        <div>Offline-first Personal Finance for Android &amp; iOS.</div>
+        <div>Offline-first Personal Finance for Android &amp; iPhone.</div>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script src="js/main.js"></script>
 </body>
-
 </html>
