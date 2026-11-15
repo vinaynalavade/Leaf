@@ -12,13 +12,13 @@
   const RELEASE_CONFIG = {
     owner: 'vinaynalavade',
     repo: 'Leaf',
-    defaultVersionName: '1.1.4',
-    defaultVersionCode: 16,
-    defaultReleaseDate: 'October 2026',
+    defaultVersionName: '1.1.5',
+    defaultVersionCode: 17,
+    defaultReleaseDate: 'November 2026',
     defaultApkSize: '4.4 MB',
-    defaultApkFileName: 'Leaf_v1.1.4.apk',
-    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.4/Leaf_v1.1.4.apk',
-    defaultSha256: '7ad7879a99c4bd1b07fb021bff5ea6627c3db4adc263297d935107e3b5d8fbf9',
+    defaultApkFileName: 'Leaf_v1.1.5.apk',
+    defaultDownloadUrl: 'https://github.com/vinaynalavade/Leaf/releases/download/v1.1.5/Leaf_v1.1.5.apk',
+    defaultSha256: 'e4fd4d0850e595f5b34ab3162c2116e53d7497be5c996ceb708a4184146f92b2',
     repoUrl: 'https://github.com/vinaynalavade/Leaf',
     releasesUrl: 'https://github.com/vinaynalavade/Leaf/releases',
     // iOS Sideloading Package (Unsigned)
@@ -415,7 +415,12 @@
             <p class="leaf-modal-subtitle">From a local personal utility in Pune to a calm, polished offline-first finance companion.</p>
             <div class="leaf-timeline">
               <div class="leaf-timeline-item current">
-                <div class="leaf-tl-ver">v1.1.4 <span>Latest</span></div>
+                <div class="leaf-tl-ver">v1.1.5 <span>Latest</span></div>
+                <div class="leaf-tl-title">Flexible Balance Display, Interactive Insights, QR Editor &amp; Consolidated Widgets</div>
+                <div class="leaf-tl-desc">Introduced 3-way balance display controls (Combined, Account, Cash) with privacy eye toggle, interactive category drill-downs and spending trends, full-featured split QR image editor (crop, zoom, rotate), Apple-inspired Settings redesign, and exactly 3 canonical home-screen widgets.</div>
+              </div>
+              <div class="leaf-timeline-item">
+                <div class="leaf-tl-ver">v1.1.4</div>
                 <div class="leaf-tl-title">Separate Cash &amp; Account Ledgers &amp; Home-Screen Widgets</div>
                 <div class="leaf-tl-desc">Full feature parity with iOS reference: separate Cash and Account ledgers with neutral internal transfers, hero breakdown pills, and native Small, Medium, and Large AppWidgets.</div>
               </div>
