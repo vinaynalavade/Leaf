@@ -1,24 +1,20 @@
 package com.vinaynalavade.expensetracker
 
+import android.appwidget.AppWidgetProvider
 import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.result.AppResult
+import com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode
 import com.vinaynalavade.expensetracker.domain.model.Budget
 import com.vinaynalavade.expensetracker.domain.model.BudgetProgress
 import com.vinaynalavade.expensetracker.domain.model.BudgetStatus
 import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
-import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.Transaction
-import com.vinaynalavade.expensetracker.domain.model.TransactionType
-import com.vinaynalavade.expensetracker.domain.model.UserPreferences
 import com.vinaynalavade.expensetracker.domain.repository.TransactionRepository
-import com.vinaynalavade.expensetracker.domain.repository.UserPreferencesRepository
 import com.vinaynalavade.expensetracker.presentation.navigation.Screen
-import com.vinaynalavade.expensetracker.presentation.widget.AccountBalanceWidgetProvider
 import com.vinaynalavade.expensetracker.presentation.widget.ExpenseTrackerWidgetProvider
 import com.vinaynalavade.expensetracker.presentation.widget.QuickAddWidgetProvider
-import com.vinaynalavade.expensetracker.presentation.widget.TodayExpenseWidgetProvider
 import com.vinaynalavade.expensetracker.presentation.widget.WidgetUpdateManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -31,10 +27,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Unit test suite verifying Leaf v1.1.5 Phase 5 requirements:
+ * Unit test suite verifying Leaf v1.1.5:
  * 1. Dashboard footer update ("Crafted with 💚 in India" + "Vinay" opening About)
- * 2. Reduction of five widgets to exactly three canonical designs
- * 3. Widget 1 (Account Balance), Widget 2 (Balance & Quick Actions), Widget 3 (Quick Actions) integrity
+ * 2. Reduction of home-screen widgets to strictly TWO canonical designs:
+ *    - Financial Overview Widget ([ExpenseTrackerWidgetProvider] - Balance & Quick Actions)
+ *    - Quick Actions Widget ([QuickAddWidgetProvider])
+ * 3. Financial Overview Widget dynamic account/mode balance reflection (Combined, Account, Cash)
+ * 4. Privacy redaction in widgets
  */
 class DashboardFooterAndWidgetConsolidationTest {
 
@@ -54,26 +53,30 @@ class DashboardFooterAndWidgetConsolidationTest {
         assertEquals("about", aboutRoute)
     }
 
-    // ─── 2. Widget Consolidation: Exactly Three Designs ───
+    // ─── 2. Widget Consolidation: Exactly Two Canonical Designs ───
 
     @Test
     fun testConsolidatedWidgetDesignsCount() {
         val canonicalWidgets = listOf(
-            "Widget 1 — Account Balance",
-            "Widget 2 — Balance & Quick Actions",
-            "Widget 3 — Quick Actions"
+            "Widget 1 — Financial Overview (Balance & Quick Actions)",
+            "Widget 2 — Quick Actions"
         )
-        assertEquals("Exactly three widget designs must be available", 3, canonicalWidgets.size)
+        assertEquals("Exactly two widget designs must be available", 2, canonicalWidgets.size)
     }
 
-    // ─── 3. Widget 1: Account Balance Verification ───
+    // ─── 3. Financial Overview Widget: Account Selection Reflection ───
 
     @Test
-    fun testWidget1AccountBalanceCalculationExcludesCash() = runBlocking {
-        // Given: Account balance = ₹1,500, Cash balance = ₹800, Opening balance = ₹500
+    fun testFinancialOverviewWidgetReflectsSelectedAccountMode() = runBlocking {
+        // Scenario:
+        // Opening balance: ₹500 (50,000 subunits)
+        // Account balance: ₹1,500 (150,000 subunits) -> Effective Account = ₹2,000
+        // Cash balance: ₹800 (80,000 subunits) -> Effective Cash = ₹800
+        // Combined balance: ₹2,800 (280,000 subunits)
+        val openingSubunits = 50000L
         val accountSubunits = 150000L
         val cashSubunits = 80000L
-        val openingSubunits = 50000L
+        val combinedSubunits = 280000L
 
         val fakeRepo = object : FakeTxRepoBase() {
             override fun getAccountBalance(): Flow<Amount> = flowOf(Amount(accountSubunits))
@@ -81,39 +84,67 @@ class DashboardFooterAndWidgetConsolidationTest {
         }
 
         val acctBal = fakeRepo.getAccountBalance().first()
+        val cashBal = fakeRepo.getCashBalance().first()
         val opening = Amount(openingSubunits)
-        val effectiveAccountBal = acctBal + opening
+        val combined = Amount(combinedSubunits)
 
-        // Account balance must strictly equal ₹1,500 + ₹500 = ₹2,000 (₹2000.00)
-        assertEquals(200000L, effectiveAccountBal.subunits)
+        // Mode: COMBINED
+        val combinedEffective = combined
+        val combinedLabel = when (BalanceDisplayMode.COMBINED) {
+            BalanceDisplayMode.ACCOUNT -> "ACCOUNT BALANCE"
+            BalanceDisplayMode.CASH -> "CASH BALANCE"
+            BalanceDisplayMode.COMBINED -> "CURRENT BALANCE"
+        }
+        assertEquals(280000L, combinedEffective.subunits)
+        assertEquals("CURRENT BALANCE", combinedLabel)
+        assertEquals("₹2,800.00", combinedEffective.format(Currency.INR))
 
-        // Cash balance (₹800.00) must NOT be included in Widget 1
-        assertFalse(effectiveAccountBal.subunits == (accountSubunits + cashSubunits + openingSubunits))
+        // Mode: ACCOUNT (strictly Account ledger + opening balance, excludes Cash)
+        val accountEffective = acctBal + opening
+        val accountLabel = when (BalanceDisplayMode.ACCOUNT) {
+            BalanceDisplayMode.ACCOUNT -> "ACCOUNT BALANCE"
+            BalanceDisplayMode.CASH -> "CASH BALANCE"
+            BalanceDisplayMode.COMBINED -> "CURRENT BALANCE"
+        }
+        assertEquals(200000L, accountEffective.subunits)
+        assertEquals("ACCOUNT BALANCE", accountLabel)
+        assertEquals("₹2,000.00", accountEffective.format(Currency.INR))
+        assertFalse(accountEffective.subunits == combinedSubunits)
 
-        // Formatting verification
-        assertEquals("₹2,000.00", effectiveAccountBal.format(Currency.INR))
+        // Mode: CASH (strictly Cash ledger, excludes Account and opening balance)
+        val cashEffective = cashBal
+        val cashLabel = when (BalanceDisplayMode.CASH) {
+            BalanceDisplayMode.ACCOUNT -> "ACCOUNT BALANCE"
+            BalanceDisplayMode.CASH -> "CASH BALANCE"
+            BalanceDisplayMode.COMBINED -> "CURRENT BALANCE"
+        }
+        assertEquals(80000L, cashEffective.subunits)
+        assertEquals("CASH BALANCE", cashLabel)
+        assertEquals("₹800.00", cashEffective.format(Currency.INR))
+        assertFalse(cashEffective.subunits == combinedSubunits)
+        assertFalse(cashEffective.subunits == accountEffective.subunits)
     }
 
     @Test
-    fun testWidget1AccountBalancePrivacyRedaction() {
-        val effectiveAccountBal = Amount(200000L)
+    fun testFinancialOverviewWidgetPrivacyRedaction() {
+        val effectiveBal = Amount(200000L)
         val inr = Currency.INR
 
         // When balance is hidden
         val isVisibleFalse = false
-        val redactedText = if (!isVisibleFalse) "••••••••" else effectiveAccountBal.format(inr)
+        val redactedText = if (!isVisibleFalse) "••••••••" else effectiveBal.format(inr)
         assertEquals("••••••••", redactedText)
 
         // When balance is visible
         val isVisibleTrue = true
-        val visibleText = if (!isVisibleTrue) "••••••••" else effectiveAccountBal.format(inr)
+        val visibleText = if (!isVisibleTrue) "••••••••" else effectiveBal.format(inr)
         assertEquals("₹2,000.00", visibleText)
     }
 
-    // ─── 4. Widget 2: Balance & Quick Actions Verification ───
+    // ─── 4. Financial Overview Widget: Flow and Budget Verification ───
 
     @Test
-    fun testWidget2BalanceAndQuickActionsFeatures() {
+    fun testFinancialOverviewWidgetFlowAndBudgetFeatures() {
         val summary = FinancialSummary(
             openingBalance = Amount(100000L),
             totalIncome = Amount(500000L),
@@ -155,10 +186,10 @@ class DashboardFooterAndWidgetConsolidationTest {
         assertEquals("Budget: ₹4,500.00 / ₹10,000.00 (45%)", budgetText)
     }
 
-    // ─── 5. Widget 3: Quick Actions Verification ───
+    // ─── 5. Quick Actions Widget Verification ───
 
     @Test
-    fun testWidget3QuickActionsExcludesBalancesAndIncludesBudgetLine() {
+    fun testQuickActionsWidgetExcludesBalancesAndIncludesBudgetLine() {
         val budget = Budget(
             id = 2L,
             categoryId = null,
@@ -188,18 +219,18 @@ class DashboardFooterAndWidgetConsolidationTest {
         assertTrue(hasAddIncome)
     }
 
-    // ─── 6. Backward Compatibility & Provider Inheritance ───
+    // ─── 6. Widget Providers and Intent Actions Verification ───
 
     @Test
-    fun testWidgetProviderHierarchyAndIntentActions() {
-        // TodayExpenseWidgetProvider inherits from AccountBalanceWidgetProvider
-        val provider = TodayExpenseWidgetProvider()
-        assertTrue("TodayExpenseWidgetProvider must inherit from AccountBalanceWidgetProvider for backwards compatibility",
-            provider is AccountBalanceWidgetProvider)
+    fun testWidgetProvidersAndBroadcastConstants() {
+        val overviewProvider = ExpenseTrackerWidgetProvider()
+        assertTrue(overviewProvider is AppWidgetProvider)
+
+        val quickAddProvider = QuickAddWidgetProvider()
+        assertTrue(quickAddProvider is AppWidgetProvider)
 
         // Widget broadcast constants
         assertEquals("com.vinaynalavade.expensetracker.ACTION_WIDGET_REFRESH", WidgetUpdateManager.ACTION_WIDGET_REFRESH)
-        assertEquals("com.vinaynalavade.expensetracker.ACTION_TODAY_WIDGET_REFRESH", WidgetUpdateManager.ACTION_TODAY_WIDGET_REFRESH)
         assertEquals("com.vinaynalavade.expensetracker.ACTION_TOGGLE_BALANCE_VISIBILITY", WidgetUpdateManager.ACTION_TOGGLE_BALANCE_VISIBILITY)
     }
 

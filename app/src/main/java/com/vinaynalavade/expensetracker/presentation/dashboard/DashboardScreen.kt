@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +49,7 @@ import com.vinaynalavade.expensetracker.presentation.dashboard.components.Dashbo
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardGoalCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardSplitCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardToolsCard
+import com.vinaynalavade.expensetracker.presentation.widget.WidgetUpdateManager
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.DashboardUpcomingPaymentsCard
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.GreetingHeader
 import com.vinaynalavade.expensetracker.presentation.dashboard.components.MonthlyOverviewCard
@@ -85,6 +87,7 @@ fun DashboardScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         floatingActionButton = {
@@ -133,8 +136,14 @@ fun DashboardScreen(
                         cashBalance = uiState.cashBalance,
                         accountBalance = uiState.accountBalance,
                         displayMode = uiState.balanceDisplayMode,
-                        onToggleBalanceVisibility = { viewModel.toggleBalanceVisibility() },
-                        onModeChange = { viewModel.setBalanceDisplayMode(it) },
+                        onToggleBalanceVisibility = {
+                            viewModel.toggleBalanceVisibility()
+                            WidgetUpdateManager.refreshAllWidgets(context)
+                        },
+                        onModeChange = { mode ->
+                            viewModel.setBalanceDisplayMode(mode)
+                            WidgetUpdateManager.refreshAllWidgets(context)
+                        },
                         onLedgerClick = onNavigateToLedgers
                     )
                 }

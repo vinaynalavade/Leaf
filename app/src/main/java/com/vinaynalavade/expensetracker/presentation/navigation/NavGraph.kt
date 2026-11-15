@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -28,6 +29,7 @@ import com.vinaynalavade.expensetracker.presentation.categories.CategoriesScreen
 import com.vinaynalavade.expensetracker.presentation.categories.CategoriesViewModel
 import com.vinaynalavade.expensetracker.presentation.dashboard.DashboardScreen
 import com.vinaynalavade.expensetracker.presentation.dashboard.DashboardViewModel
+import com.vinaynalavade.expensetracker.presentation.widget.WidgetUpdateManager
 import com.vinaynalavade.expensetracker.presentation.entry.AddTransactionScreen
 import com.vinaynalavade.expensetracker.presentation.entry.AddTransactionViewModel
 import com.vinaynalavade.expensetracker.presentation.recurring.RecurringTransactionsScreen
@@ -157,6 +159,7 @@ fun NavGraph(
         modifier = modifier
     ) {
         composable(Screen.Dashboard.route) {
+            val context = LocalContext.current
             val viewModel: DashboardViewModel = viewModel(
                 factory = DashboardViewModel.Factory(
                     container.getFinancialSummaryUseCase,
@@ -166,7 +169,8 @@ fun NavGraph(
                     container.splitRepository,
                     container.userPreferencesRepository,
                     container.getUpcomingPaymentsUseCase,
-                    container.getTransactionsUseCase
+                    container.getTransactionsUseCase,
+                    onWidgetRefresh = { WidgetUpdateManager.refreshAllWidgets(context) }
                 )
             )
             val userPrefs by container.getUserPreferencesUseCase()

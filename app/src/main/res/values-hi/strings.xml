@@ -85,9 +85,7 @@
     <string name="settings_developer_value">विनय नलवडे</string>
     <string name="settings_privacy_note">वित्तीय डेटा डिवाइस पर सुरक्षित रूप से संग्रहीत है।</string>
 
-    <!-- Widgets (Phase 5 Consolidated Designs) -->
-    <string name="widget_account_balance_title">खाता शेष</string>
-    <string name="widget_account_balance_description">गोपनीयता टॉगल के साथ अपना खाता शेष देखें।</string>
+    <!-- Widgets (Consolidated Designs) -->
     <string name="widget_balance_quick_actions_title">शेष और त्वरित क्रियाएं</string>
     <string name="widget_balance_quick_actions_description">वर्तमान शेष, बजट प्रगति रेखा और त्वरित आय/व्यय बटन।</string>
     <string name="widget_quick_actions_title">त्वरित क्रियाएं</string>

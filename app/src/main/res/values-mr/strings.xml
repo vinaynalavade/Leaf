@@ -85,9 +85,7 @@
     <string name="settings_developer_value">विनय नलवडे</string>
     <string name="settings_privacy_note">आर्थिक नोंदी डिव्हाइसवर सुरक्षितपणे साठवल्या आहेत.</string>
 
-    <!-- Widgets (Phase 5 Consolidated Designs) -->
-    <string name="widget_account_balance_title">खाते शिल्लक</string>
-    <string name="widget_account_balance_description">गोपनीयता टॉगलसह आपली खाते शिल्लक पहा.</string>
+    <!-- Widgets (Consolidated Designs) -->
     <string name="widget_balance_quick_actions_title">शिल्लक आणि जलद क्रिया</string>
     <string name="widget_balance_quick_actions_description">सध्याची शिल्लक, बजेट प्रगती रेखा आणि जलद जमा/खर्च बटणे.</string>
     <string name="widget_quick_actions_title">जलद क्रिया</string>

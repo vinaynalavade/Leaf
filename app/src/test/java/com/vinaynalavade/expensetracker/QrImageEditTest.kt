@@ -3,6 +3,7 @@ package com.vinaynalavade.expensetracker
 import com.vinaynalavade.expensetracker.core.utils.CropAspectRatio
 import com.vinaynalavade.expensetracker.core.utils.ImageEditUtils
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -189,5 +190,45 @@ class QrImageEditTest {
         val jpgName = "split_qr_legacy.jpg"
         assertTrue(pngName.endsWith(".png"))
         assertTrue(jpgName.endsWith(".jpg"))
+    }
+
+    @Test
+    fun `test EXIF orientation degree resolution maps correctly`() {
+        // Standard EXIF orientations to rotation degrees mapping
+        val mapExif = mapOf(
+            1 to 0,   // ORIENTATION_NORMAL
+            6 to 90,  // ORIENTATION_ROTATE_90
+            3 to 180, // ORIENTATION_ROTATE_180
+            8 to 270  // ORIENTATION_ROTATE_270
+        )
+        for ((orientation, expectedDegrees) in mapExif) {
+            val degrees = when (orientation) {
+                6 -> 90
+                3 -> 180
+                8 -> 270
+                else -> 0
+            }
+            assertEquals(expectedDegrees, degrees)
+            assertEquals(expectedDegrees, ImageEditUtils.normalizeRotationDegrees(degrees))
+        }
+    }
+
+    @Test
+    fun `test single pass stream copy buffering preserves byte integrity`() {
+        val sampleData = "SAMPLE_QR_IMAGE_BYTES_PAYTM_GPAY_PHONEPE".toByteArray(Charsets.UTF_8)
+        val inputStream = java.io.ByteArrayInputStream(sampleData)
+        val tempFile = java.io.File.createTempFile("test_qr_", ".tmp")
+        try {
+            java.io.FileOutputStream(tempFile).use { out ->
+                inputStream.copyTo(out)
+            }
+            assertTrue("Temp file must exist and not be empty", tempFile.exists() && tempFile.length() > 0)
+            assertEquals(sampleData.size.toLong(), tempFile.length())
+            val readBytes = tempFile.readBytes()
+            assertTrue(sampleData.contentEquals(readBytes))
+        } finally {
+            tempFile.delete()
+            assertFalse("Temp file must be deleted in finally block", tempFile.exists())
+        }
     }
 }

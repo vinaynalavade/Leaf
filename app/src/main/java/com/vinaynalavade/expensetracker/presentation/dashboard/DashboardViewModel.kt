@@ -66,7 +66,8 @@ class DashboardViewModel(
     splitRepository: SplitRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     getUpcomingPaymentsUseCase: GetUpcomingPaymentsUseCase? = null,
-    getTransactionsUseCase: GetTransactionsUseCase? = null
+    getTransactionsUseCase: GetTransactionsUseCase? = null,
+    private val onWidgetRefresh: (() -> Unit)? = null
 ) : ViewModel() {
 
     private val _selectedMonth = MutableStateFlow(YearMonth.now())
@@ -144,12 +145,14 @@ class DashboardViewModel(
         viewModelScope.launch {
             val current = uiState.value.isBalanceVisible
             userPreferencesRepository.setBalanceVisible(!current)
+            onWidgetRefresh?.invoke()
         }
     }
 
     fun setBalanceDisplayMode(mode: BalanceDisplayMode) {
         viewModelScope.launch {
             userPreferencesRepository.setBalanceDisplayMode(mode)
+            onWidgetRefresh?.invoke()
         }
     }
 
@@ -177,7 +180,8 @@ class DashboardViewModel(
         private val splitRepository: SplitRepository,
         private val userPreferencesRepository: UserPreferencesRepository,
         private val getUpcomingPaymentsUseCase: GetUpcomingPaymentsUseCase? = null,
-        private val getTransactionsUseCase: GetTransactionsUseCase? = null
+        private val getTransactionsUseCase: GetTransactionsUseCase? = null,
+        private val onWidgetRefresh: (() -> Unit)? = null
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -189,7 +193,8 @@ class DashboardViewModel(
                 splitRepository,
                 userPreferencesRepository,
                 getUpcomingPaymentsUseCase,
-                getTransactionsUseCase
+                getTransactionsUseCase,
+                onWidgetRefresh
             ) as T
         }
     }

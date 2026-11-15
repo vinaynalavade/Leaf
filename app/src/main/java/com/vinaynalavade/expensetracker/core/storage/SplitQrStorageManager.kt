@@ -3,10 +3,12 @@ package com.vinaynalavade.expensetracker.core.storage
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.ExifInterface
 import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
+import com.vinaynalavade.expensetracker.core.utils.ImageEditUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -62,40 +64,84 @@ class SplitQrStorageManager(private val context: Context) {
     /**
      * Safely decodes a bitmap from a content Uri with inSampleSize scaling
      * to avoid OutOfMemoryError on large camera photos while preserving high resolution.
+     * Streams source content once into a cache temp file to ensure full compatibility with
+     * all Android content providers (PhotoPicker, MediaStore, Documents, SAF) and automatically
+     * corrects EXIF camera orientation tags.
      */
     suspend fun decodeBitmapFromUri(sourceUri: Uri, maxDimension: Int = 2048): Bitmap? = withContext(Dispatchers.IO) {
-        try {
-            val contentResolver = context.contentResolver
+        val tempFile = try {
+            File.createTempFile("qr_import_", ".tmp", context.cacheDir)
+        } catch (_: Throwable) {
+            return@withContext null
+        }
 
-            // 1. Decode bounds only
+        try {
+            // 1. Single-pass stream from ContentResolver to cache temp file
+            context.contentResolver.openInputStream(sourceUri)?.use { input ->
+                FileOutputStream(tempFile).use { output ->
+                    input.copyTo(output)
+                }
+            } ?: return@withContext null
+
+            if (tempFile.length() <= 0L) {
+                return@withContext null
+            }
+
+            // 2. Decode bounds only
             val boundsOptions = BitmapFactory.Options().apply {
                 inJustDecodeBounds = true
             }
-            contentResolver.openInputStream(sourceUri)?.use { stream ->
-                BitmapFactory.decodeStream(stream, null, boundsOptions)
-            } ?: return@withContext null
+            BitmapFactory.decodeFile(tempFile.absolutePath, boundsOptions)
 
             if (boundsOptions.outWidth <= 0 || boundsOptions.outHeight <= 0) {
                 return@withContext null
             }
 
-            // 2. Compute sample size so max dimension is bounded by maxDimension
-            var inSampleSize = 1
-            val maxOriginalDim = maxOf(boundsOptions.outWidth, boundsOptions.outHeight)
-            while ((maxOriginalDim / (inSampleSize * 2)) >= maxDimension) {
-                inSampleSize *= 2
-            }
+            // 3. Compute sample size so max dimension is bounded by maxDimension
+            val inSampleSize = ImageEditUtils.computeSampleSize(
+                boundsOptions.outWidth,
+                boundsOptions.outHeight,
+                maxDimension
+            )
 
-            // 3. Decode scaled bitmap
+            // 4. Decode scaled bitmap safely in ARGB_8888
             val decodeOptions = BitmapFactory.Options().apply {
                 this.inSampleSize = inSampleSize
                 inPreferredConfig = Bitmap.Config.ARGB_8888
             }
-            contentResolver.openInputStream(sourceUri)?.use { stream ->
-                BitmapFactory.decodeStream(stream, null, decodeOptions)
+            val decodedBitmap = BitmapFactory.decodeFile(tempFile.absolutePath, decodeOptions) ?: return@withContext null
+
+            // 5. Handle EXIF orientation
+            val exif = try {
+                ExifInterface(tempFile.absolutePath)
+            } catch (_: Throwable) {
+                null
             }
-        } catch (_: Exception) {
+            val orientation = exif?.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            ) ?: ExifInterface.ORIENTATION_NORMAL
+
+            val rotationDegrees = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270
+                else -> 0
+            }
+
+            if (rotationDegrees != 0) {
+                ImageEditUtils.rotateBitmap(decodedBitmap, rotationDegrees)
+            } else {
+                decodedBitmap
+            }
+        } catch (_: Throwable) {
             null
+        } finally {
+            try {
+                if (tempFile.exists()) {
+                    tempFile.delete()
+                }
+            } catch (_: Throwable) {}
         }
     }
 

@@ -461,7 +461,9 @@ class CreateSplitViewModel(
                     )
                 }
             } else {
-                _uiState.update { it.copy(validationError = "Unable to process selected image.") }
+                _uiState.update {
+                    it.copy(validationError = "Unable to process the selected image. Please ensure the file is a valid image (JPEG, PNG, or WebP) and try again.")
+                }
             }
         }
     }

@@ -92,24 +92,8 @@
             </intent-filter>
         </receiver>
 
-        <!-- Widgets (Consolidated into exactly 3 widget designs) -->
-        <!-- Widget 1: Account Balance -->
-        <receiver
-            android:name=".presentation.widget.TodayExpenseWidgetProvider"
-            android:label="@string/widget_account_balance_title"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.vinaynalavade.expensetracker.ACTION_WIDGET_REFRESH" />
-                <action android:name="com.vinaynalavade.expensetracker.ACTION_TODAY_WIDGET_REFRESH" />
-                <action android:name="com.vinaynalavade.expensetracker.ACTION_TOGGLE_BALANCE_VISIBILITY" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_account_balance_info" />
-        </receiver>
-
-        <!-- Widget 2: Balance & Quick Actions -->
+        <!-- Widgets (Consolidated into exactly 2 widget designs) -->
+        <!-- Widget 1: Financial Overview (Balance & Quick Actions) -->
         <receiver
             android:name=".presentation.widget.ExpenseTrackerWidgetProvider"
             android:label="@string/widget_balance_quick_actions_title"
@@ -124,7 +108,7 @@
                 android:resource="@xml/widget_expense_tracker_info" />
         </receiver>
 
-        <!-- Widget 3: Quick Actions -->
+        <!-- Widget 2: Quick Actions -->
         <receiver
             android:name=".presentation.widget.QuickAddWidgetProvider"
             android:label="@string/widget_quick_actions_title"
