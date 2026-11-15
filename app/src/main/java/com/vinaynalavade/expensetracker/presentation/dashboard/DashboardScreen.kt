@@ -1,5 +1,6 @@
 package com.vinaynalavade.expensetracker.presentation.dashboard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -27,7 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,6 +80,7 @@ fun DashboardScreen(
     onNavigateToTransactionDetail: (Long) -> Unit = {},
     onNavigateToLedgers: () -> Unit = {},
     onProfileClick: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {},
     onOpenQuickAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -127,7 +132,9 @@ fun DashboardScreen(
                         isBalanceVisible = uiState.isBalanceVisible,
                         cashBalance = uiState.cashBalance,
                         accountBalance = uiState.accountBalance,
+                        displayMode = uiState.balanceDisplayMode,
                         onToggleBalanceVisibility = { viewModel.toggleBalanceVisibility() },
+                        onModeChange = { viewModel.setBalanceDisplayMode(it) },
                         onLedgerClick = onNavigateToLedgers
                     )
                 }
@@ -229,14 +236,15 @@ fun DashboardScreen(
                     )
                 }
 
-                // 12. Footer with official Leaf branding phrase
+                // 12. Footer with official Leaf branding phrase and creator credit
                 item {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = MaterialTheme.spacing.md),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
                             text = AppConstants.CREATOR_BRANDING,
@@ -246,6 +254,22 @@ fun DashboardScreen(
                             ),
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                        Text(
+                            text = "Vinay",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 11.sp,
+                                letterSpacing = 0.5.sp
+                            ),
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.85f),
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .clickable(
+                                    role = Role.Button,
+                                    onClick = onNavigateToAbout
+                                )
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
                 }

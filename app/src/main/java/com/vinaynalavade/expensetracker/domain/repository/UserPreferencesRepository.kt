@@ -79,4 +79,6 @@ interface UserPreferencesRepository {
     suspend fun setDefaultExpenseSource(source: com.vinaynalavade.expensetracker.domain.model.PaymentMethod): AppResult<Unit>
 
     suspend fun setBalanceVisible(isVisible: Boolean): AppResult<Unit> = AppResult.Success(Unit)
+
+    suspend fun setBalanceDisplayMode(mode: com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode): AppResult<Unit> = AppResult.Success(Unit)
 }

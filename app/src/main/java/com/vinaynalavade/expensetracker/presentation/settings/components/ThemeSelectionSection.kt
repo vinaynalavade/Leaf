@@ -3,7 +3,6 @@ package com.vinaynalavade.expensetracker.presentation.settings.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,12 +39,11 @@ import androidx.compose.ui.unit.dp
 import com.vinaynalavade.expensetracker.domain.model.ThemeMode
 import com.vinaynalavade.expensetracker.presentation.theme.Motion
 import com.vinaynalavade.expensetracker.presentation.theme.pressScale
-import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
- * Cohesive, ultra-clean Theme Selection Component.
- * Presents Light, Dark, and System appearance options in a single unified segmented control
- * with zero per-option visual clutter, immediate selection feedback, and 48dp+ touch targets.
+ * Cohesive, Apple-inspired Theme Selection Component.
+ * Presents Light, Dark, and System appearance options in a unified segmented control
+ * with icon squircle header, subtle borders, and smooth transitions.
  */
 @Composable
 fun ThemeSelectionSection(
@@ -54,16 +52,27 @@ fun ThemeSelectionSection(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
-            text = "App Theme",
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SettingsTileIconBox(
+                icon = Icons.Default.SettingsBrightness,
+                containerColor = SettingsColors.Teal,
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(14.dp))
+            Text(
+                text = "Appearance",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
 
         ThemeSegmentedControl(
             currentThemeMode = currentThemeMode,
@@ -93,18 +102,18 @@ private fun ThemeSegmentedControl(
     }
 
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
         border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            width = 0.8.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
         ),
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(3.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -152,7 +161,7 @@ private fun ThemeSegmentItem(
 
     val animatedBorderColor by animateColorAsState(
         targetValue = if (isSelected) {
-            MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            MaterialTheme.colorScheme.outline.copy(alpha = 0.35f)
         } else {
             Color.Transparent
         },
@@ -162,24 +171,23 @@ private fun ThemeSegmentItem(
 
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(9.dp),
         color = animatedBg,
-        border = if (isSelected) BorderStroke(1.dp, animatedBorderColor) else null,
+        border = if (isSelected) BorderStroke(0.8.dp, animatedBorderColor) else null,
         interactionSource = interactionSource,
         modifier = modifier
-            .defaultMinSize(minHeight = 48.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .defaultMinSize(minHeight = 42.dp)
+            .clip(RoundedCornerShape(9.dp))
             .pressScale(interactionSource = interactionSource)
             .semantics {
                 selected = isSelected
                 role = Role.RadioButton
             }
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 12.dp),
+                .padding(horizontal = 8.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -187,7 +195,7 @@ private fun ThemeSegmentItem(
                 imageVector = option.icon,
                 contentDescription = null,
                 tint = animatedContentColor,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(16.dp)
             )
 
             Spacer(modifier = Modifier.width(6.dp))
@@ -195,7 +203,7 @@ private fun ThemeSegmentItem(
             Text(
                 text = option.title,
                 style = MaterialTheme.typography.labelMedium,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                 color = animatedContentColor,
                 maxLines = 1
             )

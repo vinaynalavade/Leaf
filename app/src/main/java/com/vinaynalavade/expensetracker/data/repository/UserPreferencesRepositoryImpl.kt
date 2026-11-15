@@ -3,6 +3,7 @@ package com.vinaynalavade.expensetracker.data.repository
 import com.vinaynalavade.expensetracker.core.result.AppError
 import com.vinaynalavade.expensetracker.core.result.AppResult
 import com.vinaynalavade.expensetracker.data.preferences.UserPreferencesDataStore
+import com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode
 import com.vinaynalavade.expensetracker.domain.model.ThemeMode
 import com.vinaynalavade.expensetracker.domain.model.UserPreferences
 import com.vinaynalavade.expensetracker.domain.repository.UserPreferencesRepository
@@ -314,6 +315,15 @@ class UserPreferencesRepositoryImpl(
             AppResult.Success(Unit)
         } catch (e: Exception) {
             AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set balance visibility.", e))
+        }
+    }
+
+    override suspend fun setBalanceDisplayMode(mode: BalanceDisplayMode): AppResult<Unit> {
+        return try {
+            dataStore.setBalanceDisplayMode(mode)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            AppResult.Error(AppError.PreferencesError(e.message ?: "Failed to set balance display mode.", e))
         }
     }
 }

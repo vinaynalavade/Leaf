@@ -11,6 +11,7 @@ import com.vinaynalavade.expensetracker.ExpenseTrackerApp
 import com.vinaynalavade.expensetracker.MainActivity
 import com.vinaynalavade.expensetracker.QuickAddTransactionActivity
 import com.vinaynalavade.expensetracker.R
+import com.vinaynalavade.expensetracker.core.model.Amount
 import com.vinaynalavade.expensetracker.core.model.Currency
 import com.vinaynalavade.expensetracker.core.notification.NotificationHelper
 import com.vinaynalavade.expensetracker.di.AppContainer
@@ -20,24 +21,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 
 /**
- * Centralized widget management and update engine for Leaf.
- * Decouples widget rendering, data fetching, and intent binding from Android AppWidgetProvider lifecycle.
- *
- * Supports three independent widget types:
- * 1. Total Balance Overview Widget ([ExpenseTrackerWidgetProvider])
- * 2. Today's Expense Glanceable Widget ([TodayExpenseWidgetProvider])
- * 3. Quick Add Action Widget ([QuickAddWidgetProvider])
- *
- * Design constraints for RemoteViews-based widgets:
- * - All layout XML must use only RemoteViews-compatible views (FrameLayout, LinearLayout,
- *   RelativeLayout, GridLayout, TextView, ImageView, Button, etc.). Bare `View` is NOT supported.
- * - Widget providers may be invoked before Application.onCreate() completes; container access
- *   must be guarded with [getContainerSafely].
- * - Flow collection uses one-shot [firstOrNull] to avoid leaking subscriptions.
- * - Each widget type is updated independently so one failure cannot block others.
- * - Persistent balance visibility preference is respected to prevent sensitive data flashing.
+ * Centralized widget management and update engine for Leaf v1.1.5 (Phase 5).
+ * Consolidates all home-screen widgets into exactly three canonical designs:
+ * 1. Account Balance Widget ([AccountBalanceWidgetProvider] / [TodayExpenseWidgetProvider])
+ * 2. Balance & Quick Actions Widget ([ExpenseTrackerWidgetProvider])
+ * 3. Quick Actions Widget ([QuickAddWidgetProvider])
  */
 object WidgetUpdateManager {
 
@@ -77,79 +68,178 @@ object WidgetUpdateManager {
     }
 
     /**
-     * Triggers a refresh for all active widget instances (Total Balance, Today's Expense & Quick Add).
-     * Each widget type is updated independently — failure in one does not block others.
+     * Triggers a refresh for all active widget instances across the three consolidated designs.
      */
     fun refreshAllWidgets(context: Context) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
 
-        // 1. Update Total Balance Overview Widgets
+        // 1. Update Widget 1: Account Balance Widgets
         try {
-            val balanceIds = appWidgetManager.getAppWidgetIds(
-                ComponentName(context, ExpenseTrackerWidgetProvider::class.java)
-            )
+            val accountIds = mutableSetOf<Int>()
+            try {
+                accountIds.addAll(
+                    appWidgetManager.getAppWidgetIds(
+                        ComponentName(context, AccountBalanceWidgetProvider::class.java)
+                    ).toList()
+                )
+            } catch (_: Exception) {}
+            try {
+                accountIds.addAll(
+                    appWidgetManager.getAppWidgetIds(
+                        ComponentName(context, TodayExpenseWidgetProvider::class.java)
+                    ).toList()
+                )
+            } catch (_: Exception) {}
+
+            if (accountIds.isNotEmpty()) {
+                updateAccountBalanceWidgets(context, appWidgetManager, accountIds.toIntArray())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to refresh Account Balance widgets", e)
+        }
+
+        // 2. Update Widget 2: Balance & Quick Actions Widgets
+        try {
+            val balanceIds = mutableSetOf<Int>()
+            try {
+                balanceIds.addAll(
+                    appWidgetManager.getAppWidgetIds(
+                        ComponentName(context, ExpenseTrackerWidgetProvider::class.java)
+                    ).toList()
+                )
+            } catch (_: Exception) {}
+            // Gracefully update any lingering legacy Medium / Hub widgets
+            try {
+                balanceIds.addAll(
+                    appWidgetManager.getAppWidgetIds(
+                        ComponentName(context, MediumBudgetWidgetProvider::class.java)
+                    ).toList()
+                )
+            } catch (_: Exception) {}
+            try {
+                balanceIds.addAll(
+                    appWidgetManager.getAppWidgetIds(
+                        ComponentName(context, BudgetHubWidgetProvider::class.java)
+                    ).toList()
+                )
+            } catch (_: Exception) {}
+
             if (balanceIds.isNotEmpty()) {
-                updateFinancialSummaryWidgets(context, appWidgetManager, balanceIds)
+                updateBalanceQuickActionsWidgets(context, appWidgetManager, balanceIds.toIntArray())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh Total Balance Overview widgets", e)
+            Log.e(TAG, "Failed to refresh Balance & Quick Actions widgets", e)
         }
 
-        // 2. Update Today's Expense Glanceable Widgets
-        try {
-            val todayIds = appWidgetManager.getAppWidgetIds(
-                ComponentName(context, TodayExpenseWidgetProvider::class.java)
-            )
-            if (todayIds.isNotEmpty()) {
-                updateTodayExpenseWidgets(context, appWidgetManager, todayIds)
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh Today's Expense widgets", e)
-        }
-
-        // 3. Update Quick Add Widgets
+        // 3. Update Widget 3: Quick Actions Widgets
         try {
             val quickAddIds = appWidgetManager.getAppWidgetIds(
                 ComponentName(context, QuickAddWidgetProvider::class.java)
             )
             if (quickAddIds.isNotEmpty()) {
-                updateQuickAddWidgets(context, appWidgetManager, quickAddIds)
+                updateQuickActionsWidgets(context, appWidgetManager, quickAddIds)
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh Quick Add widgets", e)
-        }
-
-        // 4. Update Large Budget & Hub Widgets (iOS Feature Parity)
-        try {
-            val hubIds = appWidgetManager.getAppWidgetIds(
-                ComponentName(context, BudgetHubWidgetProvider::class.java)
-            )
-            if (hubIds.isNotEmpty()) {
-                updateBudgetHubWidgets(context, appWidgetManager, hubIds)
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh Budget Hub widgets", e)
-        }
-
-        // 5. Update Medium Budget Widgets (iOS Feature Parity)
-        try {
-            val mediumIds = appWidgetManager.getAppWidgetIds(
-                ComponentName(context, MediumBudgetWidgetProvider::class.java)
-            )
-            if (mediumIds.isNotEmpty()) {
-                updateMediumBudgetWidgets(context, appWidgetManager, mediumIds)
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to refresh Medium Budget widgets", e)
+            Log.e(TAG, "Failed to refresh Quick Actions widgets", e)
         }
     }
 
     /**
-     * Updates all active Total Balance widget instances with live domain data.
-     * Displays Total Balance as the hero primary metric, alongside Monthly Income & Expenses.
-     * When App Lock is active and locked or balance visibility is toggled off, redacts financial values.
+     * Updates Widget 1 — Account Balance instances.
+     * Displays Account ledger balance only (strictly excluding Cash ledger).
+     * Includes eye button to hide/unhide the balance, and refresh action.
      */
-    fun updateFinancialSummaryWidgets(
+    fun updateAccountBalanceWidgets(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        val container = getContainerSafely(context) ?: return
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val acctBal = container.transactionRepository.getAccountBalance().firstOrNull() ?: Amount.ZERO
+                val prefs = container.getUserPreferencesUseCase().firstOrNull()
+                val opening = prefs?.openingBalance ?: Amount.ZERO
+                val effectiveAccountBal = acctBal + opening
+
+                val currency = prefs?.currency ?: Currency.DEFAULT
+                val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
+                val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
+
+                val balanceStr = if (!isVisible) "••••••••" else effectiveAccountBal.format(currency)
+
+                // 1. Root tap -> Open MainActivity (Dashboard)
+                val mainIntent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                }
+                val mainPendingIntent = PendingIntent.getActivity(
+                    context,
+                    300,
+                    mainIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                // 2. Refresh icon tap -> Broadcast to update widget
+                val refreshIntent = Intent(context, TodayExpenseWidgetProvider::class.java).apply {
+                    action = ACTION_WIDGET_REFRESH
+                }
+                val refreshPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    301,
+                    refreshIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                // 3. Visibility toggle icon tap -> Broadcast to toggle visibility
+                val toggleIntent = Intent(context, TodayExpenseWidgetProvider::class.java).apply {
+                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
+                }
+                val togglePendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    302,
+                    toggleIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                for (widgetId in appWidgetIds) {
+                    val views = RemoteViews(context.packageName, R.layout.widget_account_balance).apply {
+                        setTextViewText(R.id.account_widget_balance, balanceStr)
+                        setImageViewResource(
+                            R.id.account_widget_btn_toggle_visibility,
+                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                        )
+
+                        setOnClickPendingIntent(R.id.account_widget_root, mainPendingIntent)
+                        setOnClickPendingIntent(R.id.account_widget_btn_toggle_visibility, togglePendingIntent)
+                        setOnClickPendingIntent(R.id.account_widget_btn_refresh, refreshPendingIntent)
+
+                        // Fallback mappings for any legacy layout instances
+                        try {
+                            setTextViewText(R.id.today_widget_amount, balanceStr)
+                            setImageViewResource(
+                                R.id.today_widget_btn_toggle_visibility,
+                                if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                            )
+                            setOnClickPendingIntent(R.id.today_widget_root, mainPendingIntent)
+                            setOnClickPendingIntent(R.id.today_widget_btn_toggle_visibility, togglePendingIntent)
+                            setOnClickPendingIntent(R.id.today_widget_btn_refresh, refreshPendingIntent)
+                        } catch (_: Exception) {}
+                    }
+                    appWidgetManager.updateAppWidget(widgetId, views)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error updating Account Balance widgets", e)
+            }
+        }
+    }
+
+    /**
+     * Updates Widget 2 — Balance & Quick Actions instances.
+     * Displays Current Balance, eye privacy toggle, budget progress line,
+     * income/expense flow, refresh action, and Add Expense / Add Income buttons.
+     */
+    fun updateBalanceQuickActionsWidgets(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
@@ -168,6 +258,22 @@ object WidgetUpdateManager {
                 val monthlyIncomeStr = if (!isVisible) "+••••" else "+${summary?.monthlyIncome?.format(currency) ?: "₹0.00"}"
                 val monthlyExpenseStr = if (!isVisible) "-••••" else "-${summary?.monthlyExpense?.format(currency) ?: "₹0.00"}"
                 val monthLabelStr = if (isLocked) "Protected" else (summary?.monthLabel?.ifBlank { "This Month" } ?: "This Month")
+
+                // Budget progress line calculation
+                val currentMonth = YearMonth.now()
+                val budgets = container.getBudgetProgressUseCase(currentMonth).firstOrNull() ?: emptyList()
+                val featuredBudget = budgets.find { it.budget.categoryId == null }
+                    ?: budgets.maxByOrNull { it.usedAmount.subunits }
+
+                val (budgetText, progressPercent) = if (featuredBudget != null) {
+                    val usedStr = if (!isVisible) "••••" else featuredBudget.usedAmount.format(currency)
+                    val limitStr = if (!isVisible) "••••" else featuredBudget.budget.amount.format(currency)
+                    val pct = featuredBudget.percentageUsed.toInt().coerceIn(0, 100)
+                    Pair("Budget: $usedStr / $limitStr ($pct%)", pct)
+                } else {
+                    val spentStr = if (!isVisible) "••••" else (summary?.monthlyExpense?.format(currency) ?: "₹0.00")
+                    Pair("Spent this month: $spentStr", 0)
+                }
 
                 // 1. Root tap -> Open MainActivity (Dashboard)
                 val mainIntent = Intent(context, MainActivity::class.java).apply {
@@ -235,6 +341,10 @@ object WidgetUpdateManager {
                         setTextViewText(R.id.widget_monthly_expense, monthlyExpenseStr)
                         setTextViewText(R.id.widget_month_label, monthLabelStr)
 
+                        // Budget Progress Line
+                        setTextViewText(R.id.widget_budget_text, budgetText)
+                        setProgressBar(R.id.widget_budget_progress, 100, progressPercent, false)
+
                         setImageViewResource(
                             R.id.widget_btn_toggle_visibility,
                             if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
@@ -249,17 +359,17 @@ object WidgetUpdateManager {
                     appWidgetManager.updateAppWidget(widgetId, views)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error updating Total Balance widgets", e)
+                Log.e(TAG, "Error updating Balance & Quick Actions widgets", e)
             }
         }
     }
 
     /**
-     * Updates all active Today's Expense widget instances with live domain data.
-     * Displays Today's spending as a single glanceable metric.
-     * When App Lock is active and locked or balance visibility is toggled off, redacts the expense metric.
+     * Updates Widget 3 — Quick Actions instances.
+     * Includes only the existing Add Expense and Add Income buttons,
+     * and the monthly budget progress line. Zero balance figures or charts.
      */
-    fun updateTodayExpenseWidgets(
+    fun updateQuickActionsWidgets(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
@@ -268,182 +378,35 @@ object WidgetUpdateManager {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val todayExpense = container.getTodayExpenseUseCase().firstOrNull()
                 val prefs = container.getUserPreferencesUseCase().firstOrNull()
                 val currency = prefs?.currency ?: Currency.DEFAULT
                 val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
                 val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
 
-                val todayExpenseStr = if (!isVisible) "••••••••" else (todayExpense?.format(currency) ?: "₹0.00")
-
-                // 1. Root tap -> Open MainActivity (Dashboard)
-                val mainIntent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
-                val mainPendingIntent = PendingIntent.getActivity(
-                    context,
-                    300,
-                    mainIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 2. Refresh icon tap -> Broadcast to update widget
-                val refreshIntent = Intent(context, TodayExpenseWidgetProvider::class.java).apply {
-                    action = ACTION_TODAY_WIDGET_REFRESH
-                }
-                val refreshPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    301,
-                    refreshIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 3. Visibility toggle icon tap
-                val toggleIntent = Intent(context, TodayExpenseWidgetProvider::class.java).apply {
-                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
-                }
-                val togglePendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    302,
-                    toggleIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                for (widgetId in appWidgetIds) {
-                    val views = RemoteViews(context.packageName, R.layout.widget_today_expense).apply {
-                        setTextViewText(R.id.today_widget_amount, todayExpenseStr)
-
-                        setImageViewResource(
-                            R.id.today_widget_btn_toggle_visibility,
-                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-                        )
-
-                        setOnClickPendingIntent(R.id.today_widget_root, mainPendingIntent)
-                        setOnClickPendingIntent(R.id.today_widget_btn_toggle_visibility, togglePendingIntent)
-                        setOnClickPendingIntent(R.id.today_widget_btn_refresh, refreshPendingIntent)
-                    }
-                    appWidgetManager.updateAppWidget(widgetId, views)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error updating Today's Expense widgets", e)
-            }
-        }
-    }
-
-    /**
-     * Updates Quick Add widget instances with instant transaction entry action buttons.
-     */
-    fun updateQuickAddWidgets(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        try {
-            val mainIntent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-            val mainPendingIntent = PendingIntent.getActivity(
-                context,
-                200,
-                mainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val expenseIntent = Intent(context, QuickAddTransactionActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(QuickAddTransactionActivity.EXTRA_TRANSACTION_TYPE, TransactionType.EXPENSE.name)
-                putExtra(NotificationHelper.EXTRA_START_ROUTE, NotificationHelper.ROUTE_ADD_EXPENSE)
-            }
-            val expensePendingIntent = PendingIntent.getActivity(
-                context,
-                201,
-                expenseIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val incomeIntent = Intent(context, QuickAddTransactionActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                putExtra(QuickAddTransactionActivity.EXTRA_TRANSACTION_TYPE, TransactionType.INCOME.name)
-                putExtra(NotificationHelper.EXTRA_START_ROUTE, NotificationHelper.ROUTE_ADD_INCOME)
-            }
-            val incomePendingIntent = PendingIntent.getActivity(
-                context,
-                202,
-                incomeIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            for (widgetId in appWidgetIds) {
-                val views = RemoteViews(context.packageName, R.layout.widget_quick_add).apply {
-                    setOnClickPendingIntent(R.id.quick_widget_root, mainPendingIntent)
-                    setOnClickPendingIntent(R.id.quick_widget_btn_expense, expensePendingIntent)
-                    setOnClickPendingIntent(R.id.quick_widget_btn_income, incomePendingIntent)
-                }
-                appWidgetManager.updateAppWidget(widgetId, views)
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating Quick Add widgets", e)
-        }
-    }
-
-    /**
-     * Updates all active Large Budget & Hub widget instances with live domain data.
-     * iOS Feature Parity matching LeafLargeWidgetView:
-     * - Total Balance (with privacy redaction)
-     * - Monthly Inflow & Outflow
-     * - Monthly Budget Progress bar & text
-     * - Quick action buttons: Add Expense, Split Bill, Planning
-     */
-    fun updateBudgetHubWidgets(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        val container = getContainerSafely(context) ?: return
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val summary = container.getWidgetFinancialSummaryUseCase().firstOrNull()
-                val prefs = container.getUserPreferencesUseCase().firstOrNull()
-                val currency = prefs?.currency ?: Currency.DEFAULT
-                val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
-                val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
-
-                val balanceStr = if (!isVisible) "••••••••" else (summary?.balance?.format(currency) ?: "₹0.00")
-                val monthlyIncomeStr = if (!isVisible) "Income: +••••" else "Income: +${summary?.monthlyIncome?.format(currency) ?: "₹0.00"}"
-                val monthlyExpenseStr = if (!isVisible) "Spent: -••••" else "Spent: -${summary?.monthlyExpense?.format(currency) ?: "₹0.00"}"
-
-                // Budget calculation
-                val currentMonth = java.time.YearMonth.now()
+                val currentMonth = YearMonth.now()
                 val budgets = container.getBudgetProgressUseCase(currentMonth).firstOrNull() ?: emptyList()
                 val featuredBudget = budgets.find { it.budget.categoryId == null }
                     ?: budgets.maxByOrNull { it.usedAmount.subunits }
 
                 val (budgetText, progressPercent) = if (featuredBudget != null) {
-                    val used = if (!isVisible) "••••" else featuredBudget.usedAmount.format(currency)
-                    val limit = if (!isVisible) "••••" else featuredBudget.budget.amount.format(currency)
+                    val usedStr = if (!isVisible) "••••" else featuredBudget.usedAmount.format(currency)
+                    val limitStr = if (!isVisible) "••••" else featuredBudget.budget.amount.format(currency)
                     val pct = featuredBudget.percentageUsed.toInt().coerceIn(0, 100)
-                    Pair("$used / $limit", pct)
+                    Pair("Budget: $pct% used ($usedStr / $limitStr)", pct)
                 } else {
-                    val spent = if (!isVisible) "••••" else (summary?.monthlyExpense?.format(currency) ?: "₹0.00")
-                    Pair("Spent this month: $spent", 0)
+                    Pair("Monthly Budget", 0)
                 }
 
-                val timeFormatter = java.text.SimpleDateFormat("hh:mm a", java.util.Locale.getDefault())
-                val updateTimeStr = "Updated " + timeFormatter.format(java.util.Date())
-
-                // 1. Root tap -> Open MainActivity (Dashboard)
                 val mainIntent = Intent(context, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 }
                 val mainPendingIntent = PendingIntent.getActivity(
                     context,
-                    300,
+                    200,
                     mainIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
-                // 2. Add Expense -> QuickAddTransactionActivity
                 val expenseIntent = Intent(context, QuickAddTransactionActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                     putExtra(QuickAddTransactionActivity.EXTRA_TRANSACTION_TYPE, TransactionType.EXPENSE.name)
@@ -451,212 +414,61 @@ object WidgetUpdateManager {
                 }
                 val expensePendingIntent = PendingIntent.getActivity(
                     context,
-                    301,
+                    201,
                     expenseIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
-                // 3. Split Bill -> MainActivity
-                val splitIntent = Intent(context, MainActivity::class.java).apply {
+                val incomeIntent = Intent(context, QuickAddTransactionActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    putExtra(NotificationHelper.EXTRA_START_ROUTE, "split")
+                    putExtra(QuickAddTransactionActivity.EXTRA_TRANSACTION_TYPE, TransactionType.INCOME.name)
+                    putExtra(NotificationHelper.EXTRA_START_ROUTE, NotificationHelper.ROUTE_ADD_INCOME)
                 }
-                val splitPendingIntent = PendingIntent.getActivity(
+                val incomePendingIntent = PendingIntent.getActivity(
                     context,
-                    302,
-                    splitIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 4. Planning -> MainActivity
-                val planningIntent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    putExtra(NotificationHelper.EXTRA_START_ROUTE, "planning")
-                }
-                val planningPendingIntent = PendingIntent.getActivity(
-                    context,
-                    303,
-                    planningIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 5. Refresh broadcast
-                val refreshIntent = Intent(context, BudgetHubWidgetProvider::class.java).apply {
-                    action = ACTION_WIDGET_REFRESH
-                }
-                val refreshPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    304,
-                    refreshIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 6. Visibility toggle broadcast
-                val toggleIntent = Intent(context, BudgetHubWidgetProvider::class.java).apply {
-                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
-                }
-                val togglePendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    305,
-                    toggleIntent,
+                    202,
+                    incomeIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
 
                 for (widgetId in appWidgetIds) {
-                    val views = RemoteViews(context.packageName, R.layout.widget_budget_hub).apply {
-                        setTextViewText(R.id.hub_widget_total_balance, balanceStr)
-                        setTextViewText(R.id.hub_widget_income, monthlyIncomeStr)
-                        setTextViewText(R.id.hub_widget_expense, monthlyExpenseStr)
-                        setTextViewText(R.id.hub_widget_budget_text, budgetText)
-                        setProgressBar(R.id.hub_widget_budget_progress, 100, progressPercent, false)
-                        setTextViewText(R.id.hub_widget_update_time, updateTimeStr)
+                    val views = RemoteViews(context.packageName, R.layout.widget_quick_add).apply {
+                        // Budget progress line
+                        setTextViewText(R.id.quick_widget_budget_text, budgetText)
+                        setProgressBar(R.id.quick_widget_budget_progress, 100, progressPercent, false)
 
-                        setImageViewResource(
-                            R.id.hub_widget_btn_toggle_visibility,
-                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-                        )
-
-                        setOnClickPendingIntent(R.id.hub_widget_root, mainPendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_hero_card, mainPendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_btn_toggle_visibility, togglePendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_btn_refresh, refreshPendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_btn_add_expense, expensePendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_btn_split, splitPendingIntent)
-                        setOnClickPendingIntent(R.id.hub_widget_btn_planning, planningPendingIntent)
+                        // Quick action buttons
+                        setOnClickPendingIntent(R.id.quick_widget_root, mainPendingIntent)
+                        setOnClickPendingIntent(R.id.quick_widget_btn_expense, expensePendingIntent)
+                        setOnClickPendingIntent(R.id.quick_widget_btn_income, incomePendingIntent)
                     }
                     appWidgetManager.updateAppWidget(widgetId, views)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error updating Budget Hub widgets", e)
+                Log.e(TAG, "Error updating Quick Actions widgets", e)
             }
         }
     }
 
-    /**
-     * Updates all active Medium Budget & Quick Action widget instances (4x2).
-     * iOS Feature Parity matching LeafMediumWidgetView:
-     * - Leaf Balance & Privacy Toggle
-     * - Cashflow Wells (Income & Spent)
-     * - Budget Progress Bar with remaining amount and percentage
-     * - 2 Quick Actions (+ Add Expense & Split & Collect)
-     */
-    fun updateMediumBudgetWidgets(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        val container = getContainerSafely(context) ?: return
+    // --- Backwards-compatibility aliases for legacy code & test suites ---
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val summary = container.getWidgetFinancialSummaryUseCase().firstOrNull()
-                val prefs = container.getUserPreferencesUseCase().firstOrNull()
-                val currency = prefs?.currency ?: Currency.DEFAULT
-                val isLocked = container.appLockManager.isLocked(prefs ?: UserPreferences())
-                val isVisible = (prefs?.isBalanceVisible ?: true) && !isLocked
+    fun updateFinancialSummaryWidgets(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        updateBalanceQuickActionsWidgets(context, appWidgetManager, appWidgetIds)
+    }
 
-                val balanceStr = if (!isVisible) "••••••••" else (summary?.balance?.format(currency) ?: "₹0.00")
-                val monthlyIncomeStr = if (!isVisible) "+••••" else "+${summary?.monthlyIncome?.format(currency) ?: "₹0.00"}"
-                val monthlyExpenseStr = if (!isVisible) "-••••" else "-${summary?.monthlyExpense?.format(currency) ?: "₹0.00"}"
+    fun updateTodayExpenseWidgets(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        updateAccountBalanceWidgets(context, appWidgetManager, appWidgetIds)
+    }
 
-                // Budget calculation
-                val currentMonth = java.time.YearMonth.now()
-                val budgets = container.getBudgetProgressUseCase(currentMonth).firstOrNull() ?: emptyList()
-                val featuredBudget = budgets.find { it.budget.categoryId == null }
-                    ?: budgets.maxByOrNull { it.usedAmount.subunits }
+    fun updateQuickAddWidgets(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        updateQuickActionsWidgets(context, appWidgetManager, appWidgetIds)
+    }
 
-                val (budgetText, percentText, progressPercent) = if (featuredBudget != null) {
-                    val remaining = if (!isVisible) "••••" else featuredBudget.remainingAmount.format(currency)
-                    val pct = featuredBudget.percentageUsed.toInt().coerceIn(0, 100)
-                    Triple("Budget remaining: $remaining", "$pct%", pct)
-                } else {
-                    val spent = if (!isVisible) "••••" else (summary?.monthlyExpense?.format(currency) ?: "₹0.00")
-                    Triple("Spent this month: $spent", "0%", 0)
-                }
+    fun updateBudgetHubWidgets(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        updateBalanceQuickActionsWidgets(context, appWidgetManager, appWidgetIds)
+    }
 
-                // 1. Root tap -> Open MainActivity (Dashboard)
-                val mainIntent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
-                val mainPendingIntent = PendingIntent.getActivity(
-                    context,
-                    400,
-                    mainIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 2. Add Expense -> QuickAddTransactionActivity
-                val expenseIntent = Intent(context, QuickAddTransactionActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    putExtra(QuickAddTransactionActivity.EXTRA_TRANSACTION_TYPE, TransactionType.EXPENSE.name)
-                    putExtra(NotificationHelper.EXTRA_START_ROUTE, NotificationHelper.ROUTE_ADD_EXPENSE)
-                }
-                val expensePendingIntent = PendingIntent.getActivity(
-                    context,
-                    401,
-                    expenseIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 3. Split Bill -> MainActivity
-                val splitIntent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    putExtra(NotificationHelper.EXTRA_START_ROUTE, "split")
-                }
-                val splitPendingIntent = PendingIntent.getActivity(
-                    context,
-                    402,
-                    splitIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 4. Refresh broadcast
-                val refreshIntent = Intent(context, MediumBudgetWidgetProvider::class.java).apply {
-                    action = ACTION_WIDGET_REFRESH
-                }
-                val refreshPendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    403,
-                    refreshIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                // 5. Visibility toggle broadcast
-                val toggleIntent = Intent(context, MediumBudgetWidgetProvider::class.java).apply {
-                    action = ACTION_TOGGLE_BALANCE_VISIBILITY
-                }
-                val togglePendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    404,
-                    toggleIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-
-                for (widgetId in appWidgetIds) {
-                    val views = RemoteViews(context.packageName, R.layout.widget_budget_medium).apply {
-                        setTextViewText(R.id.medium_widget_total_balance, balanceStr)
-                        setTextViewText(R.id.medium_widget_income, monthlyIncomeStr)
-                        setTextViewText(R.id.medium_widget_expense, monthlyExpenseStr)
-                        setTextViewText(R.id.medium_widget_budget_text, budgetText)
-                        setTextViewText(R.id.medium_widget_budget_percent, percentText)
-                        setProgressBar(R.id.medium_widget_budget_progress, 100, progressPercent, false)
-
-                        setImageViewResource(
-                            R.id.medium_widget_btn_toggle_visibility,
-                            if (isVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
-                        )
-
-                        setOnClickPendingIntent(R.id.medium_widget_root, mainPendingIntent)
-                        setOnClickPendingIntent(R.id.medium_widget_btn_toggle_visibility, togglePendingIntent)
-                        setOnClickPendingIntent(R.id.medium_widget_btn_refresh, refreshPendingIntent)
-                        setOnClickPendingIntent(R.id.medium_widget_btn_add_expense, expensePendingIntent)
-                        setOnClickPendingIntent(R.id.medium_widget_btn_split, splitPendingIntent)
-                    }
-                    appWidgetManager.updateAppWidget(widgetId, views)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error updating Medium Budget widgets", e)
-            }
-        }
+    fun updateMediumBudgetWidgets(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        updateBalanceQuickActionsWidgets(context, appWidgetManager, appWidgetIds)
     }
 }

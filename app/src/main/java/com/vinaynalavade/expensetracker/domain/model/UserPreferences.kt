@@ -41,7 +41,8 @@ data class UserPreferences(
     val isAppTourCompleted: Boolean = false,
     val defaultIncomeSource: PaymentMethod = PaymentMethod.ACCOUNT,
     val defaultExpenseSource: PaymentMethod = PaymentMethod.CASH,
-    val isBalanceVisible: Boolean = true
+    val isBalanceVisible: Boolean = true,
+    val balanceDisplayMode: BalanceDisplayMode = BalanceDisplayMode.COMBINED
 ) {
     val openingBalance: Amount
         get() = Amount(openingBalanceSubunits)

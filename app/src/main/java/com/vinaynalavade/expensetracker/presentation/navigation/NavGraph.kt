@@ -236,6 +236,9 @@ fun NavGraph(
                 onNavigateToLedgers = {
                     navController.navigate(Screen.LedgersHub.route)
                 },
+                onNavigateToAbout = {
+                    navController.navigate(Screen.About.route)
+                },
                 onOpenQuickAdd = onOpenQuickAdd
             )
         }

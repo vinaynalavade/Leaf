@@ -32,22 +32,85 @@ class SplitQrStorageManager(private val context: Context) {
      */
     suspend fun saveQrImage(sourceUri: Uri): String? = withContext(Dispatchers.IO) {
         try {
-            val contentResolver = context.contentResolver
-            val inputStream = contentResolver.openInputStream(sourceUri) ?: return@withContext null
+            val bitmap = decodeBitmapFromUri(sourceUri, maxDimension = 2048) ?: return@withContext null
+            saveQrBitmap(bitmap)
+        } catch (_: Exception) {
+            null
+        }
+    }
 
-            val originalBitmap = BitmapFactory.decodeStream(inputStream)
-            inputStream.close()
-
-            if (originalBitmap == null) return@withContext null
-
-            val fileName = "split_qr_${UUID.randomUUID()}.jpg"
+    /**
+     * Saves a processed Bitmap directly into internal private storage.
+     * Uses lossless PNG encoding (100% quality) to ensure mathematically perfect contrast,
+     * zero compression ringing/artifacts, and maximum readability for all UPI and QR scanners.
+     */
+    suspend fun saveQrBitmap(bitmap: Bitmap): String? = withContext(Dispatchers.IO) {
+        try {
+            val fileName = "split_qr_${UUID.randomUUID()}.png"
             val destFile = File(qrDirectory, fileName)
 
             FileOutputStream(destFile).use { out ->
-                originalBitmap.compress(Bitmap.CompressFormat.JPEG, 92, out)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
 
             destFile.absolutePath
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Safely decodes a bitmap from a content Uri with inSampleSize scaling
+     * to avoid OutOfMemoryError on large camera photos while preserving high resolution.
+     */
+    suspend fun decodeBitmapFromUri(sourceUri: Uri, maxDimension: Int = 2048): Bitmap? = withContext(Dispatchers.IO) {
+        try {
+            val contentResolver = context.contentResolver
+
+            // 1. Decode bounds only
+            val boundsOptions = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            contentResolver.openInputStream(sourceUri)?.use { stream ->
+                BitmapFactory.decodeStream(stream, null, boundsOptions)
+            } ?: return@withContext null
+
+            if (boundsOptions.outWidth <= 0 || boundsOptions.outHeight <= 0) {
+                return@withContext null
+            }
+
+            // 2. Compute sample size so max dimension is bounded by maxDimension
+            var inSampleSize = 1
+            val maxOriginalDim = maxOf(boundsOptions.outWidth, boundsOptions.outHeight)
+            while ((maxOriginalDim / (inSampleSize * 2)) >= maxDimension) {
+                inSampleSize *= 2
+            }
+
+            // 3. Decode scaled bitmap
+            val decodeOptions = BitmapFactory.Options().apply {
+                this.inSampleSize = inSampleSize
+                inPreferredConfig = Bitmap.Config.ARGB_8888
+            }
+            contentResolver.openInputStream(sourceUri)?.use { stream ->
+                BitmapFactory.decodeStream(stream, null, decodeOptions)
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Loads a stored QR image as an Android Bitmap directly for editing or processing.
+     */
+    suspend fun loadAndroidBitmap(filePath: String?): Bitmap? = withContext(Dispatchers.IO) {
+        if (filePath.isNullOrBlank()) return@withContext null
+        try {
+            val file = File(filePath)
+            if (file.exists()) {
+                BitmapFactory.decodeFile(file.absolutePath)
+            } else {
+                null
+            }
         } catch (_: Exception) {
             null
         }

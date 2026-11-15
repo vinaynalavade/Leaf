@@ -95,7 +95,8 @@ fun InsightsScreen(
                         trendData = uiState.trendData!!,
                         currency = uiState.currency,
                         selectedMonthsCount = uiState.selectedMonthsCount,
-                        onSelectMonthsCount = { insightsViewModel.setMonthsCount(it) }
+                        onSelectMonthsCount = { insightsViewModel.setMonthsCount(it) },
+                        onNavigateToTransactionDetail = onNavigateToTransactionDetail
                     )
                 }
             }

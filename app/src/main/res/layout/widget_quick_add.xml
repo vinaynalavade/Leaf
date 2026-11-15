@@ -3,49 +3,87 @@
     android:id="@+id/quick_widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="6dp"
-    android:gravity="center"
-    android:background="@drawable/bg_widget_card"
-    android:weightSum="2">
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@drawable/bg_widget_card">
 
-    <Button
-        android:id="@+id/quick_widget_btn_expense"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="+ Expense"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:background="@drawable/bg_widget_btn_expense"
-        android:textColor="@color/widget_btn_text"
-        android:stateListAnimator="@null"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:padding="0dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:layout_marginEnd="3dp" />
+    <!-- Top: Budget Progress Line -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="4dp">
 
-    <Button
-        android:id="@+id/quick_widget_btn_income"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="+ Income"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:background="@drawable/bg_widget_btn_income"
-        android:textColor="@color/widget_btn_text"
-        android:stateListAnimator="@null"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:padding="0dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:layout_marginStart="3dp" />
+        <TextView
+            android:id="@+id/quick_widget_budget_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Budget"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:textColor="@color/widget_text_secondary"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <ProgressBar
+            android:id="@+id/quick_widget_budget_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="@color/widget_text_brand"
+            android:progressBackgroundTint="@color/widget_pill_bg"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- Spacer: RemoteViews-compatible FrameLayout -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Bottom: Quick Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/quick_widget_btn_expense"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="+ Expense"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_widget_btn_expense"
+            android:textColor="@color/widget_btn_text"
+            android:stateListAnimator="@null"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:layout_marginEnd="3dp" />
+
+        <Button
+            android:id="@+id/quick_widget_btn_income"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="+ Income"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_widget_btn_income"
+            android:textColor="@color/widget_btn_text"
+            android:stateListAnimator="@null"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:layout_marginStart="3dp" />
+    </LinearLayout>
 </LinearLayout>

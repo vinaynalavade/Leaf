@@ -3,6 +3,7 @@ package com.vinaynalavade.expensetracker.presentation.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode
 import com.vinaynalavade.expensetracker.domain.model.BudgetProgress
 import com.vinaynalavade.expensetracker.domain.model.CategoryAnalysisResult
 import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
@@ -44,9 +45,17 @@ data class DashboardUiState(
     val cashBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
     val accountBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
     val isBalanceVisible: Boolean = true,
+    val balanceDisplayMode: BalanceDisplayMode = BalanceDisplayMode.COMBINED,
     val isLoading: Boolean = false,
     val error: String? = null
-)
+) {
+    val displayedBalance: com.vinaynalavade.expensetracker.core.model.Amount
+        get() = when (balanceDisplayMode) {
+            BalanceDisplayMode.COMBINED -> summary.currentBalance
+            BalanceDisplayMode.ACCOUNT -> accountBalance ?: com.vinaynalavade.expensetracker.core.model.Amount.ZERO
+            BalanceDisplayMode.CASH -> cashBalance ?: com.vinaynalavade.expensetracker.core.model.Amount.ZERO
+        }
+}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DashboardViewModel(
@@ -119,6 +128,7 @@ class DashboardViewModel(
                 cashBalance = data.ledgers?.first,
                 accountBalance = data.ledgers?.second,
                 isBalanceVisible = prefs.isBalanceVisible,
+                balanceDisplayMode = prefs.balanceDisplayMode,
                 isLoading = false
             )
         }
@@ -134,6 +144,12 @@ class DashboardViewModel(
         viewModelScope.launch {
             val current = uiState.value.isBalanceVisible
             userPreferencesRepository.setBalanceVisible(!current)
+        }
+    }
+
+    fun setBalanceDisplayMode(mode: BalanceDisplayMode) {
+        viewModelScope.launch {
+            userPreferencesRepository.setBalanceDisplayMode(mode)
         }
     }
 

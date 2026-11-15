@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,10 +39,14 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Crop
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.Visibility
 import com.vinaynalavade.expensetracker.core.easteregg.EasterEggEngine
+import com.vinaynalavade.expensetracker.presentation.split.components.QrImageEditDialog
+import com.vinaynalavade.expensetracker.presentation.split.components.QrImagePreviewDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -74,6 +79,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -82,6 +88,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.core.contact.ContactPickerHelper
@@ -744,35 +751,101 @@ fun EditSplitScreen(
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
 
                     if (uiState.qrImageBitmap != null) {
-                        Row(
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Image(
-                                bitmap = uiState.qrImageBitmap!!,
-                                contentDescription = "QR Preview",
+                            Box(
                                 modifier = Modifier
-                                    .size(80.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)),
-                                contentScale = ContentScale.Fit
+                                    .size(160.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                                    .clickable(onClick = { viewModel.onPreviewQrImage() }),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    bitmap = uiState.qrImageBitmap!!,
+                                    contentDescription = "QR Preview (Tap to enlarge)",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Fit
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(6.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.Black.copy(alpha = 0.6f))
+                                        .padding(4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Visibility,
+                                        contentDescription = "Preview full size",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Tap image to preview full-screen",
+                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
-                            Column {
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
+
+                            // Practical Action Buttons
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                            ) {
+                                OutlinedButton(
+                                    onClick = { viewModel.onPreviewQrImage() },
+                                    shape = ButtonShape,
+                                    modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+                                ) {
+                                    Icon(Icons.Default.Visibility, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Preview")
+                                }
+
+                                OutlinedButton(
+                                    onClick = { viewModel.onEditExistingQrImage() },
+                                    shape = ButtonShape,
+                                    modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+                                ) {
+                                    Icon(Icons.Default.Crop, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Edit / Crop")
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                            ) {
                                 OutlinedButton(
                                     onClick = {
                                         photoPickerLauncher.launch(
                                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                         )
                                     },
-                                    shape = ButtonShape
+                                    shape = ButtonShape,
+                                    modifier = Modifier.defaultMinSize(minHeight = 48.dp)
                                 ) {
                                     Text(stringResource(R.string.split_replace_qr_btn))
                                 }
+
                                 TextButton(
                                     onClick = { viewModel.onRemoveQrImage() },
-                                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                                    modifier = Modifier.defaultMinSize(minHeight = 48.dp)
                                 ) {
+                                    Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
                                     Text(stringResource(R.string.split_remove_qr_btn))
                                 }
                             }
@@ -794,6 +867,23 @@ fun EditSplitScreen(
                     }
                 }
             }
+        }
+
+        // QR Image Editor Dialog (Pinch-to-zoom, pan, crop, rotate 90°, aspect ratio selection)
+        if (uiState.isEditingQr && uiState.editingSourceBitmap != null) {
+            QrImageEditDialog(
+                sourceBitmap = uiState.editingSourceBitmap!!,
+                onDismiss = { viewModel.onCancelQrEditing() },
+                onSave = { editedBitmap -> viewModel.onSaveEditedQrImage(editedBitmap) }
+            )
+        }
+
+        // Full-screen QR Image Inspection Preview Dialog
+        if (uiState.isPreviewingQr && uiState.qrImageBitmap != null) {
+            QrImagePreviewDialog(
+                bitmap = uiState.qrImageBitmap!!,
+                onDismiss = { viewModel.onDismissQrPreview() }
+            )
         }
     }
 }

@@ -4,7 +4,9 @@ data class MonthlySpendingPoint(
     val yearMonth: String, // e.g. "Oct 2023" or "2023-10"
     val epochMonthStart: Long,
     val totalExpense: Double,
-    val totalIncome: Double
+    val totalIncome: Double,
+    val epochMonthEnd: Long = 0L,
+    val transactions: List<Transaction> = emptyList()
 )
 
 data class CategorySpendingSummary(
@@ -13,7 +15,8 @@ data class CategorySpendingSummary(
     val categoryIcon: String,
     val categoryColorHex: String,
     val totalAmount: Double,
-    val percentageOfTotal: Double
+    val percentageOfTotal: Double,
+    val transactions: List<Transaction> = emptyList()
 )
 
 data class SpendingTrendData(

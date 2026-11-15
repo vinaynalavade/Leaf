@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode
 import com.vinaynalavade.expensetracker.domain.model.FinancialSummary
 import com.vinaynalavade.expensetracker.domain.model.TransactionType
 import com.vinaynalavade.expensetracker.presentation.components.AmountDisplay
@@ -64,12 +65,32 @@ fun BalanceHeroCard(
     isBalanceVisible: Boolean = true,
     cashBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
     accountBalance: com.vinaynalavade.expensetracker.core.model.Amount? = null,
+    displayMode: BalanceDisplayMode = BalanceDisplayMode.COMBINED,
     onToggleBalanceVisibility: () -> Unit = {},
+    onModeChange: (BalanceDisplayMode) -> Unit = {},
     onLedgerClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
     val heroGradient = if (isDark) HeroObsidianGradient else HeroEmeraldGradient
+
+    val displayedAmount = when (displayMode) {
+        BalanceDisplayMode.COMBINED -> summary.currentBalance
+        BalanceDisplayMode.ACCOUNT -> accountBalance ?: com.vinaynalavade.expensetracker.core.model.Amount.ZERO
+        BalanceDisplayMode.CASH -> cashBalance ?: com.vinaynalavade.expensetracker.core.model.Amount.ZERO
+    }
+
+    val labelText = when (displayMode) {
+        BalanceDisplayMode.COMBINED -> "TOTAL BALANCE"
+        BalanceDisplayMode.ACCOUNT -> "ACCOUNT BALANCE"
+        BalanceDisplayMode.CASH -> "CASH BALANCE"
+    }
+
+    val statusPillText = when (displayMode) {
+        BalanceDisplayMode.COMBINED -> "Combined"
+        BalanceDisplayMode.ACCOUNT -> "Account"
+        BalanceDisplayMode.CASH -> "Cash"
+    }
 
     Box(
         modifier = modifier
@@ -99,7 +120,7 @@ fun BalanceHeroCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "TOTAL BALANCE",
+                        text = labelText,
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
@@ -129,7 +150,7 @@ fun BalanceHeroCard(
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "Live Ledger",
+                        text = statusPillText,
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontSize = 10.sp,
                             fontWeight = FontWeight.SemiBold
@@ -144,7 +165,7 @@ fun BalanceHeroCard(
             // Main Hero Amount (Massive 38sp confident typography)
             if (isBalanceVisible) {
                 AmountDisplay(
-                    amount = summary.currentBalance,
+                    amount = displayedAmount,
                     style = MaterialTheme.typography.displayLarge.copy(
                         color = PureWhite,
                         fontWeight = FontWeight.Bold,
@@ -161,6 +182,48 @@ fun BalanceHeroCard(
                         letterSpacing = 2.sp
                     )
                 )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Balance Display Mode Selector (Combined | Account | Cash)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(PillShape)
+                    .background(Color.White.copy(alpha = 0.12f))
+                    .border(
+                        width = 0.5.dp,
+                        color = Color.White.copy(alpha = 0.15f),
+                        shape = PillShape
+                    )
+                    .padding(3.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                BalanceDisplayMode.entries.forEach { mode ->
+                    val isSelected = displayMode == mode
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(PillShape)
+                            .background(
+                                if (isSelected) Color.White.copy(alpha = 0.28f)
+                                else Color.Transparent
+                            )
+                            .clickable { onModeChange(mode) }
+                            .padding(vertical = 6.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = mode.displayName,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 11.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                            ),
+                            color = if (isSelected) PureWhite else PureWhite.copy(alpha = 0.70f)
+                        )
+                    }
+                }
             }
 
             // Cash & Account Ledger Breakdown Pills

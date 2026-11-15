@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.vinaynalavade.expensetracker.core.constants.AppConstants
 import com.vinaynalavade.expensetracker.core.model.Currency
+import com.vinaynalavade.expensetracker.domain.model.BalanceDisplayMode
 import com.vinaynalavade.expensetracker.domain.model.PaymentMethod
 import com.vinaynalavade.expensetracker.domain.model.ThemeMode
 import com.vinaynalavade.expensetracker.domain.model.UserPreferences
@@ -67,6 +68,7 @@ class UserPreferencesDataStore(private val context: Context) {
         val DEFAULT_INCOME_SOURCE = stringPreferencesKey("pref_default_income_source")
         val DEFAULT_EXPENSE_SOURCE = stringPreferencesKey("pref_default_expense_source")
         val IS_BALANCE_VISIBLE = booleanPreferencesKey("pref_is_balance_visible")
+        val BALANCE_DISPLAY_MODE = stringPreferencesKey("pref_balance_display_mode")
     }
 
     val googleConnectedEmailFlow: Flow<String?> = context.dataStore.data
@@ -149,6 +151,13 @@ class UserPreferencesDataStore(private val context: Context) {
             val defaultExpenseSourceStr = preferences[PreferencesKeys.DEFAULT_EXPENSE_SOURCE]
             val defaultExpenseSource = PaymentMethod.fromString(defaultExpenseSourceStr ?: PaymentMethod.CASH.name)
             val isBalanceVisible = preferences[PreferencesKeys.IS_BALANCE_VISIBLE] ?: true
+            val balanceDisplayMode = try {
+                preferences[PreferencesKeys.BALANCE_DISPLAY_MODE]?.let {
+                    BalanceDisplayMode.valueOf(it)
+                } ?: BalanceDisplayMode.COMBINED
+            } catch (e: Exception) {
+                BalanceDisplayMode.COMBINED
+            }
 
             UserPreferences(
                 themeMode = themeMode,
@@ -185,7 +194,8 @@ class UserPreferencesDataStore(private val context: Context) {
                 isAppTourCompleted = isAppTourCompleted,
                 defaultIncomeSource = defaultIncomeSource,
                 defaultExpenseSource = defaultExpenseSource,
-                isBalanceVisible = isBalanceVisible
+                isBalanceVisible = isBalanceVisible,
+                balanceDisplayMode = balanceDisplayMode
             )
         }
 
@@ -438,6 +448,12 @@ class UserPreferencesDataStore(private val context: Context) {
     suspend fun setBalanceVisible(isVisible: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_BALANCE_VISIBLE] = isVisible
+        }
+    }
+
+    suspend fun setBalanceDisplayMode(mode: BalanceDisplayMode) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.BALANCE_DISPLAY_MODE] = mode.name
         }
     }
 }

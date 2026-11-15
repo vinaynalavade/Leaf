@@ -29,51 +29,78 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vinaynalavade.expensetracker.presentation.theme.CardShape
-import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.pressScale
-import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
- * Unified Section Container for Settings & Configuration screens in Leaf v1.0.5.
- * Provides a clean Level 1 card surface with uppercase category label.
+ * Standard palette for Apple-inspired Settings Category Squircles.
+ * Vibrant, modern, and high-contrast while harmonious with Leaf's financial palette.
+ */
+object SettingsColors {
+    val Blue = Color(0xFF007AFF)       // Language, Cloud Sync, Statements
+    val Green = Color(0xFF34C759)      // Currency, Opening Balance, Savings, Ledgers
+    val Orange = Color(0xFFFF9500)     // Categories, Budget Limit, Recents
+    val Purple = Color(0xFFAF52DE)     // Recurring, Tools, Calculators
+    val Red = Color(0xFFFF3B30)        // Master Notifications, Alerts
+    val Indigo = Color(0xFF5856D6)     // Security, App Lock, Change PIN
+    val Teal = Color(0xFF30B0C7)       // Reminders, Offsets, Schedule
+    val Slate = Color(0xFF8E8E93)      // About, Info, Visibility
+    val Mint = Color(0xFF00C7BE)       // Alternative Accent
+}
+
+/**
+ * Grouped Section Container for Apple-inspired Settings in Leaf.
+ * Provides an inset Level 1 card surface with uppercase category label and optional footnote.
  */
 @Composable
 fun SettingsSectionContainer(
     title: String,
     modifier: Modifier = Modifier,
+    footer: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
         Text(
             text = title.uppercase(),
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            letterSpacing = 0.8.sp,
-            modifier = Modifier.padding(start = MaterialTheme.spacing.xs, bottom = 6.dp)
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+            letterSpacing = 0.9.sp,
+            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
         )
         Surface(
-            shape = CardShape,
+            shape = RoundedCornerShape(18.dp),
             color = MaterialTheme.colorScheme.surface,
             border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                width = 0.8.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
             ),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.md, vertical = MaterialTheme.spacing.sm),
+                modifier = Modifier.fillMaxWidth(),
                 content = content
+            )
+        }
+        if (!footer.isNullOrBlank()) {
+            Text(
+                text = footer,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                lineHeight = 16.sp,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 2.dp)
             )
         }
     }
@@ -81,26 +108,28 @@ fun SettingsSectionContainer(
 
 /**
  * Standardized icon box used across all Settings Tiles.
- * 40dp rounded squircle with neutral surface tint.
+ * 32dp rounded squircle with vibrant background and high-contrast icon.
  */
 @Composable
 fun SettingsTileIconBox(
     icon: ImageVector,
     modifier: Modifier = Modifier,
-    tint: Color = MaterialTheme.colorScheme.onSurface,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant
+    tint: Color = Color.White,
+    containerColor: Color = SettingsColors.Blue,
+    iconSize: Dp = 18.dp,
+    boxSize: Dp = 32.dp
 ) {
     Surface(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         color = containerColor,
-        modifier = modifier.size(40.dp)
+        modifier = modifier.size(boxSize)
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = tint,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(iconSize)
             )
         }
     }
@@ -108,8 +137,8 @@ fun SettingsTileIconBox(
 
 /**
  * Standard Navigation Tile for Settings.
- * Provides a minimum 56dp effective touch target, full-row ripple, tactile press feedback,
- * optional value badge, and forward chevron indicator.
+ * Provides a minimum 52dp effective touch target, full-row ripple, tactile press feedback,
+ * right-aligned value, and forward chevron indicator.
  */
 @Composable
 fun SettingsNavigationTile(
@@ -119,8 +148,8 @@ fun SettingsNavigationTile(
     valueBadge: String? = null,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    iconTint: Color = MaterialTheme.colorScheme.onSurface,
-    iconContainerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    iconTint: Color = Color.White,
+    iconContainerColor: Color = SettingsColors.Blue,
     enabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -128,8 +157,7 @@ fun SettingsNavigationTile(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 56.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .defaultMinSize(minHeight = 52.dp)
             .pressScale(interactionSource = interactionSource, enabled = enabled)
             .clickable(
                 interactionSource = interactionSource,
@@ -138,7 +166,7 @@ fun SettingsNavigationTile(
                 role = Role.Button,
                 onClick = onClick
             )
-            .padding(vertical = 10.dp, horizontal = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 11.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         SettingsTileIconBox(
@@ -147,13 +175,13 @@ fun SettingsNavigationTile(
             containerColor = iconContainerColor
         )
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
+        Spacer(modifier = Modifier.width(14.dp))
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onSurface
             )
             if (!subtitle.isNullOrBlank()) {
@@ -161,41 +189,36 @@ fun SettingsNavigationTile(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                 )
             }
         }
 
         if (valueBadge != null) {
-            Surface(
-                shape = PillShape,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.xs)
-            ) {
-                Text(
-                    text = valueBadge,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                )
-            }
+            Text(
+                text = valueBadge,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
 
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f),
             modifier = Modifier
                 .padding(start = 6.dp)
-                .size(13.dp)
+                .size(12.dp)
         )
     }
 }
 
 /**
  * Standard Switch / Toggle Tile for Settings.
- * Tapping anywhere on the 56dp+ row toggles the switch with subtle tactile feedback and haptics.
+ * Tapping anywhere on the row toggles the switch with subtle tactile feedback and haptics.
  */
 @Composable
 fun SettingsSwitchTile(
@@ -205,8 +228,8 @@ fun SettingsSwitchTile(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    iconTint: Color = MaterialTheme.colorScheme.onSurface,
-    iconContainerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    iconTint: Color = Color.White,
+    iconContainerColor: Color = SettingsColors.Green,
     enabled: Boolean = true
 ) {
     val haptic = LocalHapticFeedback.current
@@ -215,8 +238,7 @@ fun SettingsSwitchTile(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 56.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .defaultMinSize(minHeight = 52.dp)
             .pressScale(interactionSource = interactionSource, enabled = enabled)
             .clickable(
                 interactionSource = interactionSource,
@@ -228,7 +250,7 @@ fun SettingsSwitchTile(
                     onCheckedChange(!checked)
                 }
             )
-            .padding(vertical = 10.dp, horizontal = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         SettingsTileIconBox(
@@ -237,13 +259,13 @@ fun SettingsSwitchTile(
             containerColor = iconContainerColor
         )
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
+        Spacer(modifier = Modifier.width(14.dp))
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onSurface
             )
             if (!subtitle.isNullOrBlank()) {
@@ -251,12 +273,12 @@ fun SettingsSwitchTile(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+        Spacer(modifier = Modifier.width(10.dp))
 
         Switch(
             checked = checked,
@@ -286,8 +308,8 @@ fun SettingsValueTile(
     currentValue: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    iconTint: Color = MaterialTheme.colorScheme.onSurface,
-    iconContainerColor: Color = MaterialTheme.colorScheme.surfaceVariant
+    iconTint: Color = Color.White,
+    iconContainerColor: Color = SettingsColors.Blue
 ) {
     SettingsNavigationTile(
         icon = icon,
@@ -310,62 +332,61 @@ fun SettingsCustomTile(
     subtitle: String? = null,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    iconTint: Color = Color.White,
+    iconContainerColor: Color = SettingsColors.Blue,
     content: @Composable () -> Unit
 ) {
-    Column(
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 56.dp)
-            .padding(vertical = 8.dp, horizontal = 4.dp)
+            .defaultMinSize(minHeight = 52.dp)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (icon != null) {
-                    SettingsTileIconBox(icon = icon)
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
-                }
-
-                Column {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    if (!subtitle.isNullOrBlank()) {
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = subtitle,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
-
-            content()
+        if (icon != null) {
+            SettingsTileIconBox(
+                icon = icon,
+                tint = iconTint,
+                containerColor = iconContainerColor
+            )
+            Spacer(modifier = Modifier.width(14.dp))
         }
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            if (!subtitle.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        content()
     }
 }
 
 /**
- * Standard subtle divider between Settings Tiles.
+ * Inset divider between Settings Tiles in Apple-inspired grouped list.
+ * Starts right where the label text begins (padded 62dp from start), keeping icons visually grouped.
  */
 @Composable
 fun SettingsDivider(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    startPadding: Dp = 62.dp
 ) {
     HorizontalDivider(
-        modifier = modifier.padding(vertical = 4.dp),
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+        modifier = modifier.padding(start = startPadding),
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f),
+        thickness = 0.6.dp
     )
 }

@@ -17,6 +17,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -112,6 +113,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vinaynalavade.expensetracker.BuildConfig
@@ -133,6 +135,7 @@ import com.vinaynalavade.expensetracker.presentation.settings.components.EditPro
 import com.vinaynalavade.expensetracker.presentation.settings.components.ImageCropDialog
 import com.vinaynalavade.expensetracker.presentation.settings.components.ProfileCard
 import com.vinaynalavade.expensetracker.presentation.settings.components.ProfilePhotoOptionsDialog
+import com.vinaynalavade.expensetracker.presentation.settings.components.SettingsColors
 import com.vinaynalavade.expensetracker.presentation.settings.components.SettingsCustomTile
 import com.vinaynalavade.expensetracker.presentation.settings.components.SettingsDivider
 import com.vinaynalavade.expensetracker.presentation.settings.components.SettingsNavigationTile
@@ -257,7 +260,26 @@ fun SettingsScreen(
                 .padding(horizontal = MaterialTheme.spacing.screen, vertical = MaterialTheme.spacing.md),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.lg)
         ) {
-            // 1. Profile Hero Section
+            // Refined Apple-inspired Header
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.nav_settings),
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Preferences, security & personal finance controls",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                )
+            }
+
+            // 1. Profile Hero Section (Apple ID Style)
             ProfileCard(
                 userPreferences = userPreferences,
                 googleBackupState = googleBackupState,
@@ -267,8 +289,11 @@ fun SettingsScreen(
                 onDisconnectGoogleClick = { showDisconnectGoogleDialog = true }
             )
 
-            // 1. Personalization Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_personalization)) {
+            // 2. Personalization & Appearance Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_personalization),
+                footer = "Theme and balance visibility adjust your dashboard presentation."
+            ) {
                 ThemeSelectionSection(
                     currentThemeMode = userPreferences.themeMode,
                     onThemeModeSelected = { viewModel.onThemeModeSelected(it) }
@@ -281,7 +306,8 @@ fun SettingsScreen(
                     icon = Icons.Default.Translate,
                     title = stringResource(R.string.settings_language_title),
                     valueBadge = currentLanguage.nativeName,
-                    onClick = { showLanguageDialog = true }
+                    onClick = { showLanguageDialog = true },
+                    iconContainerColor = SettingsColors.Blue
                 )
 
                 SettingsDivider()
@@ -292,17 +318,22 @@ fun SettingsScreen(
                     subtitle = if (userPreferences.isBalanceVisible) stringResource(R.string.settings_balance_visible)
                     else stringResource(R.string.settings_balance_hidden),
                     checked = userPreferences.isBalanceVisible,
-                    onCheckedChange = { viewModel.toggleBalanceVisibility() }
+                    onCheckedChange = { viewModel.toggleBalanceVisibility() },
+                    iconContainerColor = SettingsColors.Slate
                 )
             }
 
-            // 2. Finance Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_finance)) {
+            // 3. Finance & Ledgers Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_finance),
+                footer = "Ledger balances and currency settings apply across all accounts and widgets."
+            ) {
                 SettingsNavigationTile(
                     icon = Icons.Default.AccountBalance,
                     title = stringResource(R.string.settings_currency_title),
                     valueBadge = "${userPreferences.currency.symbol} ${userPreferences.currency.code}",
-                    onClick = { showCurrencyDialog = true }
+                    onClick = { showCurrencyDialog = true },
+                    iconContainerColor = SettingsColors.Green
                 )
 
                 SettingsDivider()
@@ -311,7 +342,8 @@ fun SettingsScreen(
                     icon = Icons.Default.Payments,
                     title = stringResource(R.string.settings_opening_balance_title),
                     valueBadge = userPreferences.openingBalance.format(userPreferences.currency),
-                    onClick = { showOpeningBalanceDialog = true }
+                    onClick = { showOpeningBalanceDialog = true },
+                    iconContainerColor = SettingsColors.Green
                 )
 
                 SettingsDivider()
@@ -326,7 +358,8 @@ fun SettingsScreen(
                     icon = Icons.Default.PieChart,
                     title = stringResource(R.string.settings_monthly_budget_title),
                     valueBadge = budgetLimitBadge,
-                    onClick = { showBudgetLimitDialog = true }
+                    onClick = { showBudgetLimitDialog = true },
+                    iconContainerColor = SettingsColors.Orange
                 )
 
                 SettingsDivider()
@@ -335,7 +368,8 @@ fun SettingsScreen(
                     icon = Icons.Default.Category,
                     title = stringResource(R.string.settings_categories_title),
                     subtitle = stringResource(R.string.settings_categories_subtitle),
-                    onClick = onNavigateToCategories
+                    onClick = onNavigateToCategories,
+                    iconContainerColor = SettingsColors.Orange
                 )
 
                 SettingsDivider()
@@ -343,7 +377,9 @@ fun SettingsScreen(
                 DefaultSourceSettingRow(
                     title = "Default Expense Source",
                     selectedMethod = userPreferences.defaultExpenseSource,
-                    onMethodSelect = { viewModel.onDefaultExpenseSourceSelected(it) }
+                    onMethodSelect = { viewModel.onDefaultExpenseSourceSelected(it) },
+                    icon = Icons.Default.Payments,
+                    iconContainerColor = SettingsColors.Red
                 )
 
                 SettingsDivider()
@@ -351,7 +387,9 @@ fun SettingsScreen(
                 DefaultSourceSettingRow(
                     title = "Default Income Source",
                     selectedMethod = userPreferences.defaultIncomeSource,
-                    onMethodSelect = { viewModel.onDefaultIncomeSourceSelected(it) }
+                    onMethodSelect = { viewModel.onDefaultIncomeSourceSelected(it) },
+                    icon = Icons.Default.AccountBalance,
+                    iconContainerColor = SettingsColors.Green
                 )
 
                 SettingsDivider()
@@ -360,7 +398,8 @@ fun SettingsScreen(
                     icon = Icons.AutoMirrored.Filled.ReceiptLong,
                     title = stringResource(R.string.settings_recurring_title),
                     subtitle = stringResource(R.string.settings_recurring_subtitle),
-                    onClick = onNavigateToRecurring
+                    onClick = onNavigateToRecurring,
+                    iconContainerColor = SettingsColors.Purple
                 )
 
                 SettingsDivider()
@@ -369,12 +408,16 @@ fun SettingsScreen(
                     icon = Icons.Default.SwapHoriz,
                     title = "Cash & Account Ledgers",
                     subtitle = "Independent liquid balances, history and transfers",
-                    onClick = onNavigateToLedgers
+                    onClick = onNavigateToLedgers,
+                    iconContainerColor = SettingsColors.Teal
                 )
             }
 
-            // 3. Notifications & Reminders Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_notifications)) {
+            // 4. Notifications & Reminders Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_notifications),
+                footer = "Notification alerts require notification permissions on Android 13 and above."
+            ) {
                 SettingsSwitchTile(
                     icon = Icons.Default.Notifications,
                     title = stringResource(R.string.settings_notifications_master_title),
@@ -392,7 +435,8 @@ fun SettingsScreen(
                         } else {
                             viewModel.onNotificationsMasterToggled(false)
                         }
-                    }
+                    },
+                    iconContainerColor = SettingsColors.Red
                 )
 
                 AnimatedVisibility(
@@ -409,7 +453,8 @@ fun SettingsScreen(
                             title = stringResource(R.string.settings_notif_loan_emi_title),
                             subtitle = stringResource(R.string.settings_notif_loan_emi_desc),
                             checked = userPreferences.emiRemindersEnabled,
-                            onCheckedChange = { viewModel.onLoanRemindersToggled(it) }
+                            onCheckedChange = { viewModel.onLoanRemindersToggled(it) },
+                            iconContainerColor = SettingsColors.Indigo
                         )
 
                         SettingsDivider()
@@ -420,7 +465,8 @@ fun SettingsScreen(
                             title = stringResource(R.string.settings_notif_bill_title),
                             subtitle = stringResource(R.string.settings_notif_bill_desc),
                             checked = userPreferences.billRemindersEnabled,
-                            onCheckedChange = { viewModel.onBillRemindersToggled(it) }
+                            onCheckedChange = { viewModel.onBillRemindersToggled(it) },
+                            iconContainerColor = SettingsColors.Orange
                         )
 
                         SettingsDivider()
@@ -431,7 +477,8 @@ fun SettingsScreen(
                             title = stringResource(R.string.settings_notif_credit_card_title),
                             subtitle = stringResource(R.string.settings_notif_credit_card_desc),
                             checked = userPreferences.creditCardRemindersEnabled,
-                            onCheckedChange = { viewModel.onCreditCardRemindersToggled(it) }
+                            onCheckedChange = { viewModel.onCreditCardRemindersToggled(it) },
+                            iconContainerColor = SettingsColors.Blue
                         )
 
                         SettingsDivider()
@@ -441,7 +488,8 @@ fun SettingsScreen(
                             icon = Icons.Default.Schedule,
                             title = stringResource(R.string.settings_notif_daily_reminder_title),
                             checked = userPreferences.dailyReminderEnabled,
-                            onCheckedChange = { viewModel.onDailyReminderToggled(it) }
+                            onCheckedChange = { viewModel.onDailyReminderToggled(it) },
+                            iconContainerColor = SettingsColors.Teal
                         )
 
                         if (userPreferences.dailyReminderEnabled) {
@@ -454,7 +502,8 @@ fun SettingsScreen(
                                 icon = Icons.Default.Schedule,
                                 title = stringResource(R.string.settings_reminder_time_title),
                                 valueBadge = formattedTime,
-                                onClick = { showTimePickerDialog = true }
+                                onClick = { showTimePickerDialog = true },
+                                iconContainerColor = SettingsColors.Teal
                             )
                         }
 
@@ -465,7 +514,8 @@ fun SettingsScreen(
                             icon = Icons.Default.PieChart,
                             title = stringResource(R.string.settings_notif_budget_alerts_title),
                             checked = userPreferences.budgetAlertsEnabled,
-                            onCheckedChange = { viewModel.onBudgetAlertsToggled(it) }
+                            onCheckedChange = { viewModel.onBudgetAlertsToggled(it) },
+                            iconContainerColor = SettingsColors.Orange
                         )
 
                         SettingsDivider()
@@ -475,7 +525,8 @@ fun SettingsScreen(
                             icon = Icons.Default.Flag,
                             title = stringResource(R.string.settings_notif_savings_goals_title),
                             checked = userPreferences.savingsGoalNotificationsEnabled,
-                            onCheckedChange = { viewModel.onSavingsGoalNotificationsToggled(it) }
+                            onCheckedChange = { viewModel.onSavingsGoalNotificationsToggled(it) },
+                            iconContainerColor = SettingsColors.Green
                         )
 
                         SettingsDivider()
@@ -494,7 +545,8 @@ fun SettingsScreen(
                             icon = Icons.Default.Timer,
                             title = stringResource(R.string.settings_notif_default_offset_title),
                             valueBadge = defaultOffsetBadge,
-                            onClick = { showDefaultOffsetDialog = true }
+                            onClick = { showDefaultOffsetDialog = true },
+                            iconContainerColor = SettingsColors.Purple
                         )
 
                         SettingsDivider()
@@ -505,7 +557,8 @@ fun SettingsScreen(
                             icon = Icons.Default.Schedule,
                             title = stringResource(R.string.settings_notif_default_time_title),
                             valueBadge = formattedDefaultTime,
-                            onClick = { showDefaultTimePickerDialog = true }
+                            onClick = { showDefaultTimePickerDialog = true },
+                            iconContainerColor = SettingsColors.Teal
                         )
 
                         SettingsDivider()
@@ -515,14 +568,18 @@ fun SettingsScreen(
                             icon = Icons.Default.Notifications,
                             title = stringResource(R.string.reminders_title),
                             subtitle = "View and configure all payment obligations",
-                            onClick = onNavigateToReminders
+                            onClick = onNavigateToReminders,
+                            iconContainerColor = SettingsColors.Red
                         )
                     }
                 }
             }
 
-            // 4. Security & Privacy Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_security)) {
+            // 5. Security & Privacy Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_security),
+                footer = "Biometric and PIN protection keeps your private ledger safe from unauthorized access."
+            ) {
                 SettingsSwitchTile(
                     icon = Icons.Default.Lock,
                     title = stringResource(R.string.settings_app_lock_title),
@@ -535,7 +592,8 @@ fun SettingsScreen(
                         } else {
                             showDisableAppLockDialog = true
                         }
-                    }
+                    },
+                    iconContainerColor = SettingsColors.Indigo
                 )
 
                 AnimatedVisibility(
@@ -551,7 +609,8 @@ fun SettingsScreen(
                                 icon = Icons.Default.Fingerprint,
                                 title = stringResource(R.string.settings_biometric_title),
                                 valueBadge = if (userPreferences.biometricEnabled) "Biometric + PIN" else "PIN Only",
-                                onClick = { showUnlockMethodDialog = true }
+                                onClick = { showUnlockMethodDialog = true },
+                                iconContainerColor = SettingsColors.Indigo
                             )
                             SettingsDivider()
                         }
@@ -568,7 +627,8 @@ fun SettingsScreen(
                             icon = Icons.Default.Timer,
                             title = stringResource(R.string.settings_auto_lock_title),
                             valueBadge = autoLockBadge,
-                            onClick = { showAutoLockDialog = true }
+                            onClick = { showAutoLockDialog = true },
+                            iconContainerColor = SettingsColors.Teal
                         )
 
                         SettingsDivider()
@@ -576,7 +636,8 @@ fun SettingsScreen(
                         SettingsNavigationTile(
                             icon = Icons.Default.LockReset,
                             title = stringResource(R.string.settings_change_pin),
-                            onClick = onNavigateToChangePin
+                            onClick = onNavigateToChangePin,
+                            iconContainerColor = SettingsColors.Orange
                         )
 
                         SettingsDivider()
@@ -586,19 +647,24 @@ fun SettingsScreen(
                             title = stringResource(R.string.settings_privacy_recents_title),
                             subtitle = stringResource(R.string.settings_privacy_recents_desc),
                             checked = userPreferences.hideContentInRecents,
-                            onCheckedChange = { viewModel.onHideContentInRecentsToggled(it) }
+                            onCheckedChange = { viewModel.onHideContentInRecentsToggled(it) },
+                            iconContainerColor = SettingsColors.Slate
                         )
                     }
                 }
             }
 
-            // 5. Data & Tools Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_data)) {
+            // 6. Data & Cloud Backup Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_data),
+                footer = "Leaf is strictly offline-first. Your financial records are encrypted and never stored on third-party servers."
+            ) {
                 SettingsNavigationTile(
                     icon = Icons.Default.Sync,
                     title = stringResource(R.string.settings_local_backup_title),
                     subtitle = stringResource(R.string.settings_local_backup_desc),
-                    onClick = onNavigateToBackup
+                    onClick = onNavigateToBackup,
+                    iconContainerColor = SettingsColors.Teal
                 )
 
                 SettingsDivider()
@@ -625,7 +691,8 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_google_backup_title),
                     subtitle = statusText,
                     valueBadge = if (googleBackupState is GoogleBackupState.Connected) "Connected" else "Not Connected",
-                    onClick = onNavigateToBackup
+                    onClick = onNavigateToBackup,
+                    iconContainerColor = SettingsColors.Blue
                 )
 
                 SettingsDivider()
@@ -634,7 +701,8 @@ fun SettingsScreen(
                     icon = Icons.Default.Description,
                     title = stringResource(R.string.settings_statements_title),
                     subtitle = stringResource(R.string.settings_statements_subtitle),
-                    onClick = onNavigateToStatements
+                    onClick = onNavigateToStatements,
+                    iconContainerColor = SettingsColors.Purple
                 )
 
                 SettingsDivider()
@@ -643,18 +711,23 @@ fun SettingsScreen(
                     icon = Icons.Default.Calculate,
                     title = stringResource(R.string.settings_tools_title),
                     subtitle = stringResource(R.string.settings_tools_subtitle),
-                    onClick = onNavigateToTools
+                    onClick = onNavigateToTools,
+                    iconContainerColor = SettingsColors.Indigo
                 )
             }
 
-            // 6. About Leaf Section
-            SettingsSectionContainer(title = stringResource(R.string.settings_section_about)) {
+            // 7. About Leaf Section
+            SettingsSectionContainer(
+                title = stringResource(R.string.settings_section_about),
+                footer = "Leaf Expense Tracker • Version ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
+            ) {
                 SettingsNavigationTile(
                     icon = Icons.Default.Info,
                     title = stringResource(R.string.settings_about_leaf_title),
                     subtitle = "Privacy-focused & offline-first personal finance",
                     valueBadge = "v${BuildConfig.VERSION_NAME}",
-                    onClick = onNavigateToAbout
+                    onClick = onNavigateToAbout,
+                    iconContainerColor = SettingsColors.Green
                 )
             }
 
@@ -911,12 +984,12 @@ private fun SettingOptionChip(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val animatedBg by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
         animationSpec = tween(com.vinaynalavade.expensetracker.presentation.theme.Motion.DurationFast),
         label = "ThemeChipBg"
     )
     val animatedBorderColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
         animationSpec = tween(com.vinaynalavade.expensetracker.presentation.theme.Motion.DurationFast),
         label = "ThemeChipBorder"
     )
@@ -924,8 +997,8 @@ private fun SettingOptionChip(
     Surface(
         shape = PillShape,
         color = animatedBg,
-        border = androidx.compose.foundation.BorderStroke(
-            width = if (isSelected) 1.5.dp else 1.dp,
+        border = BorderStroke(
+            width = if (isSelected) 1.dp else 0.6.dp,
             color = animatedBorderColor
         ),
         modifier = modifier
@@ -938,7 +1011,7 @@ private fun SettingOptionChip(
             )
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.sm, vertical = MaterialTheme.spacing.sm),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -946,13 +1019,13 @@ private fun SettingOptionChip(
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(14.dp)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                 color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
             )
         }
@@ -1477,26 +1550,30 @@ private fun DefaultSourceSettingRow(
     selectedMethod: PaymentMethod,
     onMethodSelect: (PaymentMethod) -> Unit,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    iconContainerColor: Color = SettingsColors.Blue,
     subtitle: String? = null
 ) {
     SettingsCustomTile(
         title = title,
         subtitle = subtitle,
+        icon = icon,
+        iconContainerColor = iconContainerColor,
         modifier = modifier
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             PaymentMethod.entries.forEach { method ->
                 val isSelected = selectedMethod == method
-                val icon = when (method) {
+                val chipIcon = when (method) {
                     PaymentMethod.CASH -> Icons.Default.Payments
                     PaymentMethod.ACCOUNT -> Icons.Default.AccountBalance
                 }
                 SettingOptionChip(
                     label = method.displayName,
-                    icon = icon,
+                    icon = chipIcon,
                     isSelected = isSelected,
                     onClick = { onMethodSelect(method) }
                 )
@@ -1582,4 +1659,3 @@ private fun DefaultReminderOffsetDialog(
         }
     )
 }
-

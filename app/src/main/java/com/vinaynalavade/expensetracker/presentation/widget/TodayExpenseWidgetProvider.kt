@@ -1,35 +1,7 @@
 package com.vinaynalavade.expensetracker.presentation.widget
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
-import android.content.Context
-import android.content.Intent
-
 /**
- * Today's Expense AppWidget Provider.
- * Displays a single glanceable metric: total expense spending for the current calendar day with privacy toggle.
+ * Backwards-compatibility alias for Widget 1 — Account Balance.
+ * Preserves existing home-screen widget instances created on previous releases.
  */
-class TodayExpenseWidgetProvider : AppWidgetProvider() {
-
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        WidgetUpdateManager.updateTodayExpenseWidgets(context, appWidgetManager, appWidgetIds)
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        when (intent.action) {
-            WidgetUpdateManager.ACTION_TODAY_WIDGET_REFRESH -> {
-                WidgetUpdateManager.refreshAllWidgets(context)
-            }
-            WidgetUpdateManager.ACTION_TOGGLE_BALANCE_VISIBILITY -> {
-                WidgetUpdateManager.toggleBalanceVisibility(context)
-            }
-        }
-    }
-
-    companion object {
-        fun updateAll(context: Context) {
-            WidgetUpdateManager.refreshAllWidgets(context)
-        }
-    }
-}
+class TodayExpenseWidgetProvider : AccountBalanceWidgetProvider()

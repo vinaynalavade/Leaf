@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.TrendingDown
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +39,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -84,6 +87,7 @@ fun MonthlySummaryScreen(
 ) {
     val selectedMonth by viewModel.selectedMonth.collectAsStateWithLifecycle()
     val selectedTab by viewModel.selectedTab.collectAsStateWithLifecycle()
+    val selectedCategoryId by viewModel.selectedCategoryId.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val currentYearMonth = YearMonth.now()
@@ -172,7 +176,10 @@ fun MonthlySummaryScreen(
                     MonthlySummaryContent(
                         summary = summary,
                         selectedTab = selectedTab,
+                        selectedCategoryId = selectedCategoryId,
                         onTabSelected = viewModel::onTabSelected,
+                        onCategorySelected = viewModel::selectCategory,
+                        onClearCategoryFilter = viewModel::clearCategoryFilter,
                         onTransactionClick = onNavigateToTransactionDetail
                     )
                 }
@@ -187,7 +194,10 @@ fun MonthlySummaryScreen(
 private fun MonthlySummaryContent(
     summary: MonthlyLedgerSummary,
     selectedTab: SummaryFilterTab,
+    selectedCategoryId: Long?,
     onTabSelected: (SummaryFilterTab) -> Unit,
+    onCategorySelected: (Long) -> Unit,
+    onClearCategoryFilter: () -> Unit,
     onTransactionClick: (Long) -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
@@ -360,13 +370,28 @@ private fun MonthlySummaryContent(
         }
 
         if (breakdownList.isNotEmpty()) {
-            Text(
-                text = "CATEGORY BREAKDOWN",
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                letterSpacing = 0.8.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "CATEGORY BREAKDOWN",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    letterSpacing = 0.8.sp
+                )
+                if (selectedCategoryId != null) {
+                    Text(
+                        text = "Clear filter",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable(onClick = onClearCategoryFilter)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
 
             Card(
@@ -387,7 +412,11 @@ private fun MonthlySummaryContent(
                             modifier = Modifier.padding(vertical = MaterialTheme.spacing.sm),
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
                         )
-                        CategorySpendingRow(item = item)
+                        CategorySpendingRow(
+                            item = item,
+                            isSelected = item.category.id == selectedCategoryId,
+                            onClick = { onCategorySelected(item.category.id) }
+                        )
                     }
                 }
             }
@@ -397,7 +426,7 @@ private fun MonthlySummaryContent(
     }
 
     // 4. Month Transactions List
-    val filteredTransactions = when (selectedTab) {
+    val baseTransactions = when (selectedTab) {
         SummaryFilterTab.ALL -> summary.transactions
         SummaryFilterTab.INCOME -> summary.transactions.filter { it.type == TransactionType.INCOME }
         SummaryFilterTab.SAVINGS -> summary.transactions.filter {
@@ -408,22 +437,121 @@ private fun MonthlySummaryContent(
         }
     }
 
-    Text(
-        text = "MONTH ACTIVITY (${filteredTransactions.size})",
-        style = MaterialTheme.typography.labelSmall,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        letterSpacing = 0.8.sp
-    )
+    val selectedCategory = if (selectedCategoryId != null) {
+        summary.expenseBreakdown.find { it.category.id == selectedCategoryId }?.category
+            ?: baseTransactions.find { it.category.id == selectedCategoryId }?.category
+    } else null
+
+    val filteredTransactions = if (selectedCategoryId != null) {
+        baseTransactions.filter { it.category.id == selectedCategoryId }
+    } else {
+        baseTransactions
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (selectedCategory != null) {
+                "MONTH ACTIVITY • ${selectedCategory.name.uppercase()} (${filteredTransactions.size})"
+            } else {
+                "MONTH ACTIVITY (${filteredTransactions.size})"
+            },
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            letterSpacing = 0.8.sp
+        )
+        if (selectedCategoryId != null) {
+            Text(
+                text = "Show all",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(onClick = onClearCategoryFilter)
+            )
+        }
+    }
+
+    if (selectedCategory != null) {
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CategoryIcon(
+                        iconName = selectedCategory.iconName,
+                        colorHex = selectedCategory.colorHex,
+                        size = 28.dp,
+                        iconSize = 16.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Filtered by ${selectedCategory.name}",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+                IconButton(
+                    onClick = onClearCategoryFilter,
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Clear Category Filter",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+        }
+    }
+
     Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
 
     if (filteredTransactions.isEmpty()) {
-        Text(
-            text = "No transactions recorded for this filter.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-            modifier = Modifier.padding(vertical = 12.dp)
-        )
+        if (selectedCategoryId != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "No transactions recorded for this category in this month.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(onClick = onClearCategoryFilter) {
+                    Text("Show All Transactions")
+                }
+            }
+        } else {
+            Text(
+                text = "No transactions recorded for this filter.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                modifier = Modifier.padding(vertical = 12.dp)
+            )
+        }
     } else {
         filteredTransactions.forEach { tx ->
             TransactionItem(
@@ -463,9 +591,33 @@ private fun SummaryStat(
 }
 
 @Composable
-private fun CategorySpendingRow(item: CategorySpending) {
+private fun CategorySpendingRow(
+    item: CategorySpending,
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {}
+) {
     val isSavings = item.category.name.equals(AppConstants.CATEGORY_SAVINGS_AND_GOALS, ignoreCase = true)
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 48.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .then(
+                if (isSelected) {
+                    Modifier
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 6.dp)
+                } else {
+                    Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
+                }
+            )
+            .clickable(onClick = onClick)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -475,7 +627,29 @@ private fun CategorySpendingRow(item: CategorySpending) {
                 CategoryIcon(iconName = item.category.iconName, colorHex = item.category.colorHex, size = 34.dp, iconSize = 18.dp)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
                 Column {
-                    Text(text = item.category.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = item.category.name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                        )
+                        if (isSelected) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Box(
+                                modifier = Modifier
+                                    .clip(PillShape)
+                                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                            ) {
+                                Text(
+                                    text = "Active Filter",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
                     if (isSavings) {
                         Text(
                             text = "Planning Allocation",

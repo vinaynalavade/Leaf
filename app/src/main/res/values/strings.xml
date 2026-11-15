@@ -85,7 +85,13 @@
     <string name="settings_developer_value">Vinay Nalavade</string>
     <string name="settings_privacy_note">Financial records stored securely on-device.</string>
 
-    <!-- Widgets -->
+    <!-- Widgets (Phase 5 Consolidated Designs) -->
+    <string name="widget_account_balance_title">Account Balance</string>
+    <string name="widget_account_balance_description">Display your Account ledger balance with privacy eye toggle.</string>
+    <string name="widget_balance_quick_actions_title">Balance &amp; Quick Actions</string>
+    <string name="widget_balance_quick_actions_description">Current balance, monthly budget progress line, and quick income/expense buttons.</string>
+    <string name="widget_quick_actions_title">Quick Actions</string>
+    <string name="widget_quick_actions_description">Fast transaction shortcuts with monthly budget progress line.</string>
     <string name="widget_overview_description">See total balance, monthly spending summary, and quick transaction shortcuts.</string>
     <string name="widget_today_expense_description">Glanceable daily expense spending total.</string>
     <string name="widget_quick_add_description">Quick shortcut buttons to instantly record income or expense.</string>

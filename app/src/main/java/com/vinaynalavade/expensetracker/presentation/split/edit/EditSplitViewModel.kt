@@ -63,6 +63,9 @@ data class EditSplitUiState(
     ),
     val qrImagePath: String? = null,
     val qrImageBitmap: ImageBitmap? = null,
+    val isEditingQr: Boolean = false,
+    val editingSourceBitmap: android.graphics.Bitmap? = null,
+    val isPreviewingQr: Boolean = false,
     val addToTransactions: Boolean = false,
     val expenseTransactionId: Long? = null,
     val paymentMethod: PaymentMethod = PaymentMethod.CASH,
@@ -480,13 +483,12 @@ class EditSplitViewModel(
 
     fun onQrImageSelected(uri: Uri) {
         viewModelScope.launch {
-            val savedPath = qrStorageManager.saveQrImage(uri)
-            if (savedPath != null) {
-                val bitmap = qrStorageManager.loadQrBitmap(savedPath)
+            val bitmap = qrStorageManager.decodeBitmapFromUri(uri)
+            if (bitmap != null) {
                 _uiState.update {
                     it.copy(
-                        qrImagePath = savedPath,
-                        qrImageBitmap = bitmap,
+                        isEditingQr = true,
+                        editingSourceBitmap = bitmap,
                         validationError = null
                     )
                 }
@@ -494,6 +496,71 @@ class EditSplitViewModel(
                 _uiState.update { it.copy(validationError = "Unable to process selected image.") }
             }
         }
+    }
+
+    fun onEditExistingQrImage() {
+        viewModelScope.launch {
+            val path = _uiState.value.qrImagePath
+            if (!path.isNullOrBlank()) {
+                val bitmap = qrStorageManager.loadAndroidBitmap(path)
+                if (bitmap != null) {
+                    _uiState.update {
+                        it.copy(
+                            isEditingQr = true,
+                            editingSourceBitmap = bitmap
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun onSaveEditedQrImage(editedBitmap: android.graphics.Bitmap) {
+        viewModelScope.launch {
+            _uiState.value.qrImagePath?.let { path ->
+                qrStorageManager.deleteQrImage(path)
+            }
+            val savedPath = qrStorageManager.saveQrBitmap(editedBitmap)
+            if (savedPath != null) {
+                val imageBitmap = qrStorageManager.loadQrBitmap(savedPath)
+                _uiState.update {
+                    it.copy(
+                        qrImagePath = savedPath,
+                        qrImageBitmap = imageBitmap,
+                        isEditingQr = false,
+                        editingSourceBitmap = null,
+                        validationError = null
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isEditingQr = false,
+                        editingSourceBitmap = null,
+                        validationError = "Failed to save edited QR image."
+                    )
+                }
+            }
+        }
+    }
+
+    fun onCancelQrEditing() {
+        _uiState.update {
+            it.copy(
+                isEditingQr = false,
+                editingSourceBitmap = null
+            )
+        }
+    }
+
+    fun onPreviewQrImage() {
+        if (_uiState.value.qrImageBitmap != null) {
+            _uiState.update { it.copy(isPreviewingQr = true) }
+        }
+    }
+
+    fun onDismissQrPreview() {
+        _uiState.update { it.copy(isPreviewingQr = false) }
     }
 
     fun onRemoveQrImage() {
@@ -504,7 +571,10 @@ class EditSplitViewModel(
             _uiState.update {
                 it.copy(
                     qrImagePath = null,
-                    qrImageBitmap = null
+                    qrImageBitmap = null,
+                    isEditingQr = false,
+                    editingSourceBitmap = null,
+                    isPreviewingQr = false
                 )
             }
         }

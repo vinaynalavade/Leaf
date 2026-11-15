@@ -50,7 +50,9 @@ class GetSpendingTrendsUseCase(
                     yearMonth = ym.format(monthFormatter),
                     epochMonthStart = startEpoch,
                     totalExpense = expenseSum,
-                    totalIncome = incomeSum
+                    totalIncome = incomeSum,
+                    epochMonthEnd = endEpoch,
+                    transactions = monthTransactions.sortedByDescending { it.timestamp }
                 )
             }
 
@@ -86,7 +88,8 @@ class GetSpendingTrendsUseCase(
                         categoryIcon = cat?.iconName ?: "more_horiz",
                         categoryColorHex = cat?.colorHex ?: "#64748B",
                         totalAmount = catTotal,
-                        percentageOfTotal = if (periodTotalExpense > 0) (catTotal / periodTotalExpense) * 100.0 else 0.0
+                        percentageOfTotal = if (periodTotalExpense > 0) (catTotal / periodTotalExpense) * 100.0 else 0.0,
+                        transactions = txList.sortedByDescending { it.timestamp }
                     )
                 }
                 .sortedByDescending { it.totalAmount }

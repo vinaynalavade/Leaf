@@ -1,6 +1,6 @@
 package com.vinaynalavade.expensetracker.presentation.settings.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +27,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -36,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,13 +44,12 @@ import com.vinaynalavade.expensetracker.R
 import com.vinaynalavade.expensetracker.domain.model.GoogleAccountInfo
 import com.vinaynalavade.expensetracker.domain.model.GoogleBackupState
 import com.vinaynalavade.expensetracker.domain.model.UserPreferences
-import com.vinaynalavade.expensetracker.presentation.theme.CardShape
 import com.vinaynalavade.expensetracker.presentation.theme.PillShape
 import com.vinaynalavade.expensetracker.presentation.theme.spacing
 
 /**
  * Premium Hero Profile Header displayed at the top of the Settings screen.
- * Elevates personal financial identity, avatar presentation, display name, and cloud status.
+ * Apple-inspired account card elevating personal financial identity, avatar, display name, and cloud status.
  */
 @Composable
 fun ProfileCard(
@@ -73,39 +70,39 @@ fun ProfileCard(
         else -> stringResource(R.string.profile_default_local_name)
     }
 
+    val cardShape = RoundedCornerShape(18.dp)
+
     Card(
-        shape = CardShape,
+        shape = cardShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                shape = CardShape
-            )
+        border = BorderStroke(
+            width = 0.8.dp,
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+        ),
+        modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.lg)
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Refined Hero Avatar (72.dp)
+                // Refined Hero Avatar (68.dp)
                 ProfileAvatar(
                     imageUri = userPreferences.profileImageUri,
                     displayName = effectiveDisplayName,
-                    size = 72.dp,
+                    size = 68.dp,
                     showEditBadge = true,
                     onEditClick = onAvatarClick
                 )
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.md))
+                Spacer(modifier = Modifier.width(14.dp))
 
                 // Identity & Account Description
                 Column(
@@ -123,7 +120,7 @@ fun ProfileCard(
                         Text(
                             text = effectiveDisplayName,
                             style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -134,14 +131,14 @@ fun ProfileCard(
                             onClick = onEditNameClick,
                             shape = CircleShape,
                             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
-                            modifier = Modifier.size(28.dp)
+                            modifier = Modifier.size(26.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = stringResource(R.string.profile_edit_name_title),
                                     tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(14.dp)
+                                    modifier = Modifier.size(13.dp)
                                 )
                             }
                         }
@@ -156,25 +153,26 @@ fun ProfileCard(
                             stringResource(R.string.profile_local_account_desc)
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
                     // Account State Pill Badge
                     AccountStateBadge(isConnected = isConnected)
                 }
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+            Spacer(modifier = Modifier.height(14.dp))
 
             HorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f),
+                thickness = 0.6.dp
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Action row for Google Cloud Connection
             Row(
@@ -184,7 +182,7 @@ fun ProfileCard(
             ) {
                 Text(
                     text = if (isConnected) "Google Drive Synced" else "Cloud Backup",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -194,9 +192,9 @@ fun ProfileCard(
                         onClick = onDisconnectGoogleClick,
                         shape = PillShape,
                         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
-                        border = androidx.compose.foundation.BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                        border = BorderStroke(
+                            0.8.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
                         )
                     ) {
                         Text(
@@ -236,9 +234,9 @@ fun ProfileCard(
 @Composable
 private fun AccountStateBadge(isConnected: Boolean) {
     val bgColor = if (isConnected) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
     } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.65f)
     }
     val contentColor = if (isConnected) {
         MaterialTheme.colorScheme.primary
@@ -264,7 +262,7 @@ private fun AccountStateBadge(isConnected: Boolean) {
                 imageVector = if (isConnected) Icons.Default.CloudDone else Icons.Default.PhoneAndroid,
                 contentDescription = null,
                 tint = contentColor,
-                modifier = Modifier.size(12.dp)
+                modifier = Modifier.size(11.dp)
             )
             Text(
                 text = if (isConnected) {

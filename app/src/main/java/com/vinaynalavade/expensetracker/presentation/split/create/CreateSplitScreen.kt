@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,11 +44,15 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Crop
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Visibility
+import com.vinaynalavade.expensetracker.presentation.split.components.QrImageEditDialog
+import com.vinaynalavade.expensetracker.presentation.split.components.QrImagePreviewDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -80,6 +85,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -365,6 +371,8 @@ fun CreateSplitScreen(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                             )
                         },
+                        onEditQr = { viewModel.onEditExistingQrImage() },
+                        onPreviewQr = { viewModel.onPreviewQrImage() },
                         onRemoveQr = { viewModel.onRemoveQrImage() }
                     )
                     5 -> Step5Review(
@@ -372,6 +380,23 @@ fun CreateSplitScreen(
                     )
                 }
             }
+        }
+
+        // QR Image Editor Dialog (Pinch-to-zoom, pan, crop, rotate 90°, aspect ratio selection)
+        if (uiState.isEditingQr && uiState.editingSourceBitmap != null) {
+            QrImageEditDialog(
+                sourceBitmap = uiState.editingSourceBitmap!!,
+                onDismiss = { viewModel.onCancelQrEditing() },
+                onSave = { editedBitmap -> viewModel.onSaveEditedQrImage(editedBitmap) }
+            )
+        }
+
+        // Full-screen QR Image Inspection Preview Dialog
+        if (uiState.isPreviewingQr && uiState.qrImageBitmap != null) {
+            QrImagePreviewDialog(
+                bitmap = uiState.qrImageBitmap!!,
+                onDismiss = { viewModel.onDismissQrPreview() }
+            )
         }
     }
 }
@@ -1575,6 +1600,8 @@ private fun ItemRowCard(
 private fun Step4PaymentQr(
     uiState: CreateSplitUiState,
     onUploadClick: () -> Unit,
+    onEditQr: () -> Unit,
+    onPreviewQr: () -> Unit,
     onRemoveQr: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -1611,36 +1638,96 @@ private fun Step4PaymentQr(
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.sm))
 
-                    Image(
-                        bitmap = uiState.qrImageBitmap,
-                        contentDescription = "UPI QR Code Preview",
+                    Box(
                         modifier = Modifier
                             .size(200.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Fit
+                            .clip(RoundedCornerShape(12.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                            .clickable(onClick = onPreviewQr),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            bitmap = uiState.qrImageBitmap,
+                            contentDescription = "UPI QR Code Preview (Tap to enlarge)",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Fit
+                        )
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                                .background(Color.Black.copy(alpha = 0.6f))
+                                .padding(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Visibility,
+                                contentDescription = "Preview full size",
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xs))
+                    Text(
+                        text = "Tap image to preview full-screen",
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.md))
 
+                    // Practical Action Buttons
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                    ) {
+                        OutlinedButton(
+                            onClick = onPreviewQr,
+                            shape = ButtonShape,
+                            modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+                        ) {
+                            Icon(Icons.Default.Visibility, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Preview")
+                        }
+
+                        OutlinedButton(
+                            onClick = onEditQr,
+                            shape = ButtonShape,
+                            modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+                        ) {
+                            Icon(Icons.Default.Crop, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Edit / Crop")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
                     ) {
                         OutlinedButton(
                             onClick = onUploadClick,
-                            shape = ButtonShape
+                            shape = ButtonShape,
+                            modifier = Modifier.defaultMinSize(minHeight = 48.dp)
                         ) {
                             Text(stringResource(R.string.split_replace_qr_btn))
                         }
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.sm))
+
                         TextButton(
                             onClick = onRemoveQr,
                             shape = ButtonShape,
-                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                            colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            modifier = Modifier.defaultMinSize(minHeight = 48.dp)
                         ) {
+                            Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
                             Text(stringResource(R.string.split_remove_qr_btn))
                         }
                     }

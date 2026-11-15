@@ -33,6 +33,9 @@ class MonthlySummaryViewModel(
     private val _selectedTab = MutableStateFlow(SummaryFilterTab.ALL)
     val selectedTab: StateFlow<SummaryFilterTab> = _selectedTab.asStateFlow()
 
+    private val _selectedCategoryId = MutableStateFlow<Long?>(null)
+    val selectedCategoryId: StateFlow<Long?> = _selectedCategoryId.asStateFlow()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<UiState<MonthlyLedgerSummary>> = _selectedMonth
         .flatMapLatest { yearMonth ->
@@ -49,6 +52,19 @@ class MonthlySummaryViewModel(
 
     fun onTabSelected(tab: SummaryFilterTab) {
         _selectedTab.value = tab
+        _selectedCategoryId.value = null
+    }
+
+    fun selectCategory(categoryId: Long) {
+        if (_selectedCategoryId.value == categoryId) {
+            _selectedCategoryId.value = null
+        } else {
+            _selectedCategoryId.value = categoryId
+        }
+    }
+
+    fun clearCategoryFilter() {
+        _selectedCategoryId.value = null
     }
 
     fun onPreviousMonth() {
